@@ -81,15 +81,33 @@ claude mcp add vrchat -- bun run /abs/path/to/vrchat-mcp/src/index.ts
 Once `vrchat-mcp` is on your PATH it can be launched from anywhere, so nothing that matters
 is resolved against the working directory:
 
-**State** is anchored to the repo, so it survives being launched from anywhere:
+**State is per project.** Run the server inside a project and its session and event history
+live in that project's `.vrchat-mcp/`:
 
-| What | Where | Why |
-|---|---|---|
-| `.vrchat-mcp/session.json` | the **repo root** | A CWD-relative session would be re-created wherever you happened to launch from, silently losing your login (and its 2FA) every time. |
-| `.vrchat-mcp/events.db` | the **repo root** | Same reason; event history would fragment across directories. |
+| What | Where |
+|---|---|
+| `.vrchat-mcp/session.json` | the **project root** |
+| `.vrchat-mcp/events.db` | the **project root** |
 
-`VRCHAT_MCP_SESSION` and `VRCHAT_MCP_DB` still override those paths, and a relative value
-there is resolved against the working directory, as you would expect.
+The project root is found by walking up from the working directory for a `.git`,
+`package.json`, `deno.json`, `pyproject.toml` or `go.mod`. Launching from a subdirectory
+therefore reaches the same state rather than stranding a second session a level down. With
+no marker anywhere above, the working directory is the project.
+
+The directory makes itself invisible to version control: `vrchat-mcp` writes a `.gitignore`
+containing `*` inside it on creation, so the session — which is an auth credential — is
+protected without the host project needing a rule for it.
+
+> **Each project logs in separately.** The first call in a new project authenticates from
+> scratch and, on an email-OTP account, asks for a code. That is the cost of isolation. To
+> share one login across projects, point every install at the same file:
+>
+> ```bash
+> VRCHAT_MCP_SESSION=/abs/path/to/shared/session.json
+> ```
+
+`VRCHAT_MCP_SESSION` and `VRCHAT_MCP_DB` override those paths; a relative value there is
+resolved against the working directory.
 
 **Configuration** layers, so a project can set its own options without repeating your
 credentials. Highest priority first:

@@ -9,7 +9,7 @@
  */
 
 import { Database, type SQLQueryBindings, type Statement } from 'bun:sqlite'
-import { config } from '../config.ts'
+import { config, ensureDataDir } from '../config.ts'
 import type { VRChatEvent } from '../types.ts'
 
 /** An event on its way into the store; `cursor` is assigned by SQLite. */
@@ -120,6 +120,10 @@ export class EventHistory {
 		this.ages = options.maxAge ?? config.historyMaxAge
 		this.trimEvery = options.trimEvery ?? 100
 		this.now = options.now ?? Date.now
+
+		// Creates the directory and makes it self-ignoring; skipped for the
+		// in-memory database the tests use.
+		if (path !== ':memory:') ensureDataDir(path)
 
 		this.db = new Database(path, { create: true })
 		// WAL keeps a burst of inserts from blocking the reader that serves tools.

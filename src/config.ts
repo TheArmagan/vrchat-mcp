@@ -7,22 +7,44 @@
  * startup crash, so `tools/list` works with no configuration at all.
  */
 
-import { readFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, isAbsolute, join, resolve } from 'node:path'
 
 const env = process.env
 
-/**
- * The installed package root, derived from this file's own location.
- *
- * Data paths resolve against this rather than `process.cwd()`. Once the server
- * is on PATH via `bun link`, its working directory is whatever the MCP client
- * happened to launch it from — with a CWD-relative default, a `.vrchat-mcp/`
- * would be created wherever you happened to be, scattering session files and
- * silently losing a login every time the client started somewhere new.
- * Anchoring to the package keeps the data in one predictable, gitignored place.
- */
+/** The installed package root, derived from this file's own location. */
 const packageRoot = dirname(import.meta.dir)
+
+/** Markers that identify the top of a project, in the order we trust them. */
+const PROJECT_MARKERS = ['.git', 'package.json', 'deno.json', 'pyproject.toml', 'go.mod']
+
+/**
+ * The project the server is being used *for*, found by walking up from the
+ * working directory.
+ *
+ * State is per-project: run the server inside a project and its session and
+ * event history live in that project's `.vrchat-mcp/`. Anchoring to a marker
+ * rather than to `process.cwd()` directly means launching from a subdirectory
+ * still reaches the same state, instead of stranding a second session a level
+ * down. With no marker anywhere above, the working directory is the project.
+ *
+ * The consequence worth knowing: separate projects have separate logins, so the
+ * first call in a new project authenticates again (and may ask for a 2FA code).
+ * `VRCHAT_MCP_SESSION` pointed at one shared path opts back out of that.
+ */
+function findProjectRoot(): string {
+	let directory = resolve(process.cwd())
+
+	for (;;) {
+		if (PROJECT_MARKERS.some((marker) => existsSync(join(directory, marker)))) return directory
+
+		const parent = dirname(directory)
+		if (parent === directory) return resolve(process.cwd())
+		directory = parent
+	}
+}
+
+const projectRoot = findProjectRoot()
 
 /**
  * Loads the package's own `.env`, without overriding anything already set.
@@ -64,10 +86,29 @@ function loadPackageEnv(): void {
 
 loadPackageEnv()
 
-/** Env-supplied paths honour the user's intent; bare defaults anchor to the package. */
+/** Env-supplied paths honour the user's intent; bare defaults anchor to the project. */
 function dataPath(override: string | undefined, fallback: string): string {
 	if (override) return isAbsolute(override) ? override : resolve(override)
-	return join(packageRoot, fallback)
+	return join(projectRoot, fallback)
+}
+
+/**
+ * Creates the data directory and makes it self-ignoring.
+ *
+ * The session file is an auth credential, and this directory now lands inside
+ * whatever project the server is run from — projects whose `.gitignore` we do
+ * not control and cannot edit. A `.gitignore` containing `*` *inside* the
+ * directory ignores it from within, so the credential is protected by default
+ * rather than by the host project remembering to add a rule.
+ */
+export function ensureDataDir(path: string): void {
+	const directory = dirname(path)
+	mkdirSync(directory, { recursive: true })
+
+	const marker = join(directory, '.gitignore')
+	if (!existsSync(marker)) {
+		writeFileSync(marker, '# Created by vrchat-mcp: this directory holds an auth session.\n*\n')
+	}
 }
 
 function bool(name: string): boolean {
@@ -185,7 +226,9 @@ export const config = {
 	/** 0 disables the age sweep entirely. */
 	historyMaxAge: parsePerType(env.VRCHAT_MCP_HISTORY_MAX_AGE, 30 * 86_400_000, parseDuration),
 
-	dataDir: join(packageRoot, '.vrchat-mcp'),
+	dataDir: join(projectRoot, '.vrchat-mcp'),
+	/** Where the server found the project boundary, for diagnostics. */
+	projectRoot,
 	dbPath: dataPath(env.VRCHAT_MCP_DB, '.vrchat-mcp/events.db'),
 	sessionPath: dataPath(env.VRCHAT_MCP_SESSION, '.vrchat-mcp/session.json'),
 

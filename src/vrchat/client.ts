@@ -8,11 +8,10 @@
  * 2FA prompt to attach to.
  */
 
-import { mkdirSync } from 'node:fs'
 import { dirname } from 'node:path'
 import { VRChat } from 'vrchat'
 import { KeyvFile } from 'keyv-file'
-import { config, hasCredentials } from '../config.ts'
+import { config, ensureDataDir, hasCredentials } from '../config.ts'
 import type { LimiterStatus, PendingTwoFactor } from '../types.ts'
 import { getBroker } from './twofactor.ts'
 import { getLimiter } from './ratelimit.ts'
@@ -72,7 +71,7 @@ export function getClient(): VRChat {
 		)
 	}
 
-	mkdirSync(dirname(config.sessionPath), { recursive: true })
+	ensureDataDir(config.sessionPath)
 	sessionStore = new KeyvFile({ filename: config.sessionPath })
 
 	const broker = getBroker()

@@ -294,12 +294,23 @@ as `claude mcp add vrchat -- vrchat-mcp` with no absolute paths anywhere.
 Three things had to change for that to actually work:
 
 - **A `#!/usr/bin/env bun` shebang on `src/index.ts`**, which the `bin` entry needs.
-- **Data paths anchor to the package root, not `process.cwd()`.** A linked
-  binary is launched from wherever the MCP client happens to be, so a
-  CWD-relative `.vrchat-mcp/` would be re-created in random directories —
-  silently losing the persisted session, and its 2FA, on every launch from a
-  new place. `config.ts` derives `packageRoot` from `import.meta.dir`. The
-  resolved paths are identical to before when CWD is the repo, so no migration.
+- **Data paths are PER PROJECT** (changed by user decision — an earlier
+  revision anchored them to the package root). `findProjectRoot()` walks up
+  from `process.cwd()` for a `.git` / `package.json` / `deno.json` /
+  `pyproject.toml` / `go.mod` marker, falling back to the working directory.
+  Anchoring to a *marker* rather than to `cwd` directly is what makes launching
+  from a subdirectory reach the same state instead of stranding a second
+  session a level down. Resolved paths are unchanged when run from the repo, so
+  no migration.
+  - **Accepted consequence:** separate projects have separate logins, so the
+    first call in a new project re-authenticates and, on an email-OTP account,
+    asks for a code. Verified live. `VRCHAT_MCP_SESSION` pointed at one shared
+    absolute path opts back out.
+  - **`ensureDataDir()` writes a `.gitignore` containing `*` inside
+    `.vrchat-mcp/` on creation.** The directory now lands in projects whose
+    `.gitignore` we do not control, and the session file is an auth credential —
+    self-ignoring protects it by default instead of relying on the host project
+    adding a rule. Verified: `git status` in a fresh project does not see it.
 - **The package's own `.env` is loaded as a fallback.** Bun auto-loads `.env`
   from the working directory only, so a linked server would start with no
   credentials and fail on the first tool call. Precedence is preserved:
