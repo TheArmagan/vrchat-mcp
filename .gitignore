@@ -134,3 +134,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# vrchat-mcp runtime data (session cookie + events DB) — NEVER COMMIT
+.vrchat-mcp/

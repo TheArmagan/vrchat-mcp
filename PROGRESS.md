@@ -1,0 +1,257 @@
+# PROGRESS
+
+Running status log for the build described in [docs/PLAN.md](docs/PLAN.md).
+Update this file as each step lands — it is the handoff surface for future agents.
+
+Legend: `[x]` done · `[~]` in progress · `[ ]` not started · `[!]` blocked
+
+## Status
+
+| # | Step | State | Owner |
+|---|---|---|---|
+| 0 | Project docs (`docs/PLAN.md`, `PROGRESS.md`) | [x] | main |
+| 1 | Dependencies, scripts, `.gitignore`, `src/config.ts`, `src/types.ts` | [x] | main |
+| 2 | `scripts/generate-tools.ts` + committed spec snapshot | [x] | agent A |
+| 3 | `src/vrchat/client.ts` (lazy client, proxy) | [x] | agent B |
+| 4 | `src/vrchat/twofactor.ts` (pending-code broker) | [x] | agent B |
+| 5 | `src/tools/auth.ts` | [x] | agent B |
+| 6 | `src/vrchat/ratelimit.ts` | [x] | agent B |
+| 7 | `src/vrchat/events.ts` + `history.ts` + `src/tools/events.ts` | [x] | agent C |
+| 8 | `src/registry.ts` (gating + registration) | [x] | main |
+| 9 | `src/project.ts` (`_responseKeys`) + `src/errors.ts` | [x] | agent D |
+| 10 | `src/index.ts` (stdio entry) | [x] | main |
+| 11 | `.env.example` + README | [x] | agent E |
+
+## Established facts (verified against installed packages, do not re-derive)
+
+Read these before touching the code — each one was checked against the
+actual installed dependency, not assumed from docs.
+
+### MCP SDK — `@modelcontextprotocol/server@2.0.0`
+
+- Entry: `import { serveStdio } from '@modelcontextprotocol/server/stdio'`,
+  `import { McpServer } from '@modelcontextprotocol/server'`.
+- `serveStdio(factory, options?)` takes a **factory** (`() => McpServer`) and
+  returns a handle synchronously. One instance is pinned per connection.
+- `server.registerTool(name, { title?, description?, inputSchema?,
+  outputSchema?, annotations? }, cb)`. `inputSchema` should be a **`z.object(...)`**
+  (Standard Schema); the raw-shape form is deprecated.
+- Input-required flow is exported: `inputRequired`, `InputRequiredResult`,
+  `isInputRequiredResult`, `inputResponse`.
+- `sendLoggingMessage` is **deprecated** as of `2026-07-28` — log to stderr.
+
+### VRChat SDK — `vrchat@2.22.8`
+
+- `new VRChat({ application, authentication, keyv, pipeline, fetch, ... })`.
+- **`authentication.optimistic` defaults to `true`** and fires a login from the
+  constructor. Set it to **`false`** — that is what makes login lazy.
+- **The SDK already single-flights login.** `authenticate()` memoizes an
+  `authenticatePromise`, and a request interceptor makes every in-flight request
+  await it. A response interceptor catches **401**, re-authenticates, and
+  replays the original request. So a burst of cold-start calls produces one
+  login and one 2FA prompt for free — do not build a second lock.
+- **`twoFactorCode` receives NO arguments.** It is `Lazy<string>` =
+  `string | Promise<string> | (() => string | Promise<string>)`. The SDK does
+  *not* pass the 2FA method in, which the plan flagged as an open question.
+  **Resolution:** sniff it from the wire. The login response body carries
+  `requiresTwoFactorAuth: ["emailOtp"]` or `["totp","otp"]`; the `fetch`
+  override (already ours, for the proxy) records the methods into the broker
+  before the callback runs. Zero extra requests.
+- `totpSecret` is only consulted when the methods include `totp` **and** no
+  `twoFactorCode` was supplied — so set `twoFactorCode` only when there is no
+  `VRCHAT_TOTP_SECRET`, or TOTP goes interactive unnecessarily.
+- Every operation method takes `Options<..., ThrowOnError>` and returns
+  `{ data, error, request, response }` when `throwOnError: false`.
+- Websocket: `import { VRChatWebsocket } from 'vrchat/websocket'`, also reachable
+  as `vrchat.pipeline`; `vrchat.on(event, handler)` is an alias for
+  `vrchat.pipeline.on`. It takes `{ baseUrl?, headers?, authToken? }` and is
+  authenticated via `pipeline.authenticate(authToken)` — which the SDK already
+  calls with the persisted cookie during `authenticate()`.
+
+## Decisions taken during implementation (diverging from or refining the plan)
+
+- **`src/types.ts` and `src/config.ts` were written up front** as the shared
+  contract every module codes against, so the workstreams could proceed in
+  parallel without guessing each other's shapes. Not in the plan's file list.
+- **No hand-rolled single-flight login lock** (plan §4) — the SDK provides one.
+  Documented above so nobody "fixes" its absence.
+- **2FA method detection is done by response sniffing in the `fetch` override**
+  rather than from a callback argument, which the SDK does not offer.
+- `src/errors.ts` was split out of `src/registry.ts` so the error mapping is
+  unit-testable on its own and reusable by the event and auth tools.
+- **The registry calls SDK methods by indexing the client** (`client[operationId]`)
+  rather than through a `callOperation` helper in `client.ts`. The SDK exposes
+  every spec `operationId` as a method of the same name and codegen asserts that
+  mapping, so one indexed call serves all ~250 tools with no per-op glue.
+- **Rate limiting is applied inside the client's `fetch` override**, not around
+  each tool handler. That is the only seam every request passes through, so the
+  auth flow is limited too — which §6 requires and a handler-level wrapper would
+  have missed.
+- **Gate tests spawn the server over stdio** (`tests/gates.test.ts`) instead of
+  using the Inspector CLI. The gates are read from the environment at import
+  time, so they can only be tested across a process boundary; this also proves
+  `tools/list` works with no credentials.
+
+## Codegen results (spec `b7fff1af`, fetched 2026-08-09)
+
+**297 operations**, not the ~250 the plan estimated — but the four tags the plan
+pins are exact: economy 41, inventory 15, props 8, prints 5. Largest tag is
+groups (51). Kinds: read 144, write 84, destructive 44, admin 14, money 11;
+39 are paginated.
+
+- **Ten operationIds have no matching SDK method** — `cancelPending2FA`,
+  `disable2FA`, `enable2FA`, `verify2FA`, `verify2FAEmailCode`,
+  `verifyPending2FA`, `getGroupCalendarEventICS`, `getCSS`,
+  `deleteAllNotificationV2s`, `getNotificationV2s`. The spec moves faster than
+  the client library. `src/registry.ts` routes these through a **raw-request
+  fallback** on the same client, so cookies, User-Agent, proxy and the rate
+  limiter still apply and 1:1 coverage stays true rather than quietly becoming
+  a lie. Codegen prints the gap list on every run.
+- **Several ops the plan's override lists name have been renamed upstream** —
+  `deleteProductListing` → `deleteProductListingDirect`,
+  `updateTiliaTosAgreementStatus` → `updateTiliaTos`,
+  `deleteAllUserPersistence` → `deleteAllUserPersistenceData`. Both spellings
+  are kept in the lists: a stale entry is inert, a missing one would silently
+  downgrade an operation's safety class.
+- **Money and admin are also matched by path** (`/tilia|kyc|payout/i`,
+  `/moderationReports|avatarmoderations/i`) so a future rename cannot leak an
+  op past its gate. Precedence: admin > money > destructive > HTTP verb.
+- **`getBalance` classifies as `read`**, not `money` — it only reads a number.
+  The plan's verification step 4 calls it under default env, which only works
+  if it is a read.
+
+## Env surface: plan vs. `src/config.ts`
+
+`src/config.ts` is authoritative; the README documents it, not the plan.
+Differences worth knowing:
+
+- Three vars exist that §11 never names: `VRCHAT_MCP_MAX_WAIT_MS` (30000),
+  `VRCHAT_MCP_SESSION` (`.vrchat-mcp/session.json`), `VRCHAT_MCP_2FA_TIMEOUT_MS`
+  (300000). The plan gave these as prose defaults only.
+- Booleans accept `1` or `true` (case-insensitive), not just `=1`.
+- `VRCHAT_MCP_RPS=0` falls back to 20 — there is no "disable the limiter" value.
+  `VRCHAT_MCP_HISTORY_MAX_AGE=0` *does* disable the age sweep, because it parses
+  through a different helper that permits zero.
+- `VRCHAT_MCP_WS_EVENTS` **replaces** the default event set; it does not extend it.
+- `parseDuration` accepts `ms|s|m|h|d|w` and a bare millisecond count, beyond
+  the `7d`/`12h`/`0` the plan documents.
+- `config.dataDir` is hardcoded; `VRCHAT_MCP_DB` and `VRCHAT_MCP_SESSION` are
+  independent full paths, so overriding them does not move the directory.
+
+## Projection semantics settled (`src/project.ts`)
+
+The plan's path table left several cases open. These are now fixed behaviour,
+pinned by `tests/project.test.ts`:
+
+- **`["*"]` returns the input by reference** — identity, no meta at all, so the
+  raw path is provably lossless. `["**"]` is a genuine projection with the same
+  content but carrying meta. `["*", "!x"]` is likewise a projection.
+- **Array misses become `null`; object misses vanish.** Array length and order
+  are load-bearing (an index seen once must stay that element), so a
+  non-matching element is a `null` placeholder. Object keys are names, not
+  positions, so a non-matching key is simply omitted.
+- **No implicit array fan-out.** `items.name` does *not* auto-map over an array;
+  `*` must be explicit, so a typo surfaces in `_unmatched` rather than silently
+  fanning out.
+- **Meta collision** (`_availableKeys` / `_unmatched` already present, or an
+  array/scalar projection) nests the projection under `_result` with the meta
+  beside it. The payload's own field is never overwritten or dropped. Arrays
+  always take this route, because `JSON.stringify` silently discards
+  non-index properties on an array.
+- **`_availableKeys` names array element keys as `*.id`, `*.name`** — the form
+  that actually works as a `_responseKeys` entry. Cap 50, with a `+N more` marker.
+- **Meta has a fixed cost**, so excluding one short field can make a response
+  marginally larger than raw. Narrowing is what pays; exclusion alone may not.
+
+`src/errors.ts` matches the limiter timeout **structurally**
+(`name === 'RateLimitTimeoutError'`, or `code` of `RATE_LIMIT_TIMEOUT`/`ETIMEDOUT`)
+rather than importing `src/vrchat/ratelimit.ts`, so the two modules stay
+independently testable. Messages are cut at the first V8 stack frame and capped
+at 500 chars; a test asserts no stack ever reaches a tool result.
+
+## Runtime findings (verified empirically, not assumed)
+
+- **FTS5 IS available** in Bun 1.3.14's `bun:sqlite`, so search ships as an
+  external-content FTS5 virtual table synced by triggers. The indexed-`LIKE`
+  fallback is written and gated on `FTS5_AVAILABLE`; a test pins which path is
+  live. Queries are wrapped as a single prefix phrase (`"…"*`), which both makes
+  agent input injection-proof (no bare `OR`/`NEAR`) and lets the **default**
+  tokenizer match inside VRChat ids — a custom `tokenchars '_-'` tokenizer was
+  tried first and was strictly worse (`pancakes` stopped matching
+  `wrld_pancakes`).
+- **`Statement.run().changes` in `bun:sqlite` counts trigger-driven writes too** —
+  a 2-row DELETE reported `changes: 10` because of the FTS shadow tables. Drop
+  accounting uses an indexed `COUNT(*)` diff per trim instead.
+- **Bun 1.3.14's `fetch` does NOT support SOCKS.** `socks5://`, `socks5h://` and
+  `socks://` all fail with `UnsupportedProxyProtocol`; `http://` and `https://`
+  proxies work and are genuinely honoured. `getClient()` rejects a `socks*` URL
+  up front with a `ConfigurationError` rather than failing per-request. The
+  plan's `socks-proxy-agent` fallback is **not** implemented — see Blocked/open.
+- **The SDK refuses any `VRCHAT_CONTACT` containing `@example.com`**
+  (`isApplication()`), so the obvious placeholder is the one value guaranteed to
+  fail. `getClient()` pre-empts it with an actionable error, and `.env.example`
+  now ships a non-`example.com` placeholder.
+- **Bun's global `WebSocket` accepts `proxy` natively**, which is how pipeline
+  traffic gets proxied — see below.
+
+## Two leaks found and closed during integration
+
+1. **`VRChat.authenticate()` calls `pipeline.authenticate(cookie)`
+   unconditionally** whenever an auth cookie exists — including from the 401
+   re-auth interceptor, and including when `VRCHAT_MCP_WEBSOCKET` is off. That
+   opens a socket nobody asked for, burns a session slot, and connects
+   **directly** while the rest of the server is proxied. `getClient()` now calls
+   `pipeline.close()` and neuters `pipeline.authenticate` when the feature is
+   disabled. When it is enabled, `EventPipeline.start()` replaces the same
+   method with its token-capture hook, which doubles as the cookie feed for
+   reconnects.
+2. **Enabling the websocket used to crash startup without credentials** —
+   `startEventPipeline(getClient())` threw before the server ever served, which
+   would have destroyed the "`tools/list` works with no credentials" property
+   that makes the server inspectable. Pipeline startup is now fully contained:
+   failures log to stderr and nothing else.
+
+## Websocket: the SDK's own pipeline could not be used
+
+`VRChatWebsocket` builds `new WebSocket(url, { headers })` inline — no agent, no
+dispatcher, no proxy option, and `url`/`websocket` are private. `src/vrchat/events.ts`
+therefore drives Bun's global `WebSocket` directly, which takes `proxy` natively,
+so pipeline traffic honours `VRCHAT_MCP_PROXY` like everything else.
+`status()` reports `proxied` so it is visible rather than assumed.
+
+Two further reasons the SDK socket had to go, both contradicting the plan's
+assumption that we would just consume `vrchat.pipeline`:
+
+- **It silently loses `see-notification` / `hide-notification`.** Its handler
+  does an unconditional `JSON.parse(content)` inside a try/catch; a bare
+  notification id is not JSON, so those frames are swallowed. `normalizeMessage`
+  keeps the bare string (unit-tested) — exactly the case the plan called out.
+- It emits per-type on a plain EventEmitter: no wildcard, no raw frame access.
+
+## Naming change: `response_keys` → `_responseKeys`
+
+Requested by the user mid-build. The leading underscore makes a collision with a
+real VRChat parameter structurally impossible rather than merely asserted, and
+it matches the project's camelCase convention. Renamed across the codegen
+assertion, the registry, the event tools, the projection help text, the tests
+and the docs. `docs/PLAN.md` retains the original spelling as a historical record.
+
+## Blocked / open
+
+- **SOCKS proxy support is deliberately NOT implemented — decided, not pending.**
+  Plan §3 offers a `socks-proxy-agent` fallback for exactly this case, and
+  Bun 1.3.14 does reject `socks5://` with `UnsupportedProxyProtocol`. The user
+  chose to ship HTTP/HTTPS only rather than take on `undici` plumbing (Bun's
+  native `fetch` accepts no dispatcher) plus a second agent path for the
+  websocket. `http://` and `https://` proxies work fully and cover both API and
+  pipeline traffic; a `socks*://` URL fails up front with a `ConfigurationError`
+  naming the limitation and suggesting a local HTTP front-end, and never falls
+  back to a direct connection. **Do not implement the fallback without asking
+  again** — its absence is the decision.
+- **Live verification has not been run.** Every offline step passes (116 tests,
+  clean `tsc`, deterministic offline codegen, gates verified over real stdio).
+  Plan steps 4, 6, 7, 8, 9, 11, 16-live, 17 and 18 all need a real VRChat
+  account and credentials in `.env`.
+- **Ten operations rely on the raw-request fallback** and have not been
+  exercised against the live API — the fallback path itself is untested until a
+  live run.

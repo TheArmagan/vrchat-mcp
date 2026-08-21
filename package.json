@@ -1,0 +1,32 @@
+{
+  "name": "vrchat-mcp",
+  "version": "0.1.0",
+  "module": "src/index.ts",
+  "type": "module",
+  "private": true,
+  "bin": {
+    "vrchat-mcp": "src/index.ts"
+  },
+  "scripts": {
+    "generate": "bun run scripts/generate-tools.ts",
+    "start": "bun run src/index.ts",
+    "inspect": "npx @modelcontextprotocol/inspector bun run src/index.ts",
+    "test": "bun test tests",
+    "test:live": "VRCHAT_LIVE_TESTS=1 bun test tests/live",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@redocly/cli": "^2.46.2",
+    "@types/bun": "latest",
+    "json-schema-to-zod": "^2.8.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.0.0",
+    "keyv-file": "^5.3.5",
+    "vrchat": "^2.22.8",
+    "zod": "^4.4.3"
+  }
+}
