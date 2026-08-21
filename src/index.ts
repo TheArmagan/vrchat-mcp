@@ -14,6 +14,7 @@ import { config } from './config.ts'
 import { knownTags, registerGeneratedTools, unknownTags } from './registry.ts'
 import { registerAuthTools } from './tools/auth.ts'
 import { registerEventTools } from './tools/events.ts'
+import { registerImageTools } from './tools/images.ts'
 import { registerUploadTools } from './tools/upload.ts'
 import { getClient } from './vrchat/client.ts'
 import { type EventClientLike, startEventPipeline } from './vrchat/events.ts'
@@ -31,6 +32,9 @@ function createServer() {
 	// Registered even with writes off, so the tool can explain the gate rather
 	// than simply not existing when an agent goes looking for it.
 	registerUploadTools(server)
+
+	// Read-only, so it needs no gate.
+	registerImageTools(server)
 
 	if (config.websocket) {
 		registerEventTools(server)

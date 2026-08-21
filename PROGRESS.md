@@ -488,6 +488,32 @@ indistinguishable from a broken server. Startup warns on stderr naming the bad
 value and listing the valid ones, and `vrchat_authStatus` carries the same in
 `availability.unknownTags`.
 
+## Image viewing, and the README rewrite
+
+- **`vrchat_getImage`** returns an MCP image block, so the model looks at the
+  picture instead of reporting a URL. Takes a `url` or a `fileId`, optionally
+  writes to `savePath`.
+  - **Host allowlist, and a narrower cookie rule.** A tool that fetches a
+    caller-supplied URL while holding a session cookie is a request-forgery
+    primitive, so only VRChat hosts are fetched at all, plain `http` is refused,
+    and **only `api.vrchat.cloud` is ever sent the cookie**. CDN hosts go
+    through a bare fetch. Tests cover the lookalike case (`notvrchat.cloud` must
+    not pass a `.vrchat.cloud` suffix check).
+  - 4 MB ceiling by default, checked against `content-length` and again after
+    reading, since not every host sends the header. Base64 in the transcript
+    costs about 1.33x the file, so a full-size texture is expensive and a `/256`
+    variant is usually identical for the purpose.
+  - A non-image response (an HTML error page) is refused rather than returned as
+    an image block the model cannot read.
+- **README rewritten** with a cheatsheet at the top and the AI tells removed: no
+  em dashes, en dashes or curly quotes anywhere, sentence-case headings, active
+  voice, no bolded label lists that restate their own line. Numbers corrected
+  throughout (297 operations, not "roughly 250 across 18 tags").
+- **GitHub metadata updated** via `gh repo edit`: description now names what the
+  server actually does, plus 14 topics (mcp, model-context-protocol, vrchat,
+  vrchat-api, claude, claude-code, anthropic, ai-agents, llm-tools, bun,
+  typescript, openapi, code-generation, stdio).
+
 ## Blocked / open
 
 - **SOCKS proxy support is deliberately NOT implemented — decided, not pending.**
