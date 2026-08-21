@@ -17,7 +17,7 @@ import { z } from 'zod'
 
 import { config } from '../config.ts'
 import { describeError } from '../errors.ts'
-import { fileFromPath, mimeTypeFor, UploadError } from '../upload.ts'
+import { type FileInput, fileFromInput, mimeTypeFor, UploadError } from '../upload.ts'
 import { ensureAuthenticated, getClient } from '../vrchat/client.ts'
 import { getLimiter } from '../vrchat/ratelimit.ts'
 
@@ -69,6 +69,26 @@ async function putToPresignedUrl(url: string, file: File): Promise<string> {
  */
 const STORE_IMAGE_TAGS = ['product', 'listinggallery'] as const
 
+/**
+ * A file argument: a local path, or the bytes inline.
+ *
+ * Paths stay the recommended route. Inline exists for content with no path,
+ * such as an image the agent has just produced, and costs about 1.33 bytes of
+ * tool argument per byte of file.
+ */
+const fileInputSchema = z
+	.union([
+		z.string(),
+		z.object({
+			data: z.string().describe('Base64-encoded file bytes.'),
+			mimeType: z.string().optional().describe('MIME type of the bytes, e.g. image/png.'),
+			filename: z.string().optional().describe('Name to send to VRChat. Defaults from the MIME type.')
+		})
+	])
+	.describe(
+		'Either a local file path (absolute, or relative to the server working directory), or inline bytes as { data, mimeType, filename }. A data: URI works in the string form too.'
+	)
+
 export function registerUploadTools(server: McpServer): void {
 	server.registerTool(
 		'vrchat_setProductImage',
@@ -80,11 +100,9 @@ export function registerUploadTools(server: McpServer): void {
 				productId: z
 					.string()
 					.describe('The product to attach the image to. From vrchat__listUserProducts.'),
-				path: z
-					.string()
-					.describe(
-						"Path to the local image. Absolute, or relative to the server's working directory. Never file contents."
-					),
+				file: fileInputSchema.describe(
+					'The image: a local path, or inline bytes as { data, mimeType }. A path is cheaper.'
+				),
 				tag: z
 					.enum(STORE_IMAGE_TAGS)
 					.default('product')
@@ -97,7 +115,7 @@ export function registerUploadTools(server: McpServer): void {
 				openWorldHint: true
 			}
 		},
-		async ({ productId, path, tag }) => {
+		async ({ productId, file: input, tag }) => {
 			if (!config.allowWrites) {
 				return fail({
 					status: null,
@@ -107,7 +125,7 @@ export function registerUploadTools(server: McpServer): void {
 			}
 
 			try {
-				const file = await fileFromPath(path, 'path')
+				const file = await fileFromInput(input as FileInput, 'file')
 				await ensureAuthenticated()
 				const client = getClient()
 
@@ -164,11 +182,9 @@ export function registerUploadTools(server: McpServer): void {
 			description:
 				'Uploads a local file to VRChat storage, running the whole create → start → transfer → finish sequence and returning the finished file record. Use this for asset bundles, unity packages and other non-image files. For images use vrchat__uploadImage, vrchat__uploadPrint, vrchat__uploadIcon or vrchat__uploadGalleryImage, which take a path directly in one call. Requires VRCHAT_MCP_ALLOW_WRITES=1.',
 			inputSchema: z.object({
-				path: z
-					.string()
-					.describe(
-						"Path to the local file to upload. Absolute, or relative to the server's working directory. Never file contents."
-					),
+				file: fileInputSchema.describe(
+					'The file: a local path, or inline bytes as { data, mimeType, filename }. A path is cheaper.'
+				),
 				name: z
 					.string()
 					.optional()
@@ -190,7 +206,7 @@ export function registerUploadTools(server: McpServer): void {
 				openWorldHint: true
 			}
 		},
-		async ({ path, name, mimeType, fileType, tags }) => {
+		async ({ file: input, name, mimeType, fileType, tags }) => {
 			// Gated with the generated write tools: this creates account content.
 			if (!config.allowWrites) {
 				return fail({
@@ -203,7 +219,7 @@ export function registerUploadTools(server: McpServer): void {
 			let fileId = ''
 
 			try {
-				const file = await fileFromPath(path, 'path')
+				const file = await fileFromInput(input as FileInput, 'file')
 				await ensureAuthenticated()
 				const client = getClient()
 

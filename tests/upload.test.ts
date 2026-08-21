@@ -11,7 +11,15 @@ import { mkdirSync, rmSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 import { operationsById } from '../src/generated/operations.ts'
-import { fileFromPath, mimeTypeFor, resolveUploads, UploadError } from '../src/upload.ts'
+import {
+	extensionFor,
+	fileFromInline,
+	fileFromInput,
+	fileFromPath,
+	mimeTypeFor,
+	resolveUploads,
+	UploadError
+} from '../src/upload.ts'
 
 const DIR = join(
 	process.env.TEMP ?? '.',
@@ -36,15 +44,18 @@ describe('codegen marks binary fields', () => {
 		expect(operationsById.uploadPrint?.binaryFields).toEqual(['image'])
 	})
 
-	test('a binary field asks for a path, not base64', () => {
-		// The whole point: base64 here would be megabytes of tool argument.
-		const schema = operationsById.uploadImage!.inputSchema as never
-		const parsed = (schema as { safeParse: (v: unknown) => { success: boolean } }).safeParse({
-			file: '/tmp/x.png',
-			tag: 'icon'
-		})
+	test('a binary field accepts a path or inline bytes', () => {
+		const schema = operationsById.uploadImage!.inputSchema as unknown as {
+			safeParse: (v: unknown) => { success: boolean }
+		}
 
-		expect(parsed.success).toBe(true)
+		expect(schema.safeParse({ file: '/tmp/x.png', tag: 'icon' }).success).toBe(true)
+		expect(
+			schema.safeParse({ file: { data: 'AAAA', mimeType: 'image/png' }, tag: 'icon' }).success
+		).toBe(true)
+
+		// A bare number is neither, and must not be quietly coerced.
+		expect(schema.safeParse({ file: 42, tag: 'icon' }).success).toBe(false)
 	})
 
 	test('ordinary operations carry no binary fields', () => {
@@ -100,7 +111,9 @@ describe('resolveUploads', () => {
 
 		expect(body.file).toBeInstanceOf(File)
 		expect(body.tag).toBe('icon')
-		expect(uploaded).toEqual([{ field: 'file', name: 'avatar.png', bytes: 11, type: 'image/png' }])
+		expect(uploaded).toEqual([
+			{ field: 'file', name: 'avatar.png', bytes: 11, type: 'image/png', source: 'path' }
+		])
 	})
 
 	test('leaves an omitted optional field alone', async () => {
@@ -118,5 +131,105 @@ describe('resolveUploads', () => {
 		expect(uploaded).toHaveLength(2)
 		expect(body.file).toBeInstanceOf(File)
 		expect(body.image).toBeInstanceOf(File)
+	})
+})
+
+const PNG_BASE64 = Buffer.from([0x89, 0x50, 0x4e, 0x47, 1, 2, 3]).toString('base64')
+
+describe('inline bytes', () => {
+	test('decodes base64 with an explicit mime type', () => {
+		const file = fileFromInline({ data: PNG_BASE64, mimeType: 'image/png' }, 'file')
+
+		expect(file.size).toBe(7)
+		expect(file.type).toBe('image/png')
+		// VRChat rejects a body with no usable filename, so one is invented from
+		// the mime type rather than left as "blob".
+		expect(file.name).toBe('upload.png')
+	})
+
+	test('honours an explicit filename', () => {
+		expect(fileFromInline({ data: PNG_BASE64, filename: 'icon.png' }, 'file').name).toBe('icon.png')
+	})
+
+	test('accepts a data: URI and takes the type from it', () => {
+		const file = fileFromInline({ data: `data:image/png;base64,${PNG_BASE64}` }, 'file')
+
+		expect(file.type).toBe('image/png')
+		expect(file.size).toBe(7)
+	})
+
+	test('a data: URI works in the string position too', async () => {
+		// An agent handed one form naturally reaches for the other, and failing
+		// with "no such file" on an obvious data: URI would be unhelpful.
+		const file = await fileFromInput(`data:image/png;base64,${PNG_BASE64}`, 'file')
+
+		expect(file.type).toBe('image/png')
+	})
+
+	test('rejects a non-base64 data: URI rather than mangling it', () => {
+		const error = (() => {
+			try {
+				fileFromInline({ data: 'data:image/png,notbase64' }, 'file')
+			} catch (e) {
+				return e as UploadError
+			}
+		})()
+
+		expect(error).toBeInstanceOf(UploadError)
+		expect(error!.message).toContain('not base64-encoded')
+	})
+
+	test('rejects junk that is not base64 at all', () => {
+		expect(() => fileFromInline({ data: 'not base64!!!' }, 'file')).toThrow(UploadError)
+	})
+
+	test('rejects data that decodes to nothing', () => {
+		// Base64 silently decodes plenty of junk to zero bytes, and VRChat stores
+		// an empty upload as a broken record, so this has to be caught here.
+		expect(() => fileFromInline({ data: '' }, 'file')).toThrow(UploadError)
+	})
+
+	test('falls back to octet-stream when no type is given', () => {
+		const file = fileFromInline({ data: PNG_BASE64 }, 'file')
+
+		expect(file.type).toBe('application/octet-stream')
+		expect(file.name).toBe('upload.bin')
+	})
+
+	test('a non-string, non-object argument is refused', async () => {
+		await expect(fileFromInput(42 as never, 'file')).rejects.toBeInstanceOf(UploadError)
+	})
+
+	test('extensions map back from mime types', () => {
+		expect(extensionFor('image/png')).toBe('.png')
+		expect(extensionFor('image/jpeg')).toBe('.jpg')
+		expect(extensionFor('application/x-avatar')).toBe('.vrca')
+		expect(extensionFor('application/unknown')).toBe('.bin')
+	})
+})
+
+describe('resolveUploads with inline bytes', () => {
+	test('swaps inline data for a File and marks the source', async () => {
+		const body: Record<string, unknown> = {
+			file: { data: PNG_BASE64, mimeType: 'image/png', filename: 'a.png' }
+		}
+		const { uploaded } = await resolveUploads(body, ['file'])
+
+		expect(body.file).toBeInstanceOf(File)
+		expect(uploaded).toEqual([
+			{ field: 'file', name: 'a.png', bytes: 7, type: 'image/png', source: 'inline' }
+		])
+	})
+
+	test('reports which form each field arrived in', async () => {
+		// The result names the bytes sent so a wrong file is detectable; naming
+		// the source makes it clear which argument produced them.
+		const body: Record<string, unknown> = {
+			file: png,
+			image: { data: PNG_BASE64, mimeType: 'image/png' }
+		}
+		const { uploaded } = await resolveUploads(body, ['file', 'image'])
+
+		expect(uploaded.map((u) => u.source)).toEqual(['path', 'inline'])
 	})
 })

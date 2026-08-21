@@ -2228,7 +2228,7 @@ export const operations: Operation[] = [
 		binaryFields: ['file'],
 		responseKeys: ['animationStyle', 'extension', 'frames', 'framesOverTime', 'id', 'loopStyle', 'maskTag', 'mimeType', 'modifiedThumbnailFileName', 'name', 'ownerId', 'tags', 'versions'],
 		inputSchema: z.object({
-			'file': z.string().describe('Path to a local file to upload. The binary blob of the png file. Give an absolute path, or one relative to the server\'s working directory. Do not paste file contents.').optional()
+			'file': z.union([z.string(), z.object({ data: z.string(), mimeType: z.string().optional(), filename: z.string().optional() })]).describe('A file to upload. The binary blob of the png file. Either a LOCAL FILE PATH (absolute, or relative to the server\'s working directory), or inline bytes as { data: "<base64>", mimeType: "image/png", filename?: "x.png" }. A data: URI works in the string form too. Prefer a path: inline costs about 1.33 bytes of tool argument per byte of file.').optional()
 		})
 	},
 	{
@@ -2245,7 +2245,7 @@ export const operations: Operation[] = [
 		binaryFields: ['file'],
 		responseKeys: ['animationStyle', 'extension', 'frames', 'framesOverTime', 'id', 'loopStyle', 'maskTag', 'mimeType', 'modifiedThumbnailFileName', 'name', 'ownerId', 'tags', 'versions'],
 		inputSchema: z.object({
-			'file': z.string().describe('Path to a local file to upload. The binary blob of the png file. Give an absolute path, or one relative to the server\'s working directory. Do not paste file contents.').optional()
+			'file': z.union([z.string(), z.object({ data: z.string(), mimeType: z.string().optional(), filename: z.string().optional() })]).describe('A file to upload. The binary blob of the png file. Either a LOCAL FILE PATH (absolute, or relative to the server\'s working directory), or inline bytes as { data: "<base64>", mimeType: "image/png", filename?: "x.png" }. A data: URI works in the string form too. Prefer a path: inline costs about 1.33 bytes of tool argument per byte of file.').optional()
 		})
 	},
 	{
@@ -2263,7 +2263,7 @@ export const operations: Operation[] = [
 		responseKeys: ['animationStyle', 'extension', 'frames', 'framesOverTime', 'id', 'loopStyle', 'maskTag', 'mimeType', 'modifiedThumbnailFileName', 'name', 'ownerId', 'tags', 'versions'],
 		inputSchema: z.object({
 			'animationStyle': z.enum(["aura","bats","bees","bounce","cloud","confetti","crying","dislike","fire","idea","lasers","like","magnet","mistletoe","money","noise","orbit","pizza","rain","rotate","shake","snow","snowball","spin","splash","stop","zzz"]).describe("Animation style for images.").optional(),
-			'file': z.string().describe('Path to a local file to upload. The binary blob of the png file. Give an absolute path, or one relative to the server\'s working directory. Do not paste file contents.').optional(),
+			'file': z.union([z.string(), z.object({ data: z.string(), mimeType: z.string().optional(), filename: z.string().optional() })]).describe('A file to upload. The binary blob of the png file. Either a LOCAL FILE PATH (absolute, or relative to the server\'s working directory), or inline bytes as { data: "<base64>", mimeType: "image/png", filename?: "x.png" }. A data: URI works in the string form too. Prefer a path: inline costs about 1.33 bytes of tool argument per byte of file.').optional(),
 			'frames': z.number().int().gte(2).lte(64).describe("Required for animated images. Total number of frames of the spritesheet to be animated.").optional(),
 			'framesOverTime': z.number().int().gte(1).lte(64).describe("Required for animated images. Animation frames per second.").optional(),
 			'loopStyle': z.enum(["linear","pingpong"]).describe("Animation looping style for images.").default("linear"),
@@ -3852,7 +3852,7 @@ export const operations: Operation[] = [
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
 			'data': z.object({ "instanceId": z.string().describe("InstanceID can be \"offline\" on User profiles if you are not friends with that user and \"private\" if you are friends and user is in private instance."), "messageSlot": z.number().int().gte(0).lte(11).optional() }),
-			'image': z.string().describe('Path to a local file to upload. The binary blob of the png file. Give an absolute path, or one relative to the server\'s working directory. Do not paste file contents.')
+			'image': z.union([z.string(), z.object({ data: z.string(), mimeType: z.string().optional(), filename: z.string().optional() })]).describe('A file to upload. The binary blob of the png file. Either a LOCAL FILE PATH (absolute, or relative to the server\'s working directory), or inline bytes as { data: "<base64>", mimeType: "image/png", filename?: "x.png" }. A data: URI works in the string form too. Prefer a path: inline costs about 1.33 bytes of tool argument per byte of file.')
 		})
 	},
 	{
@@ -3889,7 +3889,7 @@ export const operations: Operation[] = [
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
 			'data': z.object({ "requestSlot": z.number().int().gte(0).lte(11).optional() }).optional(),
-			'image': z.string().describe('Path to a local file to upload. The binary blob of the png file. Give an absolute path, or one relative to the server\'s working directory. Do not paste file contents.').optional()
+			'image': z.union([z.string(), z.object({ data: z.string(), mimeType: z.string().optional(), filename: z.string().optional() })]).describe('A file to upload. The binary blob of the png file. Either a LOCAL FILE PATH (absolute, or relative to the server\'s working directory), or inline bytes as { data: "<base64>", mimeType: "image/png", filename?: "x.png" }. A data: URI works in the string form too. Prefer a path: inline costs about 1.33 bytes of tool argument per byte of file.').optional()
 		})
 	},
 	{
@@ -3945,7 +3945,7 @@ export const operations: Operation[] = [
 		inputSchema: z.object({
 			'notificationId': z.string().describe("Must be a valid notification ID."),
 			'data': z.object({ "responseSlot": z.number().int().gte(0).lte(11) }),
-			'image': z.string().describe('Path to a local file to upload. The binary blob of the png file. Give an absolute path, or one relative to the server\'s working directory. Do not paste file contents.')
+			'image': z.union([z.string(), z.object({ data: z.string(), mimeType: z.string().optional(), filename: z.string().optional() })]).describe('A file to upload. The binary blob of the png file. Either a LOCAL FILE PATH (absolute, or relative to the server\'s working directory), or inline bytes as { data: "<base64>", mimeType: "image/png", filename?: "x.png" }. A data: URI works in the string form too. Prefer a path: inline costs about 1.33 bytes of tool argument per byte of file.')
 		})
 	},
 	{
@@ -4529,7 +4529,7 @@ export const operations: Operation[] = [
 		responseKeys: ['authorId', 'authorName', 'createdAt', 'files', 'id', 'note', 'ownerId', 'timestamp', 'worldId', 'worldName'],
 		inputSchema: z.object({
 			'printId': z.string().describe("Print ID."),
-			'image': z.string().describe('Path to a local file to upload. The binary blob of the png file. Give an absolute path, or one relative to the server\'s working directory. Do not paste file contents.').optional(),
+			'image': z.union([z.string(), z.object({ data: z.string(), mimeType: z.string().optional(), filename: z.string().optional() })]).describe('A file to upload. The binary blob of the png file. Either a LOCAL FILE PATH (absolute, or relative to the server\'s working directory), or inline bytes as { data: "<base64>", mimeType: "image/png", filename?: "x.png" }. A data: URI works in the string form too. Prefer a path: inline costs about 1.33 bytes of tool argument per byte of file.').optional(),
 			'note': z.string().describe("The caption for the image.").optional()
 		})
 	},
@@ -4581,7 +4581,7 @@ export const operations: Operation[] = [
 		binaryFields: ['image'],
 		responseKeys: ['authorId', 'authorName', 'createdAt', 'files', 'id', 'note', 'ownerId', 'timestamp', 'worldId', 'worldName'],
 		inputSchema: z.object({
-			'image': z.string().describe('Path to a local file to upload. The binary blob of the png file. Give an absolute path, or one relative to the server\'s working directory. Do not paste file contents.').optional(),
+			'image': z.union([z.string(), z.object({ data: z.string(), mimeType: z.string().optional(), filename: z.string().optional() })]).describe('A file to upload. The binary blob of the png file. Either a LOCAL FILE PATH (absolute, or relative to the server\'s working directory), or inline bytes as { data: "<base64>", mimeType: "image/png", filename?: "x.png" }. A data: URI works in the string form too. Prefer a path: inline costs about 1.33 bytes of tool argument per byte of file.').optional(),
 			'note': z.string().describe("The caption for the image.").optional(),
 			'timestamp': z.string().datetime({ offset: true }).describe("The time the image was captured.").optional(),
 			'worldId': z.string().describe("The id of the world in which the image was captured.").optional(),

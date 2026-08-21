@@ -328,10 +328,17 @@ function buildFields(
 		if (origin === 'body' && schema.type === 'string' && schema.format === 'binary') {
 			binaryFields.push(name)
 			const detail = String(schema.description ?? '').trim()
+			const help =
+				`A file to upload.${detail ? ` ${detail}` : ''} Either a LOCAL FILE PATH (absolute, ` +
+				`or relative to the server's working directory), or inline bytes as ` +
+				`{ data: "<base64>", mimeType: "image/png", filename?: "x.png" }. A data: URI works ` +
+				`in the string form too. Prefer a path: inline costs about 1.33 bytes of tool ` +
+				`argument per byte of file.`
+
 			fields.push({
 				name,
-				source: `z.string().describe(${quote(
-					`Path to a local file to upload.${detail ? ` ${detail}` : ''} Give an absolute path, or one relative to the server's working directory. Do not paste file contents.`
+				source: `z.union([z.string(), z.object({ data: z.string(), mimeType: z.string().optional(), filename: z.string().optional() })]).describe(${quote(
+					help
 				)})${required ? '' : '.optional()'}`
 			})
 			return

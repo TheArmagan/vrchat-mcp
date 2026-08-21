@@ -514,6 +514,32 @@ value and listing the valid ones, and `vrchat_authStatus` carries the same in
   vrchat-api, claude, claude-code, anthropic, ai-agents, llm-tools, bun,
   typescript, openapi, code-generation, stdio).
 
+## Inline base64 uploads
+
+Every upload argument now takes either a local path or the bytes themselves.
+Paths stay the recommended route, but content that has no path (an image the
+agent just generated) previously had nowhere to go.
+
+- Codegen emits a union for binary fields: `z.string()` or
+  `{ data, mimeType?, filename? }`. A `data:` URI is also accepted **in the
+  string position**, since an agent handed one form naturally reaches for the
+  other, and failing with "no such file" on an obvious data: URI is unhelpful.
+- `filename` is optional and invented from the MIME type when absent
+  (`upload.png`), because VRChat rejects an upload it cannot name. That is the
+  same reason a `File` is used rather than a `Blob`.
+- Size is checked **before** decoding, from the base64 length times 3/4, so an
+  oversized payload is refused without allocating it.
+- Zero-byte and non-base64 input are rejected locally. Base64 decodes plenty of
+  junk to nothing, and VRChat stores an empty upload as a broken record.
+- `resolveUploads` reports `source: 'path' | 'inline'` per field, so the result
+  says both what was sent and which argument produced it.
+- `vrchat_uploadFile` and `vrchat_setProductImage` renamed their `path`
+  argument to `file` and take the same union.
+
+Verified over stdio with a real 1x1 PNG: the object form and the data: URI form
+both decoded and reached the auth step, and `{ data: 'not base64!!!' }` was
+refused before any network call.
+
 ## Blocked / open
 
 - **SOCKS proxy support is deliberately NOT implemented — decided, not pending.**

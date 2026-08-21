@@ -38,7 +38,7 @@ VRCHAT_CONTACT=you@your-domain.tld     # must be real, VRChat 403s generic agent
 | Find out why a tool is missing | call `vrchat_authStatus` |
 | Stop huge payloads eating context | `_responseKeys: ["id","name"]` on any tool |
 | See an image | `vrchat_getImage` with an `imageUrl` |
-| Upload a picture | `vrchat__uploadImage` with a local file path |
+| Upload a picture | `vrchat__uploadImage` with a path, or `{ data, mimeType }` |
 | Fix a login stuck on a new network | open the emailed link, then `vrchat_retryLogin` |
 
 Tool names carry their origin. Two underscores means generated from the spec
@@ -359,6 +359,19 @@ Pass a local file path. The server runs on your machine and reads the file itsel
 contents never enter the conversation. Inlining a 2 MB PNG as base64 would cost roughly 2.7 MB
 of tool arguments, more than everything else in the call combined.
 
+When there is no file on disk, for instance an image the agent just produced, the same argument
+takes the bytes inline:
+
+```json
+{ "file": { "data": "iVBORw0KGgo...", "mimeType": "image/png", "filename": "icon.png" } }
+```
+
+A `data:` URI works in the string position too, so
+`"file": "data:image/png;base64,iVBORw0..."` is equivalent. `filename` is optional and is
+invented from the MIME type when omitted, because VRChat rejects an upload it cannot name.
+Prefer a path whenever one exists: inline costs about 1.33 bytes of tool argument per byte of
+file, and that comes out of the same context budget as everything else.
+
 Eight operations take a file directly, one call each:
 
 | Tool | Field | For |
@@ -377,8 +390,15 @@ Eight operations take a file directly, one call each:
   "arguments": { "file": "C:/Users/me/Pictures/icon.png", "tag": "icon" } }
 ```
 
-The result names the bytes that were sent, which is the only way to tell a successful upload of
-the right file from a successful upload of the wrong one.
+The result names the bytes that were sent, and which form they arrived in, which is the only
+way to tell a successful upload of the right file from a successful upload of the wrong one:
+
+```json
+{ "uploaded": [
+    { "field": "file", "name": "icon.png", "bytes": 48211, "type": "image/png", "source": "path" }
+  ],
+  "result": { "id": "file_...", "name": "icon.png" } }
+```
 
 For everything else, `vrchat_uploadFile` runs VRChat's four-step sequence (create the record,
 request a presigned URL, transfer the bytes, finish) and returns the completed file record. Use
@@ -407,7 +427,7 @@ Setting a product image takes one call:
 
 ```json
 { "name": "vrchat_setProductImage",
-  "arguments": { "productId": "prod_...", "path": "/abs/path/cover.png" } }
+  "arguments": { "productId": "prod_...", "file": "/abs/path/cover.png" } }
 ```
 
 That uploads with `tag: "product"` and attaches the returned file id as the product's

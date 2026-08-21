@@ -51,6 +51,109 @@ export function mimeTypeFor(path: string): string {
 	return MIME_TYPES[extname(path).toLowerCase()] ?? 'application/octet-stream'
 }
 
+/** MIME type back to an extension, for naming a file that arrived without one. */
+const EXTENSIONS: Record<string, string> = Object.fromEntries(
+	Object.entries(MIME_TYPES)
+		.reverse()
+		.map(([extension, mime]) => [mime, extension])
+)
+
+export function extensionFor(mimeType: string): string {
+	return EXTENSIONS[mimeType.toLowerCase()] ?? '.bin'
+}
+
+/**
+ * An upload argument: a local path, or the bytes themselves.
+ *
+ * Paths are the cheap route and should be preferred. Inline base64 exists for
+ * content that has no path to begin with, such as an image the agent just
+ * generated, and it costs roughly 1.33 bytes of tool argument per byte of file.
+ */
+export type FileInput =
+	| string
+	| { data: string; mimeType?: string; filename?: string }
+
+/** Rejects the obvious non-base64 before spending memory decoding it. */
+const BASE64_PATTERN = /^[A-Za-z0-9+/\s]*={0,2}$/
+
+/**
+ * Decodes inline bytes into a `File`.
+ *
+ * Accepts a bare base64 string or a `data:` URI, since an agent handed one
+ * naturally reaches for the other.
+ */
+export function fileFromInline(
+	input: { data: string; mimeType?: string; filename?: string },
+	field: string
+): File {
+	let payload = input.data.trim()
+	let mimeType = input.mimeType
+
+	const dataUri = /^data:([^;,]*)(;base64)?,/i.exec(payload)
+	if (dataUri) {
+		if (!dataUri[2]) {
+			throw new UploadError(
+				`\`${field}\` is a data: URI that is not base64-encoded.`,
+				'Use a `data:<mime>;base64,<...>` URI, or pass `data` as plain base64 with `mimeType`.'
+			)
+		}
+		mimeType ||= dataUri[1] || undefined
+		payload = payload.slice(dataUri[0].length)
+	}
+
+	if (!payload) {
+		throw new UploadError(`\`${field}\` has no data.`, 'Pass base64 bytes in `data`.')
+	}
+	if (!BASE64_PATTERN.test(payload)) {
+		throw new UploadError(
+			`\`${field}\` is not valid base64.`,
+			'Pass base64 bytes, a data: URI, or a local file path instead.'
+		)
+	}
+
+	// Base64 inflates by 4/3, so an oversized payload can be refused before the
+	// decode allocates it.
+	if ((payload.length * 3) / 4 > MAX_UPLOAD_BYTES) {
+		throw new UploadError(
+			`\`${field}\` is over the ${MAX_UPLOAD_BYTES / 1024 / 1024} MB limit.`,
+			'Write the file to disk and pass its path instead.'
+		)
+	}
+
+	const bytes = Buffer.from(payload, 'base64')
+
+	if (bytes.byteLength === 0) {
+		throw new UploadError(
+			`\`${field}\` decoded to zero bytes.`,
+			'Check the base64 is complete and not truncated.'
+		)
+	}
+
+	const type = mimeType || 'application/octet-stream'
+	const name = input.filename || `upload${extensionFor(type)}`
+
+	return new File([bytes], name, { type })
+}
+
+/** Resolves either form of upload argument into a `File`. */
+export async function fileFromInput(input: FileInput, field: string): Promise<File> {
+	if (typeof input === 'string') {
+		// A data: URI is unambiguous, so accept it in the path position rather
+		// than failing with "no such file" on something clearly not a path.
+		if (/^data:/i.test(input.trim())) return fileFromInline({ data: input }, field)
+		return fileFromPath(input, field)
+	}
+
+	if (input && typeof input === 'object' && typeof input.data === 'string') {
+		return fileFromInline(input, field)
+	}
+
+	throw new UploadError(
+		`\`${field}\` must be a file path or { data, mimeType }.`,
+		'Pass a local path, or base64 bytes as { data: "...", mimeType: "image/png" }.'
+	)
+}
+
 /**
  * Reads a path into a `File`.
  *
@@ -102,19 +205,35 @@ export async function fileFromPath(path: string, field: string): Promise<File> {
  * bytes actually sent, which is the only way to tell a successful upload of the
  * wrong file from a successful upload of the right one.
  */
+export interface UploadedFile {
+	field: string
+	name: string
+	bytes: number
+	type: string
+	source: 'path' | 'inline'
+}
+
 export async function resolveUploads(
 	body: Record<string, unknown>,
 	binaryFields: readonly string[]
-): Promise<{ uploaded: { field: string; name: string; bytes: number; type: string }[] }> {
-	const uploaded: { field: string; name: string; bytes: number; type: string }[] = []
+): Promise<{ uploaded: UploadedFile[] }> {
+	const uploaded: UploadedFile[] = []
 
 	for (const field of binaryFields) {
 		const value = body[field]
-		if (typeof value !== 'string' || value === '') continue
+		if (value === undefined || value === null || value === '') continue
 
-		const file = await fileFromPath(value, field)
+		const inline = typeof value !== 'string' || /^data:/i.test(value.trim())
+		const file = await fileFromInput(value as FileInput, field)
+
 		body[field] = file
-		uploaded.push({ field, name: file.name, bytes: file.size, type: file.type })
+		uploaded.push({
+			field,
+			name: file.name,
+			bytes: file.size,
+			type: file.type,
+			source: inline ? 'inline' : 'path'
+		})
 	}
 
 	return { uploaded }
