@@ -81,14 +81,37 @@ claude mcp add vrchat -- bun run /abs/path/to/vrchat-mcp/src/index.ts
 Once `vrchat-mcp` is on your PATH it can be launched from anywhere, so nothing that matters
 is resolved against the working directory:
 
+**State** is anchored to the repo, so it survives being launched from anywhere:
+
 | What | Where | Why |
 |---|---|---|
-| `.env` | the **repo root**, as a fallback | Bun only auto-loads `.env` from the working directory. A linked server would otherwise start with no credentials and fail on the first tool call. Real environment variables — including an MCP client's `env` block — always win. |
 | `.vrchat-mcp/session.json` | the **repo root** | A CWD-relative session would be re-created wherever you happened to launch from, silently losing your login (and its 2FA) every time. |
 | `.vrchat-mcp/events.db` | the **repo root** | Same reason; event history would fragment across directories. |
 
 `VRCHAT_MCP_SESSION` and `VRCHAT_MCP_DB` still override those paths, and a relative value
 there is resolved against the working directory, as you would expect.
+
+**Configuration** layers, so a project can set its own options without repeating your
+credentials. Highest priority first:
+
+| Priority | Source | Use it for |
+|---|---|---|
+| 1 | Real environment variables, including an MCP client's `env` block | Anything you want to win unconditionally. |
+| 2 | **`.env` in the directory the command is run from** | Per-project overrides. Bun auto-loads this. |
+| 3 | `.env` at the repo root | Your credentials, set once. |
+
+So a project that wants economy tools only, using the credentials you already configured,
+needs a one-line `.env` next to it:
+
+```bash
+# ~/my-project/.env
+VRCHAT_MCP_TAGS=economy
+```
+
+Run `vrchat-mcp` from `~/my-project` and it registers the 28 economy tools, authenticating
+with the username, password and contact from the repo's `.env`. Any key the local `.env`
+does define — `VRCHAT_CONTACT`, a different account, a tighter `VRCHAT_MCP_RPS` — overrides
+the repo value for that run only.
 
 The server starts read-only. Nothing that writes, spends, or moderates is registered until
 you set the corresponding gate — see [Safety gates](#safety-gates).

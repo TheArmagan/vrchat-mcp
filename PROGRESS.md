@@ -306,6 +306,19 @@ Three things had to change for that to actually work:
   anything already in `process.env` — including an MCP client's `env` block —
   wins over the file.
 
+**Config layering works out to three tiers, verified empirically** (a linked
+run from a scratch directory containing its own `.env`):
+
+1. Real environment variables / an MCP client's `env` block.
+2. `.env` in the **directory the command is run from** — Bun auto-loads this,
+   and it works through the linked binary. Overrides the repo's `.env` per key.
+3. `.env` at the **repo root** — the fallback added above.
+
+So a project drops a one-line `.env` (`VRCHAT_MCP_TAGS=economy` → 28 tools
+instead of 144) and still inherits credentials from the repo. Confirmed both
+directions: the local `VRCHAT_CONTACT` won, and `VRCHAT_USERNAME`/`PASSWORD`,
+absent locally, were inherited.
+
 Verified end-to-end from an unrelated working directory: `tools/list` returns
 144 read-only tools, and `vrchat__getCurrentUser` with
 `_responseKeys: ["displayName","id"]` returns real projected data.
