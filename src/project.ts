@@ -268,6 +268,40 @@ export function availableKeys(value: unknown): string[] {
 }
 
 /**
+ * A names-only outline of a value, to whatever depth is asked for.
+ *
+ * Values are dropped entirely, which is the point: the shape of a `World` is a
+ * few hundred bytes, the `World` itself is a few thousand.
+ */
+export function keyOutline(value: unknown, depth = 2): unknown {
+	if (depth <= 0) return undefined
+
+	if (Array.isArray(value)) {
+		if (value.length === 0) return { '<array>': 'empty' }
+		// Elements are homogeneous in every VRChat listing, so one is enough.
+		const inner = keyOutline(value[0], depth)
+		return { '<array>': value.length, '*': inner ?? typeName(value[0]) }
+	}
+
+	if (isPlainObject(value)) {
+		const outline: PlainObject = {}
+		for (const [key, child] of Object.entries(value)) {
+			const nested = keyOutline(child, depth - 1)
+			outline[key] = nested ?? typeName(child)
+		}
+		return outline
+	}
+
+	return undefined
+}
+
+function typeName(value: unknown): string {
+	if (value === null) return 'null'
+	if (Array.isArray(value)) return 'array'
+	return typeof value
+}
+
+/**
  * Attaches the discovery meta without ever shadowing real payload data.
  *
  * Meta lands inline when the projection is a plain object that does not already
@@ -278,8 +312,17 @@ export function availableKeys(value: unknown): string[] {
  * changes, and it changes deterministically.
  */
 function withMeta(projected: unknown, source: unknown, unmatched: string[]): unknown {
-	const meta: PlainObject = { [AVAILABLE_KEYS_KEY]: availableKeys(source) }
-	if (unmatched.length > 0) meta[UNMATCHED_KEY] = unmatched
+	// Only when something went wrong. Shipping the key list on every successful
+	// response taxes the common case, where the caller already knows the shape,
+	// to serve the rare one. On a miss it is essential, because an empty result
+	// with no explanation is a dead end; `vrchat_availableKeys` covers asking on
+	// purpose.
+	if (unmatched.length === 0) return projected
+
+	const meta: PlainObject = {
+		[UNMATCHED_KEY]: unmatched,
+		[AVAILABLE_KEYS_KEY]: availableKeys(source)
+	}
 
 	const collides =
 		isPlainObject(projected) &&
@@ -346,8 +389,9 @@ export const RESPONSE_KEYS_DESCRIPTION = [
 	'array or object | "items.*.name" from every element of items | "unityPackages.*.**"',
 	'everything below each element | "!description" excludes (combine with "*" for raw-minus).',
 	'Shape is preserved — arrays stay arrays, order and length intact.',
-	`Every response carries ${AVAILABLE_KEYS_KEY} (names only, capped at ${AVAILABLE_KEYS_CAP});`,
-	`paths that match nothing come back in ${UNMATCHED_KEY} instead of silently returning empty.`
+	`A path that matches nothing comes back in ${UNMATCHED_KEY}, with ${AVAILABLE_KEYS_KEY}`,
+	`listing what was actually there (capped at ${AVAILABLE_KEYS_CAP}), rather than silently`,
+	'returning empty. Call vrchat_availableKeys to ask for the key list up front instead.'
 ].join(' ')
 
 /** Appends the spec's known top-level response fields, when codegen has them. */

@@ -15,6 +15,7 @@ import { knownTags, registerGeneratedTools, unknownTags } from './registry.ts'
 import { registerAuthTools } from './tools/auth.ts'
 import { registerEventTools } from './tools/events.ts'
 import { registerImageTools } from './tools/images.ts'
+import { registerKeyTools } from './tools/keys.ts'
 import { registerRequestTools } from './tools/request.ts'
 import { registerUploadTools } from './tools/upload.ts'
 import { getClient } from './vrchat/client.ts'
@@ -34,8 +35,9 @@ function createServer() {
 	// than simply not existing when an agent goes looking for it.
 	registerUploadTools(server)
 
-	// Read-only, so it needs no gate.
+	// Read-only, so they need no gate.
 	registerImageTools(server)
+	registerKeyTools(server)
 
 	// Gates itself per call, from the method and path.
 	registerRequestTools(server)

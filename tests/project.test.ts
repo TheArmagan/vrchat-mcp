@@ -59,10 +59,16 @@ describe('selection', () => {
 			{ id: 'b', name: 'second', bulk: 'y'.repeat(200) },
 			{ id: 'c', name: 'third', bulk: 'z'.repeat(200) }
 		]
-		const result = project(list, ['*.id']) as Bag
-		// An array projection cannot carry meta in place without JSON dropping it,
-		// so it arrives under `_result` with the array itself untouched.
-		expect(result[RESULT_KEY]).toEqual([{ id: 'a' }, { id: 'b' }, { id: 'c' }])
+		// With nothing unmatched there is no meta, so the array comes back as an
+		// array rather than wrapped in an envelope it no longer needs.
+		expect(project(list, ['*.id'])).toEqual([{ id: 'a' }, { id: 'b' }, { id: 'c' }])
+	})
+
+	test('an array projection that misses is wrapped, since JSON drops keys on arrays', () => {
+		const result = project([{ id: 'a' }], ['*.id', '*.nope']) as Bag
+
+		expect(result[RESULT_KEY]).toEqual([{ id: 'a' }])
+		expect(result[UNMATCHED_KEY]).toEqual(['*.nope'])
 	})
 
 	test('"*.id" also walks a top-level object of objects', () => {
@@ -106,8 +112,11 @@ describe('selection', () => {
 
 	test('a bare "**" reproduces the whole payload, projected', () => {
 		const result = project(raw, ['**'])
+
 		expect(withoutMeta(result)).toEqual(raw)
-		expect((result as Bag)[AVAILABLE_KEYS_KEY]).toContain('id')
+		// Same content as ["*"], but a real projection rather than the input by
+		// reference, so identity is what separates them.
+		expect(result).not.toBe(raw)
 	})
 })
 
@@ -153,12 +162,20 @@ describe('discovery', () => {
 		expect(result[UNMATCHED_KEY]).toEqual(['nope'])
 	})
 
-	test('_availableKeys ships on every projected response', () => {
-		expect((project(raw, ['id']) as Bag)[AVAILABLE_KEYS_KEY]).toContain('visits')
+	test('a successful projection carries no meta at all', () => {
+		// Meta used to ride along on every response. That taxed the common case,
+		// where the caller already knows the shape, to serve the rare one.
+		// vrchat_availableKeys covers asking on purpose.
+		const result = project(raw, ['id']) as Bag
+
+		expect(result).toEqual({ id: raw.id })
+		expect(result[AVAILABLE_KEYS_KEY]).toBeUndefined()
+		expect(result[UNMATCHED_KEY]).toBeUndefined()
 	})
 
-	test('array element keys are listed in usable "*.field" form', () => {
-		const result = project([{ id: 1, name: 'x' }], ['*.id']) as Bag
+	test('array element keys are listed in usable "*.field" form on a miss', () => {
+		const result = project([{ id: 1, name: 'x' }], ['*.nope']) as Bag
+
 		expect(result[AVAILABLE_KEYS_KEY]).toEqual(['*.id', '*.name'])
 	})
 
@@ -171,10 +188,14 @@ describe('discovery', () => {
 	})
 
 	test('a payload owning a meta key keeps it; the meta moves into an envelope', () => {
+		// Only reachable on a miss now, which is the only time meta is attached.
+		// The payload's own field must survive rather than be overwritten.
 		const collide = { id: 'x', [AVAILABLE_KEYS_KEY]: ['payload-owned'] }
-		const result = project(collide, ['id', AVAILABLE_KEYS_KEY]) as Bag
+		const result = project(collide, ['id', AVAILABLE_KEYS_KEY, 'nope']) as Bag
+
 		expect((result[RESULT_KEY] as Bag)[AVAILABLE_KEYS_KEY]).toEqual(['payload-owned'])
 		expect(result[AVAILABLE_KEYS_KEY]).toEqual(['id', AVAILABLE_KEYS_KEY])
+		expect(result[UNMATCHED_KEY]).toEqual(['nope'])
 	})
 
 	test('the tool description documents the syntax and the meta keys', () => {

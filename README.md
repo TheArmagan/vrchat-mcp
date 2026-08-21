@@ -37,6 +37,7 @@ VRCHAT_CONTACT=you@your-domain.tld     # must be real, VRChat 403s generic agent
 | Expose everything | `VRCHAT_MCP_TAGS=everything` |
 | Find out why a tool is missing | call `vrchat_authStatus` |
 | Stop huge payloads eating context | `_responseKeys: ["id","name"]` on any tool |
+| Find out what fields exist | `vrchat_availableKeys` with the tool name |
 | See an image | `vrchat_getImage` with an `imageUrl` |
 | Upload a picture | `vrchat__uploadImage` with a path, or `{ data, mimeType }` |
 | Fix a login stuck on a new network | open the emailed link, then `vrchat_retryLogin` |
@@ -55,6 +56,7 @@ Hand-written tools, in full:
 | `vrchat_retryLogin` | Restarts a login after a new-network email link is opened |
 | `vrchat_logout` | Clears the stored session |
 | `vrchat_request` | Calls any endpoint directly, for when a generated schema is wrong |
+| `vrchat_availableKeys` | Lists the fields a tool returns, so you can pick `_responseKeys` |
 | `vrchat_getImage` | Downloads a VRChat image and returns it as a viewable image |
 | `vrchat_uploadFile` | Runs VRChat's four-step upload for non-image files |
 | `vrchat_setProductImage` | Uploads an image and attaches it to a store product |
@@ -329,6 +331,28 @@ exist, and a silently empty result would make this design worse than trimming. S
 matches nothing comes back as `_unmatched`, alongside `_availableKeys` listing what was
 actually there. Array element keys are named as `*.id`, `*.name`, the form that works as a
 `_responseKeys` entry.
+
+That meta appears only on a miss. Shipping the key list on every response taxed the common
+case, where the caller already knows the shape, to serve the rare one. To ask deliberately,
+call `vrchat_availableKeys`:
+
+```json
+{ "name": "vrchat_availableKeys", "arguments": { "tool": "vrchat__getUser" } }
+```
+
+That answers from the spec with no API call at all, which covers most operations. For nested
+fields, or where the spec describes nothing, `live: true` makes one real call and returns a
+names-and-types outline instead of the payload:
+
+```json
+{ "outline": { "id": "string", "author": { "displayName": "string" },
+               "unityPackages": { "<array>": 3, "*": { "platform": "string" } } } }
+```
+
+On the sample `World`, an outline is 73% smaller than the object at depth 1 and 50% smaller at
+depth 2, which is the depth that shows you paths like `author.displayName`. A live outline
+obeys the same gates as the operation itself, so reading keys is never a way to reach a write
+that is switched off.
 
 `["*"]` returns the input by reference, so the raw path is provably lossless and nothing is
 ever hidden.

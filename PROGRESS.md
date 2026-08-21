@@ -573,6 +573,30 @@ The 400 hint now says all of this, because a 400 here is as likely to mean the
 schema is wrong as the caller is, and without the hint an agent keeps rewriting
 a call that was already correct.
 
+## Discovery meta is now opt-in
+
+`_availableKeys` used to ship on every projected response. It solved discovery
+by charging every successful call for the benefit of the occasional one that
+needed help: up to 50 key names appended to a result the caller may have
+narrowed to two fields.
+
+- **Meta appears only when something was unmatched.** A miss still returns
+  `_unmatched` plus `_availableKeys`, because an empty result with no
+  explanation is the dead end the whole design exists to avoid. A hit returns
+  exactly the fields asked for. `project(world, ['id'])` went from roughly a
+  kilobyte to under 120 bytes.
+- **`vrchat_availableKeys`** is the deliberate ask. It answers from
+  `Operation.responseKeys`, which codegen already stored, so the common case
+  costs no request at all. `live: true` makes one call and returns
+  `keyOutline()`: names and types, no values, depth-limited.
+- The live path **re-checks `shouldRegister`**, so asking for keys can never
+  reach an operation whose gate is closed.
+- Measured on the `World` fixture: outline is 73% smaller than the payload at
+  depth 1, 50% at depth 2. Stated in a test rather than claimed loosely, because
+  depth 2 expands nested arrays and the saving is real but not dramatic.
+- Array projections no longer need the `_result` envelope on success, only on a
+  miss, since that envelope exists to carry meta that is no longer there.
+
 ## Blocked / open
 
 - **SOCKS proxy support is deliberately NOT implemented — decided, not pending.**
