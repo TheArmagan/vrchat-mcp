@@ -252,6 +252,56 @@ const HINTS: Record<AuthState, string> = {
 		'No login has happened yet in this process. Login is lazy — just call the tool you want and it will authenticate (prompting for a 2FA code if needed).'
 }
 
+/** In-flight `ensureAuthenticated`, so a cold-start burst logs in exactly once. */
+let authenticating: Promise<void> | undefined
+
+/**
+ * Drives a login if this process does not already hold a live session.
+ *
+ * The plan assumed the SDK's 401 interceptor would make login lazy for free.
+ * It does not: on a *partial* session VRChat answers `/auth/user` with **200**
+ * and a `requiresTwoFactorAuth` body rather than a 401, so the interceptor
+ * never fires, `authenticate()` is never called, and the tool hands the agent
+ * `{ requiresTwoFactorAuth: ['emailOtp'] }` as though it were a result. Calling
+ * `authenticate({ partial: true })` explicitly is what turns that into a real
+ * login (and, when a code is needed, a real prompt).
+ *
+ * Cheap in the common case: it returns immediately once a session is live, so
+ * this is one extra request per process, not per tool call.
+ */
+export async function ensureAuthenticated(): Promise<void> {
+	if (sessionActive) return
+	if (authenticating) return authenticating
+
+	// `authenticate` is public at runtime but marked private in the SDK's types.
+	const client = getClient() as unknown as {
+		authenticate: (options: { partial: boolean }) => Promise<{ data?: unknown; error?: unknown }>
+	}
+
+	authenticating = (async () => {
+		const result = await client.authenticate({ partial: true })
+
+		if (result.error) throw result.error
+
+		// The fetch sniffer sets `sessionActive` from the response body; if a
+		// login "succeeded" without ever producing a user, treat it as a failure
+		// rather than letting every later call retry the same dead path.
+		if (!sessionActive) {
+			const pending = getBroker().status()
+
+			throw new Error(
+				pending.state === 'awaiting_code'
+					? 'Login is parked on a two-factor code.'
+					: 'Login did not produce a session.'
+			)
+		}
+	})().finally(() => {
+		authenticating = undefined
+	})
+
+	return authenticating
+}
+
 /**
  * Clears the persisted session and drops the memoized client, so the next call
  * logs in from scratch.

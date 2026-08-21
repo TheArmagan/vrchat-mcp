@@ -21,6 +21,7 @@ Legend: `[x]` done · `[~]` in progress · `[ ]` not started · `[!]` blocked
 | 9 | `src/project.ts` (`_responseKeys`) + `src/errors.ts` | [x] | agent D |
 | 10 | `src/index.ts` (stdio entry) | [x] | main |
 | 11 | `.env.example` + README | [x] | agent E |
+| 12 | `tests/live/` — live suite (plan Verification §17) | [x] | main |
 
 ## Established facts (verified against installed packages, do not re-derive)
 
@@ -50,6 +51,10 @@ actual installed dependency, not assumed from docs.
   await it. A response interceptor catches **401**, re-authenticates, and
   replays the original request. So a burst of cold-start calls produces one
   login and one 2FA prompt for free — do not build a second lock.
+  **CAVEAT, learned the hard way:** that 401 path does *not* make login lazy on
+  its own, because a partial session comes back **200** with
+  `requiresTwoFactorAuth`. See "Lazy login was broken" below — call
+  `ensureAuthenticated()`, never rely on the interceptor alone.
 - **`twoFactorCode` receives NO arguments.** It is `Lazy<string>` =
   `string | Promise<string> | (() => string | Promise<string>)`. The SDK does
   *not* pass the 2FA method in, which the plan flagged as an open question.
@@ -235,6 +240,52 @@ real VRChat parameter structurally impossible rather than merely asserted, and
 it matches the project's camelCase convention. Renamed across the codegen
 assertion, the registry, the event tools, the projection help text, the tests
 and the docs. `docs/PLAN.md` retains the original spelling as a historical record.
+
+## Lazy login was broken — fixed (`ensureAuthenticated`)
+
+The plan assumed the SDK's 401 response interceptor would make login lazy for
+free, and `PROGRESS.md` recorded that as an established fact. **It is wrong**,
+and it was only caught by running against a real account:
+
+On a *partial* session VRChat answers `/auth/user` with **200** and a
+`{ requiresTwoFactorAuth: ['emailOtp'] }` body — **not** a 401. So the
+interceptor never fires, `authenticate()` is never called, no 2FA prompt is ever
+raised, and the tool hands the agent that body as though it were a result. Every
+API call would have silently returned nonsense on any account needing 2FA.
+
+`src/vrchat/client.ts` now exports **`ensureAuthenticated()`**, which calls
+`authenticate({ partial: true })` explicitly, single-flighted, and short-circuits
+once `sessionActive` is set by the fetch sniffer — so it costs one extra request
+per process, not per tool call. `src/registry.ts` awaits it before every
+operation, and the live suite's `liveCall` does the same.
+
+The SDK's single-flight and 401-replay behaviour is still real and still worth
+not duplicating; it simply does not cover the partial-session case, which is the
+case that matters on a 2FA account.
+
+## Live verification: PASSING
+
+Confirmed end-to-end against a real account (`AVTRZIP`) over the configured
+HTTP proxy, email-OTP login included. `bun run test:live` → 10 pass / 0 fail.
+
+- Email-OTP flow works: the broker parks the login, `submitCode` resolves it,
+  and the Keyv session persists so later runs skip 2FA entirely.
+- `getCurrentUser` and `getBalance` both return real data — the economy path and
+  auth scope are live.
+- `searchWorlds` paginates correctly and page 2 differs from page 1.
+- Narrowing `_responseKeys` on a real World listing cuts the payload by >50%.
+- A bogus user id produces a structured error with no stack trace.
+- A 10-call burst stays inside the local rate budget with none dropped.
+
+`tests/live/guard.ts` is the safety rail: every live call goes through
+`liveCall`, which **hard-refuses the `money` and `admin` classes** before any
+client is constructed. Three tests assert that refusal and run even without
+credentials. Cleanups are registered per artifact and torn down in reverse.
+
+The suite skips itself entirely unless `VRCHAT_LIVE_TESTS=1` **and** credentials
+are present, so `bun test` still needs neither. `liveLogin()` fails fast with an
+actionable message when an account would park on an interactive 2FA prompt —
+otherwise a run hangs for the full five-minute broker timeout, per describe block.
 
 ## Blocked / open
 

@@ -15,7 +15,7 @@ import { describeError, toToolError } from './errors.ts'
 import { operations } from './generated/operations.ts'
 import { PROJECTION_HELP, project } from './project.ts'
 import type { Operation, OperationKind } from './types.ts'
-import { getClient } from './vrchat/client.ts'
+import { ensureAuthenticated, getClient } from './vrchat/client.ts'
 
 /** Default page size for paginated operations, mirrored from codegen. */
 const DEFAULT_PAGE_SIZE = 25
@@ -180,6 +180,11 @@ async function invoke(
 	request: { path: Record<string, unknown>; query: Record<string, unknown>; body: Record<string, unknown> | undefined }
 ): Promise<SdkResult> {
 	const client = getClient()
+
+	// VRChat answers a partial session with 200 + `requiresTwoFactorAuth`, not a
+	// 401, so nothing else would ever drive the login.
+	await ensureAuthenticated()
+
 	const method = (client as unknown as Record<string, unknown>)[operation.operationId]
 
 	const options = { ...request, throwOnError: false }
