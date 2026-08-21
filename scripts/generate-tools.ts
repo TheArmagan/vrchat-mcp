@@ -277,10 +277,15 @@ function buildFields(
 	operationId: string,
 	parameters: Json[],
 	body: { schema: Json | null; required: boolean }
-): { fields: Field[]; params: { path: string[]; query: string[]; body: string[] | null } } {
+): {
+	fields: Field[]
+	params: { path: string[]; query: string[]; body: string[] | null }
+	binaryFields: string[]
+} {
 	const fields: Field[] = []
 	const seen = new Map<string, string>()
 	const params = { path: [] as string[], query: [] as string[], body: null as string[] | null }
+	const binaryFields: string[] = []
 
 	const push = (name: string, origin: string, schema: Json, required: boolean) => {
 		const previous = seen.get(name)
@@ -289,6 +294,22 @@ function buildFields(
 			return
 		}
 		seen.set(name, origin)
+
+		// A `format: binary` field is a file. Advertising it as base64 would make
+		// the agent inline the whole payload into the tool call; a path lets the
+		// server, which runs on the same machine, read the bytes itself.
+		if (origin === 'body' && schema.type === 'string' && schema.format === 'binary') {
+			binaryFields.push(name)
+			const detail = String(schema.description ?? '').trim()
+			fields.push({
+				name,
+				source: `z.string().describe(${quote(
+					`Path to a local file to upload.${detail ? ` ${detail}` : ''} Give an absolute path, or one relative to the server's working directory. Do not paste file contents.`
+				)})${required ? '' : '.optional()'}`
+			})
+			return
+		}
+
 		const source = toZod(schema)
 		// `.default()` already makes the input optional; stacking `.optional()`
 		// on top would erase the default from the advertised schema.
@@ -321,7 +342,7 @@ function buildFields(
 		push(parameter.name, 'query', describe(parameter), Boolean(parameter.required))
 	}
 
-	return { fields, params }
+	return { fields, params, binaryFields }
 }
 
 /** OpenAPI hangs the description off the parameter, not its schema. */
@@ -369,6 +390,7 @@ interface Emitted {
 	kind: OperationKind
 	params: { path: string[]; query: string[]; body: string[] | null }
 	paginated: boolean
+	binaryFields: string[]
 	responseKeys: string[]
 	fields: Field[]
 }
@@ -396,6 +418,7 @@ function render(op: Emitted): string {
 			op.params.body === null ? 'null' : list(op.params.body)
 		} },`,
 		`\t\tpaginated: ${op.paginated},`,
+		`		binaryFields: ${list(op.binaryFields)},`,
 		`\t\tresponseKeys: ${list(op.responseKeys)},`,
 		shape ? `\t\tinputSchema: z.object({\n${shape}\n\t\t})` : '\t\tinputSchema: z.object({})',
 		'\t}'
@@ -493,7 +516,7 @@ async function main(): Promise<void> {
 			const content = deref(operation.requestBody ?? null)?.content ?? {}
 			const bodySchema = (content['application/json'] ?? content['multipart/form-data'])?.schema ?? null
 
-			const { fields, params } = buildFields(
+			const { fields, params, binaryFields } = buildFields(
 				operationId,
 				parameters.map((p) => (paginated ? { ...p, schema: paginationSchema(p) } : p)),
 				{ schema: bodySchema, required: Boolean(operation.requestBody?.required) }
@@ -513,6 +536,7 @@ async function main(): Promise<void> {
 				kind: classify(operationId, method, path),
 				params,
 				paginated,
+				binaryFields,
 				responseKeys: responseKeys(operation, deref),
 				fields
 			})

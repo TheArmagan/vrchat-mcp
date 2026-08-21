@@ -81,12 +81,34 @@ describe('registration gates', () => {
 		expect(tools).not.toContain('vrchat__deleteUser')
 	}, 30_000)
 
-	test('writes gate unlocks destructive ops but not money or admin', async () => {
+	test('writes gate unlocks creating and editing, but nothing destructive', async () => {
 		const tools = await listTools({ VRCHAT_MCP_ALLOW_WRITES: '1' })
+
+		expect(tools).toContain('vrchat__uploadImage')
+		expect(tools).not.toContain('vrchat__deleteProduct')
+		expect(tools).not.toContain('vrchat__purchaseProductListing')
+		expect(tools).not.toContain('vrchat__deleteUser')
+	}, 30_000)
+
+	test('destructive gate unlocks deletes, but not money or admin', async () => {
+		const tools = await listTools({
+			VRCHAT_MCP_ALLOW_WRITES: '1',
+			VRCHAT_MCP_ALLOW_DESTRUCTIVE_WRITES: '1'
+		})
 
 		expect(tools).toContain('vrchat__deleteProduct')
 		expect(tools).not.toContain('vrchat__purchaseProductListing')
 		expect(tools).not.toContain('vrchat__deleteUser')
+	}, 30_000)
+
+	test('the destructive gate is layered on writes, not a substitute for it', async () => {
+		// On its own it grants nothing: a delete is a write, so both are needed.
+		// Otherwise the flag would be a way to get deletes without writes, which
+		// is the opposite of what a safety gate should allow.
+		const tools = await listTools({ VRCHAT_MCP_ALLOW_DESTRUCTIVE_WRITES: '1' })
+
+		expect(tools).not.toContain('vrchat__deleteProduct')
+		expect(tools).not.toContain('vrchat__uploadImage')
 	}, 30_000)
 
 	test('purchases gate unlocks money ops but not admin', async () => {

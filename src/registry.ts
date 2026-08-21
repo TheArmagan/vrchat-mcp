@@ -14,6 +14,7 @@ import { config } from './config.ts'
 import { describeError, toToolError } from './errors.ts'
 import { operations } from './generated/operations.ts'
 import { PROJECTION_HELP, project } from './project.ts'
+import { resolveUploads } from './upload.ts'
 import type { Operation, OperationKind } from './types.ts'
 import { ensureAuthenticated, getClient, LoginPendingError, TwoFactorRequiredError } from './vrchat/client.ts'
 
@@ -23,17 +24,19 @@ const DEFAULT_PAGE_SIZE = 25
 /**
  * Whether an operation's safety class is unlocked by the current env.
  *
- * The three gates are deliberately independent: `admin` is not implied by
- * `writes`, so granting an agent the ability to edit your own content never
- * also grants it the ability to delete the account.
+ * Destructive and money operations layer on top of writes, so enabling writes
+ * grants exactly the ability to create and edit, never to delete or to spend.
+ * Admin stands apart and is not implied by anything: letting an agent edit your
+ * own content must never also let it delete the account.
  */
 export function passesKindGate(kind: OperationKind): boolean {
 	switch (kind) {
 		case 'read':
 			return true
 		case 'write':
-		case 'destructive':
 			return config.allowWrites
+		case 'destructive':
+			return config.allowWrites && config.allowDestructive
 		case 'money':
 			return config.allowWrites && config.allowPurchases
 		case 'admin':
@@ -82,6 +85,15 @@ function describeOperation(operation: Operation): string {
 
 	if (operation.responseKeys.length > 0) {
 		parts.push(`Response fields: ${operation.responseKeys.join(', ')}.`)
+	}
+
+	if (operation.binaryFields.length > 0) {
+		const names = operation.binaryFields.map((field) => '`' + field + '`').join(', ')
+		parts.push(
+			'Uploads a file. Pass a LOCAL FILE PATH for ' +
+				names +
+				' and the server reads the file itself. Never paste file contents or base64.'
+		)
 	}
 
 	if (operation.paginated) {
@@ -217,11 +229,21 @@ async function handle(operation: Operation, rawArgs: Record<string, unknown>) {
 	try {
 		const { path, query, body } = splitArguments(operation, args)
 
+		// Binary fields arrive as paths; the SDK needs the file itself.
+		const { uploaded } =
+			operation.binaryFields.length > 0 && body
+				? await resolveUploads(body, operation.binaryFields)
+				: { uploaded: [] }
+
 		const result = await invoke(operation, { path, query, body })
 
 		if (result.error) return toToolError(result.error)
 
 		const projected = project(result.data, responseKeys as string[])
+
+		// Naming the bytes actually sent is the only way to tell a successful
+		// upload of the right file from one of the wrong file.
+		if (uploaded.length > 0) return textResult({ uploaded, result: projected })
 
 		if (!operation.paginated) return textResult(projected)
 

@@ -212,6 +212,8 @@ export const config = {
 	/** null = every tag registers. */
 	tags: set('VRCHAT_MCP_TAGS'),
 	allowWrites: bool('VRCHAT_MCP_ALLOW_WRITES'),
+	/** Layered on top of writes: DELETE and the explicit destructive overrides. */
+	allowDestructive: bool('VRCHAT_MCP_ALLOW_DESTRUCTIVE_WRITES'),
 	allowPurchases: bool('VRCHAT_MCP_ALLOW_PURCHASES'),
 	allowAdmin: bool('VRCHAT_MCP_ALLOW_ADMIN'),
 

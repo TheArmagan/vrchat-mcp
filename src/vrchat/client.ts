@@ -217,6 +217,7 @@ export interface AuthStatus {
 	gates: {
 		tags: string[] | null
 		allowWrites: boolean
+		allowDestructive: boolean
 		allowPurchases: boolean
 		allowAdmin: boolean
 		websocket: boolean
@@ -250,6 +251,7 @@ export async function authStatus(): Promise<AuthStatus> {
 		gates: {
 			tags: config.tags ? [...config.tags] : null,
 			allowWrites: config.allowWrites,
+			allowDestructive: config.allowDestructive,
 			allowPurchases: config.allowPurchases,
 			allowAdmin: config.allowAdmin,
 			websocket: config.websocket

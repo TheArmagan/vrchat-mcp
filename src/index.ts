@@ -14,6 +14,7 @@ import { config } from './config.ts'
 import { registerGeneratedTools } from './registry.ts'
 import { registerAuthTools } from './tools/auth.ts'
 import { registerEventTools } from './tools/events.ts'
+import { registerUploadTools } from './tools/upload.ts'
 import { getClient } from './vrchat/client.ts'
 import { type EventClientLike, startEventPipeline } from './vrchat/events.ts'
 
@@ -26,6 +27,10 @@ function createServer() {
 	// Auth tools ignore every gate: they are not VRChat API operations, and a
 	// server you cannot ask "why am I not authenticated?" is undiagnosable.
 	registerAuthTools(server)
+
+	// Registered even with writes off, so the tool can explain the gate rather
+	// than simply not existing when an agent goes looking for it.
+	registerUploadTools(server)
 
 	if (config.websocket) {
 		registerEventTools(server)
@@ -52,7 +57,8 @@ function createServer() {
 
 	console.error(
 		`[vrchat-mcp] ${registered.length} tools registered, ${skipped.length} gated off` +
-			` (writes=${config.allowWrites} purchases=${config.allowPurchases} admin=${config.allowAdmin}` +
+			` (writes=${config.allowWrites} destructive=${config.allowDestructive}` +
+			` purchases=${config.allowPurchases} admin=${config.allowAdmin}` +
 			` tags=${config.tags ? [...config.tags].join(',') : 'all'} websocket=${config.websocket})`
 	)
 

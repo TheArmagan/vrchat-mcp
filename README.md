@@ -163,7 +163,8 @@ server at startup — a missing credential becomes a tool error on first use.
 | `VRCHAT_TOTP_SECRET` | — | Base32 TOTP secret. Set for unattended login; leave unset for the interactive 2FA flow. |
 | `VRCHAT_CONTACT` | — | Contact string in the mandatory descriptive User-Agent. Effectively required. |
 | `VRCHAT_MCP_TAGS` | all tags | Comma-separated OpenAPI tags to register, e.g. `economy,inventory,users`. Trimmed, lowercased, de-duped. |
-| `VRCHAT_MCP_ALLOW_WRITES` | off | Registers `write` and `destructive` operations. |
+| `VRCHAT_MCP_ALLOW_WRITES` | off | Registers `write` operations: creating and editing. Not deletes. |
+| `VRCHAT_MCP_ALLOW_DESTRUCTIVE_WRITES` | off | Additionally registers `destructive` operations. Requires the write gate too. |
 | `VRCHAT_MCP_ALLOW_PURCHASES` | off | Additionally registers `money` operations. Requires the write gate too. |
 | `VRCHAT_MCP_ALLOW_ADMIN` | off | Registers `admin` operations. Independent of the write gate. |
 | `VRCHAT_MCP_RPS` | `20` | Sustained requests/second through the shared token bucket. |
@@ -216,14 +217,17 @@ refused at call time — they never appear in `tools/list`.
 |---|---|---|---|
 | `read` | `GET` | none — always registered | `getCurrentUser`, `searchWorlds`, `getBalance` |
 | `write` | `POST` / `PUT` / `PATCH` | `VRCHAT_MCP_ALLOW_WRITES=1` | `createInstance`, `updateWorld` |
-| `destructive` | `DELETE`, plus an explicit override list | `VRCHAT_MCP_ALLOW_WRITES=1` | `deleteProduct`, `banGroupMember`, `kickGroupMember`, `moderateUser`, `deleteAllUserPersistence`, `closeInstance` |
+| `destructive` | `DELETE`, plus an explicit override list | `VRCHAT_MCP_ALLOW_WRITES=1` **and** `VRCHAT_MCP_ALLOW_DESTRUCTIVE_WRITES=1` | `deleteProduct`, `banGroupMember`, `kickGroupMember`, `moderateUser`, `deleteAllUserPersistence`, `closeInstance` |
 | `money` | Explicit list plus anything under Tilia/KYC/payout paths | `VRCHAT_MCP_ALLOW_WRITES=1` **and** `VRCHAT_MCP_ALLOW_PURCHASES=1` | `purchaseProductListing`, `getEconomyPayouts`, `createProduct`, `createProductListing`, `updateTiliaTosAgreementStatus` |
 | `admin` | Admin-only and account-lifecycle ops | `VRCHAT_MCP_ALLOW_ADMIN=1` (independent of the write gate) | `deleteUser`, `registerUserAccount`, `confirmEmail`, `updateAssetReviewNotes`, moderation-report ops |
 
 What you are actually opting into:
 
-- `VRCHAT_MCP_ALLOW_WRITES=1` lets an agent change and delete things you own — worlds,
+- `VRCHAT_MCP_ALLOW_WRITES=1` lets an agent create and change things you own — worlds,
   avatars, group membership, instances. Reversible mostly by hand.
+- `VRCHAT_MCP_ALLOW_DESTRUCTIVE_WRITES=1` adds deleting and moderating on top: every `DELETE`,
+  plus banning and kicking group members, closing instances and wiping user persistence. These
+  are the calls with no undo, which is why they are not bundled with ordinary writes.
 - `VRCHAT_MCP_ALLOW_PURCHASES=1` lets an agent **spend real balance**: `purchaseProductListing`
   is a live transaction. Do not set this because a tool listing looked incomplete.
 - `VRCHAT_MCP_ALLOW_ADMIN=1` exposes `deleteUser` among others. Most of these 403 on a normal
@@ -377,6 +381,59 @@ there, so one retry lands it. `_availableKeys` is included on projected response
 (names only, capped). Where the spec has a response schema, the top-level field names are
 baked into the tool description at codegen time, so the common case needs no discovery
 round-trip at all.
+
+## Uploading files
+
+Pass a **local file path**. The server runs on your machine and reads the file itself, so
+file contents never enter the conversation. Inlining a 2 MB PNG as base64 would cost roughly
+2.7 MB of tool arguments, more than everything else in the call combined.
+
+Eight operations take a file directly, one call each:
+
+| Tool | Field | For |
+|---|---|---|
+| `vrchat__uploadImage` | `file` | Icons, gallery images, emoji, stickers (`tag` picks which) |
+| `vrchat__uploadPrint` | `image` | Prints |
+| `vrchat__uploadIcon` | `file` | Profile icons |
+| `vrchat__uploadGalleryImage` | `file` | Gallery |
+| `vrchat__editPrint` | `image` | Replacing a print's image |
+| `vrchat__inviteUserWithPhoto` | `image` | Invite photos |
+| `vrchat__requestInviteWithPhoto` | `image` | Invite requests |
+| `vrchat__respondInviteWithPhoto` | `image` | Invite responses |
+
+```json
+{
+  "name": "vrchat__uploadImage",
+  "arguments": { "file": "C:/Users/me/Pictures/icon.png", "tag": "icon" }
+}
+```
+
+The result names the bytes that were sent, which is the only way to tell a successful upload
+of the right file from a successful upload of the wrong one:
+
+```json
+{
+  "uploaded": [{ "field": "file", "name": "icon.png", "bytes": 48211, "type": "image/png" }],
+  "result": { "id": "file_...", "name": "icon.png" }
+}
+```
+
+For everything else, `vrchat_uploadFile` runs VRChat's four-step sequence (create the record,
+request a presigned URL, transfer the bytes, finish) and returns the completed file record.
+Use it for asset bundles and unity packages.
+
+```json
+{ "name": "vrchat_uploadFile", "arguments": { "path": "/abs/path/avatar.vrca" } }
+```
+
+The bytes go straight to VRChat's storage provider with a plain request, deliberately not
+through the API client, because that client attaches your VRChat session cookie to everything
+it sends and the storage host is a third party. The proxy and rate limiter still apply.
+
+Uploads are writes, so all of this needs `VRCHAT_MCP_ALLOW_WRITES=1`. Files are capped at
+100 MB, and an empty file is refused before it reaches VRChat, which would otherwise store a
+broken record. If `vrchat_uploadFile` fails partway it names the file record it created, so
+you can inspect it with `vrchat__getFile` and remove it with `vrchat__deleteFile`.
 
 ## Pagination
 

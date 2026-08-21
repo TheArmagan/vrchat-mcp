@@ -38,6 +38,15 @@ export interface Operation {
 	}
 	/** True when the op accepts `n`/`offset` and the handler should echo `nextOffset`. */
 	paginated: boolean
+	/**
+	 * Body fields the spec declares as `format: binary`.
+	 *
+	 * The agent supplies a local file path for each; the registry reads the file
+	 * and swaps in a `File` before the SDK builds the multipart body. Inlining
+	 * the bytes as base64 would put a whole PNG in the tool arguments, which
+	 * costs more context than the rest of the call put together.
+	 */
+	binaryFields: string[]
 	/** Top-level response field names from the spec, for the tool description. */
 	responseKeys: string[]
 	/** Zod schema for the merged path+query+body arguments (no `_responseKeys`). */

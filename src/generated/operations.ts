@@ -22,6 +22,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['removed'],
 		inputSchema: z.object({})
 	},
@@ -35,6 +36,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['email', 'displayName', 'username', 'excludeUserId'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['nameOk', 'userExists'],
 		inputSchema: z.object({
 			'email': z.string().describe("Filter by email.").optional(),
@@ -53,6 +55,7 @@ export const operations: Operation[] = [
 		kind: 'admin',
 		params: { path: [], query: ['id', 'verify_email'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'id': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -69,6 +72,7 @@ export const operations: Operation[] = [
 		kind: 'admin',
 		params: { path: [], query: [], body: ['avatarModerationType', 'targetAvatarId'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['avatarModerationType', 'created', 'targetAvatarId'],
 		inputSchema: z.object({
 			'avatarModerationType': z.literal("block"),
@@ -85,6 +89,7 @@ export const operations: Operation[] = [
 		kind: 'admin',
 		params: { path: [], query: ['targetAvatarId', 'avatarModerationType'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['OK'],
 		inputSchema: z.object({
 			'targetAvatarId': z.string().describe("Must be a valid avatar ID."),
@@ -101,6 +106,7 @@ export const operations: Operation[] = [
 		kind: 'admin',
 		params: { path: ['moderationReportId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'moderationReportId': z.string().describe("The moderation report id.")
@@ -116,6 +122,7 @@ export const operations: Operation[] = [
 		kind: 'admin',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['acceptedPrivacyVersion', 'acceptedTOSVersion', 'accountDeletionDate', 'accountDeletionLog', 'activeFriends', 'ageVerificationStatus', 'ageVerified', 'allowAvatarCopying', 'appleDetails', 'appleId', 'authToken', 'badges', 'bio', 'bioLinks', 'contentFilters', 'currentAvatar', 'currentAvatarImageUrl', 'currentAvatarTags', 'currentAvatarThumbnailImageUrl', 'date_joined', 'developerType', 'discordDetails', 'discordId', 'displayName', 'emailVerified', 'fallbackAvatar', 'friendGroupNames', 'friendKey', 'friends', 'googleDetails', 'googleId', 'hasBirthday', 'hasDiscordFriendsOptOut', 'hasEmail', 'hasLoggedInFromClient', 'hasPendingEmail', 'hasSharedConnectionsOptOut', 'hideContentFilterSettings', 'homeLocation', 'id', 'isAdult', 'isBoopingEnabled', 'isFriend', 'last_activity', 'last_login', 'last_mobile', 'last_platform', 'obfuscatedEmail', 'obfuscatedPendingEmail', 'oculusId', 'offlineFriends', 'onlineFriends', 'pastDisplayNames', 'picoId', 'platform_history', 'presence', 'profilePicOverride', 'profilePicOverrideThumbnail', 'pronouns', 'pronounsHistory', 'queuedInstance', 'receiveMobileInvitations', 'state', 'status', 'statusDescription', 'statusFirstTime', 'statusHistory', 'steamDetails', 'steamId', 'tags', 'twitchDetails', 'twitchId', 'twoFactorAuthEnabled', 'twoFactorAuthEnabledDate', 'unsubscribe', 'updated_at', 'userIcon', 'userLanguage', 'userLanguageCode', 'username', 'usesGeneratedPassword', 'viveId'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -131,6 +138,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['removed'],
 		inputSchema: z.object({})
 	},
@@ -144,6 +152,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['qrCodeDataUrl', 'secret'],
 		inputSchema: z.object({})
 	},
@@ -157,6 +166,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['acceptedPrivacyVersion', 'acceptedTOSVersion', 'accountDeletionDate', 'accountDeletionLog', 'activeFriends', 'ageVerificationStatus', 'ageVerified', 'allowAvatarCopying', 'appleDetails', 'appleId', 'authToken', 'badges', 'bio', 'bioLinks', 'contentFilters', 'currentAvatar', 'currentAvatarImageUrl', 'currentAvatarTags', 'currentAvatarThumbnailImageUrl', 'date_joined', 'developerType', 'discordDetails', 'discordId', 'displayName', 'emailVerified', 'fallbackAvatar', 'friendGroupNames', 'friendKey', 'friends', 'googleDetails', 'googleId', 'hasBirthday', 'hasDiscordFriendsOptOut', 'hasEmail', 'hasLoggedInFromClient', 'hasPendingEmail', 'hasSharedConnectionsOptOut', 'hideContentFilterSettings', 'homeLocation', 'id', 'isAdult', 'isBoopingEnabled', 'isFriend', 'last_activity', 'last_login', 'last_mobile', 'last_platform', 'obfuscatedEmail', 'obfuscatedPendingEmail', 'oculusId', 'offlineFriends', 'onlineFriends', 'pastDisplayNames', 'picoId', 'platform_history', 'presence', 'profilePicOverride', 'profilePicOverrideThumbnail', 'pronouns', 'pronounsHistory', 'queuedInstance', 'receiveMobileInvitations', 'state', 'status', 'statusDescription', 'statusFirstTime', 'statusHistory', 'steamDetails', 'steamId', 'tags', 'twitchDetails', 'twitchId', 'twoFactorAuthEnabled', 'twoFactorAuthEnabledDate', 'unsubscribe', 'updated_at', 'userIcon', 'userLanguage', 'userLanguageCode', 'username', 'usesGeneratedPassword', 'viveId'],
 		inputSchema: z.object({})
 	},
@@ -170,6 +180,7 @@ export const operations: Operation[] = [
 		kind: 'admin',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['avatarModerationType', 'created', 'targetAvatarId'],
 		inputSchema: z.object({})
 	},
@@ -183,6 +194,7 @@ export const operations: Operation[] = [
 		kind: 'admin',
 		params: { path: [], query: ['offset', 'n', 'reportingUserId', 'status', 'type'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['hasNext', 'results', 'totalCount'],
 		inputSchema: z.object({
 			'offset': z.number().int().gte(0).describe("A zero-based offset from the default object sorting from where search results start.").optional(),
@@ -202,6 +214,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['otp', 'requiresTwoFactorAuth'],
 		inputSchema: z.object({})
 	},
@@ -215,6 +228,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({})
 	},
@@ -228,6 +242,7 @@ export const operations: Operation[] = [
 		kind: 'admin',
 		params: { path: [], query: [], body: ['acceptedTOSVersion', 'captchaCode', 'day', 'email', 'month', 'password', 'subscribe', 'username', 'year'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['acceptedPrivacyVersion', 'acceptedTOSVersion', 'accountDeletionDate', 'accountDeletionLog', 'activeFriends', 'ageVerificationStatus', 'ageVerified', 'allowAvatarCopying', 'appleDetails', 'appleId', 'authToken', 'badges', 'bio', 'bioLinks', 'contentFilters', 'currentAvatar', 'currentAvatarImageUrl', 'currentAvatarTags', 'currentAvatarThumbnailImageUrl', 'date_joined', 'developerType', 'discordDetails', 'discordId', 'displayName', 'emailVerified', 'fallbackAvatar', 'friendGroupNames', 'friendKey', 'friends', 'googleDetails', 'googleId', 'hasBirthday', 'hasDiscordFriendsOptOut', 'hasEmail', 'hasLoggedInFromClient', 'hasPendingEmail', 'hasSharedConnectionsOptOut', 'hideContentFilterSettings', 'homeLocation', 'id', 'isAdult', 'isBoopingEnabled', 'isFriend', 'last_activity', 'last_login', 'last_mobile', 'last_platform', 'obfuscatedEmail', 'obfuscatedPendingEmail', 'oculusId', 'offlineFriends', 'onlineFriends', 'pastDisplayNames', 'picoId', 'platform_history', 'presence', 'profilePicOverride', 'profilePicOverrideThumbnail', 'pronouns', 'pronounsHistory', 'queuedInstance', 'receiveMobileInvitations', 'state', 'status', 'statusDescription', 'statusFirstTime', 'statusHistory', 'steamDetails', 'steamId', 'tags', 'twitchDetails', 'twitchId', 'twoFactorAuthEnabled', 'twoFactorAuthEnabledDate', 'unsubscribe', 'updated_at', 'userIcon', 'userLanguage', 'userLanguageCode', 'username', 'usesGeneratedPassword', 'viveId'],
 		inputSchema: z.object({
 			'acceptedTOSVersion': z.number().int().describe("The most recent version of the TOS"),
@@ -251,6 +266,7 @@ export const operations: Operation[] = [
 		kind: 'admin',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({})
 	},
@@ -264,6 +280,7 @@ export const operations: Operation[] = [
 		kind: 'admin',
 		params: { path: [], query: [], body: ['category', 'contentId', 'description', 'details', 'reason', 'type'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['category', 'contentId', 'contentName', 'contentThumbnailImageUrl', 'description', 'evidenceRequired', 'id', 'reason', 'supportRequired', 'type'],
 		inputSchema: z.object({
 			'category': z.string().describe("Valid values are the keys of the object `$.reportOptions[type]` from `GET /config`. Descriptions of these are found at `$.reportCategories[type]`."),
@@ -284,6 +301,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['code'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['enabled', 'verified'],
 		inputSchema: z.object({
 			'code': z.string()
@@ -299,6 +317,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['code'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['verified'],
 		inputSchema: z.object({
 			'code': z.string()
@@ -314,6 +333,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['ok', 'token'],
 		inputSchema: z.object({})
 	},
@@ -327,6 +347,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['userId', 'token'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.").optional(),
@@ -343,6 +364,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['code'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['enabled', 'verified'],
 		inputSchema: z.object({
 			'code': z.string()
@@ -358,6 +380,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['code'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['enabled', 'verified'],
 		inputSchema: z.object({
 			'code': z.string()
@@ -373,6 +396,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['assetUrl', 'assetVersion', 'created_at', 'description', 'id', 'imageUrl', 'name', 'platform', 'releaseStatus', 'tags', 'thumbnailImageUrl', 'unityPackageUrl', 'unityVersion', 'updated_at', 'version'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['acknowledgements', 'activeAssetReviewId', 'assetUrl', 'assetUrlObject', 'authorId', 'authorName', 'created_at', 'description', 'featured', 'highestPrice', 'id', 'imageUrl', 'listingDate', 'lock', 'lowestPrice', 'name', 'pendingUpload', 'performance', 'productId', 'publishedListings', 'releaseStatus', 'searchable', 'styles', 'tags', 'thumbnailImageUrl', 'unityPackageUrl', 'unityPackageUrlObject', 'unityPackages', 'updated_at', 'version'],
 		inputSchema: z.object({
 			'assetUrl': z.string().optional(),
@@ -402,6 +426,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['avatarId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['acknowledgements', 'activeAssetReviewId', 'assetUrl', 'assetUrlObject', 'authorId', 'authorName', 'created_at', 'description', 'featured', 'highestPrice', 'id', 'imageUrl', 'listingDate', 'lock', 'lowestPrice', 'name', 'pendingUpload', 'performance', 'productId', 'publishedListings', 'releaseStatus', 'searchable', 'styles', 'tags', 'thumbnailImageUrl', 'unityPackageUrl', 'unityPackageUrlObject', 'unityPackages', 'updated_at', 'version'],
 		inputSchema: z.object({
 			'avatarId': z.string().describe("Must be a valid avatar ID.")
@@ -417,6 +442,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['avatarId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'avatarId': z.string().describe("Must be a valid avatar ID.")
@@ -432,6 +458,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['avatarId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['created_at', 'id', 'progress', 'requesterUserId', 'state', 'subjectId', 'subjectType', 'type', 'updated_at'],
 		inputSchema: z.object({
 			'avatarId': z.string().describe("Must be a valid avatar ID.")
@@ -447,6 +474,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['avatarId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['acknowledgements', 'activeAssetReviewId', 'assetUrl', 'assetUrlObject', 'authorId', 'authorName', 'created_at', 'description', 'featured', 'highestPrice', 'id', 'imageUrl', 'listingDate', 'lock', 'lowestPrice', 'name', 'pendingUpload', 'performance', 'productId', 'publishedListings', 'releaseStatus', 'searchable', 'styles', 'tags', 'thumbnailImageUrl', 'unityPackageUrl', 'unityPackageUrlObject', 'unityPackages', 'updated_at', 'version'],
 		inputSchema: z.object({
 			'avatarId': z.string().describe("Must be a valid avatar ID.")
@@ -462,6 +490,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['id', 'styleName'],
 		inputSchema: z.object({})
 	},
@@ -475,6 +504,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['featured', 'sort', 'n', 'order', 'offset', 'search', 'tag', 'notag', 'releaseStatus', 'maxUnityVersion', 'minUnityVersion', 'platform', 'userId'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['acknowledgements', 'activeAssetReviewId', 'assetUrl', 'assetUrlObject', 'authorId', 'authorName', 'created_at', 'description', 'featured', 'highestPrice', 'id', 'imageUrl', 'listingDate', 'lock', 'lowestPrice', 'name', 'pendingUpload', 'performance', 'productId', 'publishedListings', 'releaseStatus', 'searchable', 'styles', 'tags', 'thumbnailImageUrl', 'unityPackageUrl', 'unityPackageUrlObject', 'unityPackages', 'updated_at', 'version'],
 		inputSchema: z.object({
 			'featured': z.boolean().describe("Filters on featured results.").optional(),
@@ -502,6 +532,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['estimatedServiceDurationSeconds'],
 		inputSchema: z.object({})
 	},
@@ -515,6 +546,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['n', 'offset'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['acknowledgements', 'activeAssetReviewId', 'assetUrl', 'assetUrlObject', 'authorId', 'authorName', 'created_at', 'description', 'featured', 'highestPrice', 'id', 'imageUrl', 'listingDate', 'lock', 'lowestPrice', 'name', 'pendingUpload', 'performance', 'productId', 'publishedListings', 'releaseStatus', 'searchable', 'styles', 'tags', 'thumbnailImageUrl', 'unityPackageUrl', 'unityPackageUrlObject', 'unityPackages', 'updated_at', 'version'],
 		inputSchema: z.object({
 			'n': z.number().int().gte(1).lte(100).describe("The number of objects to return. Max 100. One page per call.").default(25),
@@ -531,6 +563,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['acknowledgements', 'activeAssetReviewId', 'assetUrl', 'assetUrlObject', 'authorId', 'authorName', 'created_at', 'description', 'featured', 'highestPrice', 'id', 'imageUrl', 'listingDate', 'lock', 'lowestPrice', 'name', 'pendingUpload', 'performance', 'productId', 'publishedListings', 'releaseStatus', 'searchable', 'styles', 'tags', 'thumbnailImageUrl', 'unityPackageUrl', 'unityPackageUrlObject', 'unityPackages', 'updated_at', 'version'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -546,6 +579,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['featured', 'sort', 'user', 'userId', 'n', 'order', 'offset', 'tag', 'notag', 'releaseStatus', 'maxUnityVersion', 'minUnityVersion', 'platform', 'isInternalVariant'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['acknowledgements', 'activeAssetReviewId', 'assetUrl', 'assetUrlObject', 'authorId', 'authorName', 'created_at', 'description', 'featured', 'highestPrice', 'id', 'imageUrl', 'listingDate', 'lock', 'lowestPrice', 'name', 'pendingUpload', 'performance', 'productId', 'publishedListings', 'releaseStatus', 'searchable', 'styles', 'tags', 'thumbnailImageUrl', 'unityPackageUrl', 'unityPackageUrlObject', 'unityPackages', 'updated_at', 'version'],
 		inputSchema: z.object({
 			'featured': z.boolean().describe("Filters on featured results.").optional(),
@@ -574,6 +608,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['avatarId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['acceptedPrivacyVersion', 'acceptedTOSVersion', 'accountDeletionDate', 'accountDeletionLog', 'activeFriends', 'ageVerificationStatus', 'ageVerified', 'allowAvatarCopying', 'appleDetails', 'appleId', 'authToken', 'badges', 'bio', 'bioLinks', 'contentFilters', 'currentAvatar', 'currentAvatarImageUrl', 'currentAvatarTags', 'currentAvatarThumbnailImageUrl', 'date_joined', 'developerType', 'discordDetails', 'discordId', 'displayName', 'emailVerified', 'fallbackAvatar', 'friendGroupNames', 'friendKey', 'friends', 'googleDetails', 'googleId', 'hasBirthday', 'hasDiscordFriendsOptOut', 'hasEmail', 'hasLoggedInFromClient', 'hasPendingEmail', 'hasSharedConnectionsOptOut', 'hideContentFilterSettings', 'homeLocation', 'id', 'isAdult', 'isBoopingEnabled', 'isFriend', 'last_activity', 'last_login', 'last_mobile', 'last_platform', 'obfuscatedEmail', 'obfuscatedPendingEmail', 'oculusId', 'offlineFriends', 'onlineFriends', 'pastDisplayNames', 'picoId', 'platform_history', 'presence', 'profilePicOverride', 'profilePicOverrideThumbnail', 'pronouns', 'pronounsHistory', 'queuedInstance', 'receiveMobileInvitations', 'state', 'status', 'statusDescription', 'statusFirstTime', 'statusHistory', 'steamDetails', 'steamId', 'tags', 'twitchDetails', 'twitchId', 'twoFactorAuthEnabled', 'twoFactorAuthEnabledDate', 'unsubscribe', 'updated_at', 'userIcon', 'userLanguage', 'userLanguageCode', 'username', 'usesGeneratedPassword', 'viveId'],
 		inputSchema: z.object({
 			'avatarId': z.string().describe("Must be a valid avatar ID.")
@@ -589,6 +624,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['avatarId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['acceptedPrivacyVersion', 'acceptedTOSVersion', 'accountDeletionDate', 'accountDeletionLog', 'activeFriends', 'ageVerificationStatus', 'ageVerified', 'allowAvatarCopying', 'appleDetails', 'appleId', 'authToken', 'badges', 'bio', 'bioLinks', 'contentFilters', 'currentAvatar', 'currentAvatarImageUrl', 'currentAvatarTags', 'currentAvatarThumbnailImageUrl', 'date_joined', 'developerType', 'discordDetails', 'discordId', 'displayName', 'emailVerified', 'fallbackAvatar', 'friendGroupNames', 'friendKey', 'friends', 'googleDetails', 'googleId', 'hasBirthday', 'hasDiscordFriendsOptOut', 'hasEmail', 'hasLoggedInFromClient', 'hasPendingEmail', 'hasSharedConnectionsOptOut', 'hideContentFilterSettings', 'homeLocation', 'id', 'isAdult', 'isBoopingEnabled', 'isFriend', 'last_activity', 'last_login', 'last_mobile', 'last_platform', 'obfuscatedEmail', 'obfuscatedPendingEmail', 'oculusId', 'offlineFriends', 'onlineFriends', 'pastDisplayNames', 'picoId', 'platform_history', 'presence', 'profilePicOverride', 'profilePicOverrideThumbnail', 'pronouns', 'pronounsHistory', 'queuedInstance', 'receiveMobileInvitations', 'state', 'status', 'statusDescription', 'statusFirstTime', 'statusHistory', 'steamDetails', 'steamId', 'tags', 'twitchDetails', 'twitchId', 'twoFactorAuthEnabled', 'twoFactorAuthEnabledDate', 'unsubscribe', 'updated_at', 'userIcon', 'userLanguage', 'userLanguageCode', 'username', 'usesGeneratedPassword', 'viveId'],
 		inputSchema: z.object({
 			'avatarId': z.string().describe("Must be a valid avatar ID.")
@@ -604,6 +640,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['avatarId'], query: [], body: ['assetUrl', 'description', 'id', 'imageUrl', 'name', 'releaseStatus', 'tags', 'unityPackageUrl', 'unityVersion', 'version'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['acknowledgements', 'activeAssetReviewId', 'assetUrl', 'assetUrlObject', 'authorId', 'authorName', 'created_at', 'description', 'featured', 'highestPrice', 'id', 'imageUrl', 'listingDate', 'lock', 'lowestPrice', 'name', 'pendingUpload', 'performance', 'productId', 'publishedListings', 'releaseStatus', 'searchable', 'styles', 'tags', 'thumbnailImageUrl', 'unityPackageUrl', 'unityPackageUrlObject', 'unityPackages', 'updated_at', 'version'],
 		inputSchema: z.object({
 			'avatarId': z.string().describe("Must be a valid avatar ID."),
@@ -629,6 +666,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId'], query: [], body: ['accessType', 'category', 'closeInstanceAfterEndMinutes', 'description', 'endsAt', 'featured', 'guestEarlyJoinMinutes', 'hostEarlyJoinMinutes', 'imageId', 'isDraft', 'languages', 'occurrenceKind', 'parentId', 'platforms', 'recurrence', 'roleIds', 'sendCreationNotification', 'startsAt', 'tags', 'title', 'usesInstanceOverflow'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['accessType', 'category', 'closeInstanceAfterEndMinutes', 'createdAt', 'deletedAt', 'description', 'durationInMs', 'endsAt', 'featured', 'guestEarlyJoinMinutes', 'hostEarlyJoinMinutes', 'id', 'imageId', 'imageUrl', 'interestedUserCount', 'isDraft', 'languages', 'occurrenceKind', 'ownerId', 'platforms', 'recurrence', 'roleIds', 'seriesId', 'startsAt', 'tags', 'title', 'type', 'updatedAt', 'userInterest', 'usesInstanceOverflow'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -665,6 +703,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['groupId', 'calendarId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -681,6 +720,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['scope', 'categories', 'tags', 'featuredResults', 'nonFeaturedResults', 'personalizedResults', 'minimumInterestCount', 'minimumRemainingMinutes', 'upcomingOffsetMinutes', 'n', 'nextCursor'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['nextCursor', 'results'],
 		inputSchema: z.object({
 			'scope': z.enum(["all","live","upcoming"]).describe("Scope for calendar event discovery.").default("upcoming"),
@@ -706,6 +746,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId', 'calendarId'], query: [], body: ['isFollowing'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['accessType', 'category', 'closeInstanceAfterEndMinutes', 'createdAt', 'deletedAt', 'description', 'durationInMs', 'endsAt', 'featured', 'guestEarlyJoinMinutes', 'hostEarlyJoinMinutes', 'id', 'imageId', 'imageUrl', 'interestedUserCount', 'isDraft', 'languages', 'occurrenceKind', 'ownerId', 'platforms', 'recurrence', 'roleIds', 'seriesId', 'startsAt', 'tags', 'title', 'type', 'updatedAt', 'userInterest', 'usesInstanceOverflow'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -723,6 +764,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['date', 'n', 'offset'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['hasNext', 'results', 'totalCount'],
 		inputSchema: z.object({
 			'date': z.string().datetime({ offset: true }).describe("The month to search in.").optional(),
@@ -740,6 +782,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['date', 'n', 'offset'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['hasNext', 'results', 'totalCount'],
 		inputSchema: z.object({
 			'date': z.string().datetime({ offset: true }).describe("The month to search in.").optional(),
@@ -757,6 +800,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['date', 'n', 'offset'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['hasNext', 'results', 'totalCount'],
 		inputSchema: z.object({
 			'date': z.string().datetime({ offset: true }).describe("The month to search in.").optional(),
@@ -774,6 +818,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId', 'calendarId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['accessType', 'category', 'closeInstanceAfterEndMinutes', 'createdAt', 'deletedAt', 'description', 'durationInMs', 'endsAt', 'featured', 'guestEarlyJoinMinutes', 'hostEarlyJoinMinutes', 'id', 'imageId', 'imageUrl', 'interestedUserCount', 'isDraft', 'languages', 'occurrenceKind', 'ownerId', 'platforms', 'recurrence', 'roleIds', 'seriesId', 'startsAt', 'tags', 'title', 'type', 'updatedAt', 'userInterest', 'usesInstanceOverflow'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -790,6 +835,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId', 'calendarId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -806,6 +852,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId'], query: ['date', 'n', 'offset'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['hasNext', 'results', 'totalCount'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -824,6 +871,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['accessType', 'category', 'closeInstanceAfterEndMinutes', 'createdAt', 'deletedAt', 'description', 'durationInMs', 'endsAt', 'featured', 'guestEarlyJoinMinutes', 'hostEarlyJoinMinutes', 'id', 'imageId', 'imageUrl', 'interestedUserCount', 'isDraft', 'languages', 'occurrenceKind', 'ownerId', 'platforms', 'recurrence', 'roleIds', 'seriesId', 'startsAt', 'tags', 'title', 'type', 'updatedAt', 'userInterest', 'usesInstanceOverflow'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID.")
@@ -839,6 +887,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['searchTerm', 'utcOffset', 'n', 'offset', 'isInternalVariant'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['hasNext', 'results', 'totalCount'],
 		inputSchema: z.object({
 			'searchTerm': z.string().describe("Search term for calendar events."),
@@ -858,6 +907,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId', 'calendarId'], query: [], body: ['category', 'closeInstanceAfterEndMinutes', 'description', 'endsAt', 'featured', 'guestEarlyJoinMinutes', 'hostEarlyJoinMinutes', 'imageId', 'isDraft', 'languages', 'parentId', 'platforms', 'recurrence', 'roleIds', 'sendCreationNotification', 'startsAt', 'tags', 'title', 'usesInstanceOverflow'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['accessType', 'category', 'closeInstanceAfterEndMinutes', 'createdAt', 'deletedAt', 'description', 'durationInMs', 'endsAt', 'featured', 'guestEarlyJoinMinutes', 'hostEarlyJoinMinutes', 'id', 'imageId', 'imageUrl', 'interestedUserCount', 'isDraft', 'languages', 'occurrenceKind', 'ownerId', 'platforms', 'recurrence', 'roleIds', 'seriesId', 'startsAt', 'tags', 'title', 'type', 'updatedAt', 'userInterest', 'usesInstanceOverflow'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -893,6 +943,7 @@ export const operations: Operation[] = [
 		kind: 'money',
 		params: { path: [], query: [], body: ['description', 'displayName', 'imageId', 'productType', 'tags', 'useForSubscriberList'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['archived', 'created', 'description', 'displayName', 'groupAccess', 'groupAccessRemove', 'groupId', 'groupRoleId', 'id', 'imageId', 'imageUrl', 'parentListings', 'productType', 'productTypeLabel', 'purchaseCount', 'purchaseCountQuantity', 'sellerDisplayName', 'sellerId', 'tags', 'updated', 'useForSubscriberList'],
 		inputSchema: z.object({
 			'description': z.string(),
@@ -913,6 +964,7 @@ export const operations: Operation[] = [
 		kind: 'money',
 		params: { path: [], query: [], body: ['active', 'description', 'displayName', 'imageId', 'listingType', 'priceTokens', 'productIds', 'storeIds'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['active', 'archived', 'buyerRefundable', 'created', 'description', 'displayName', 'duration', 'durationType', 'groupIcon', 'groupId', 'groupName', 'hasAvatar', 'hasUdon', 'hydratedProducts', 'id', 'imageId', 'imageUrl', 'listingType', 'listingVariants', 'permanent', 'priceTokens', 'productIds', 'productType', 'products', 'purchaseCount', 'purchaseCountQuantity', 'quantifiable', 'recurrable', 'refundable', 'sellerDisplayName', 'sellerId', 'soldByVrc', 'stackable', 'storeIds', 'subtitle', 'tags', 'updated', 'vrcPlusDiscountPrice', 'whenToExpire'],
 		inputSchema: z.object({
 			'active': z.boolean().optional(),
@@ -935,6 +987,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['productId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'productId': z.string().describe("Must be a valid product ID.")
@@ -950,6 +1003,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['productId'], query: ['hydrate'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'productId': z.string().describe("Must be a valid product ID."),
@@ -966,6 +1020,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['forAction', 'forId', 'forName', 'forType'],
 		inputSchema: z.object({})
 	},
@@ -979,6 +1034,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['balance', 'noTransactions', 'tiliaResponse'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -994,6 +1050,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['balance', 'noTransactions', 'tiliaResponse'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -1009,6 +1066,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['mostRecent'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'mostRecent': z.boolean().optional()
@@ -1024,6 +1082,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['active', 'amount', 'created_at', 'description', 'expires', 'id', 'isBulkGift', 'isGift', 'licenseGroups', 'period', 'starts', 'status', 'steamItemId', 'store', 'tier', 'transactionId', 'updated_at'],
 		inputSchema: z.object({})
 	},
@@ -1037,6 +1096,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['metricDateStart', 'metricDateEnd', 'sellerId', 'groupByDuration'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['breakdown', 'sellerId', 'totals'],
 		inputSchema: z.object({
 			'metricDateStart': z.string().describe("Lower bound for economy metrics queries. Observed formats include both date-only and full ISO timestamps.").optional(),
@@ -1055,6 +1115,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['accountActivatedOn', 'accountId', 'accountSellerRegisteredOn', 'accountSellerStatus', 'blocked', 'canEarn', 'canPayout', 'canSpend', 'skrillEmail', 'source', 'tiliaId', 'tiliaType', 'userId'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -1070,6 +1131,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['balance', 'earnings', 'standard'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -1085,6 +1147,7 @@ export const operations: Operation[] = [
 		kind: 'money',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['payouts'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -1100,6 +1163,7 @@ export const operations: Operation[] = [
 		kind: 'money',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['accountId', 'activePayout', 'activePayoutCancellable', 'activePayoutTiliaAmount', 'earningsBalance', 'eligibility', 'payoutEligible', 'tiliaId'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -1115,6 +1179,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['licenseGroupId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['description', 'id', 'licenses', 'name'],
 		inputSchema: z.object({
 			'licenseGroupId': z.string().describe("Must be a valid license group ID.")
@@ -1130,6 +1195,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['productId'], query: ['hydrate'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['active', 'archived', 'buyerRefundable', 'created', 'description', 'displayName', 'duration', 'durationType', 'groupIcon', 'groupId', 'groupName', 'hasAvatar', 'hasUdon', 'hydratedProducts', 'id', 'imageId', 'imageUrl', 'listingType', 'listingVariants', 'permanent', 'priceTokens', 'productIds', 'productType', 'products', 'purchaseCount', 'purchaseCountQuantity', 'quantifiable', 'recurrable', 'refundable', 'sellerDisplayName', 'sellerId', 'soldByVrc', 'stackable', 'storeIds', 'subtitle', 'tags', 'updated', 'vrcPlusDiscountPrice', 'whenToExpire'],
 		inputSchema: z.object({
 			'productId': z.string().describe("Must be a valid product ID."),
@@ -1146,6 +1212,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['productId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['active', 'archived', 'buyerRefundable', 'created', 'description', 'displayName', 'duration', 'durationType', 'groupIcon', 'groupId', 'groupName', 'hasAvatar', 'hasUdon', 'hydratedProducts', 'id', 'imageId', 'imageUrl', 'listingType', 'listingVariants', 'permanent', 'priceTokens', 'productIds', 'productType', 'products', 'purchaseCount', 'purchaseCountQuantity', 'quantifiable', 'recurrable', 'refundable', 'sellerDisplayName', 'sellerId', 'soldByVrc', 'stackable', 'storeIds', 'subtitle', 'tags', 'updated', 'vrcPlusDiscountPrice', 'whenToExpire'],
 		inputSchema: z.object({
 			'productId': z.string().describe("Must be a valid product ID.")
@@ -1161,6 +1228,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: ['n', 'offset', 'hydrate', 'listingType', 'groupId', 'active'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['active', 'archived', 'buyerRefundable', 'created', 'description', 'displayName', 'duration', 'durationType', 'groupIcon', 'groupId', 'groupName', 'hasAvatar', 'hasUdon', 'hydratedProducts', 'id', 'imageId', 'imageUrl', 'listingType', 'listingVariants', 'permanent', 'priceTokens', 'productIds', 'productType', 'products', 'purchaseCount', 'purchaseCountQuantity', 'quantifiable', 'recurrable', 'refundable', 'sellerDisplayName', 'sellerId', 'soldByVrc', 'stackable', 'storeIds', 'subtitle', 'tags', 'updated', 'vrcPlusDiscountPrice', 'whenToExpire'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -1182,6 +1250,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['productPurchaseId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['buyerDisplayName', 'buyerId', 'firstParty', 'isBuyer', 'isGift', 'isReceiver', 'isSeller', 'ledgerTransactionId', 'listingCurrentlyAvailable', 'listingDescription', 'listingDisplayName', 'listingId', 'listingImageId', 'listingSubtitle', 'listingType', 'products', 'purchaseActive', 'purchaseContext', 'purchaseCurrentStatus', 'purchaseDate', 'purchaseDuration', 'purchaseDurationType', 'purchaseEndDate', 'purchaseFee', 'purchaseId', 'purchaseLatest', 'purchasePrice', 'purchaseQuantity', 'purchaseStartDate', 'purchaseToken', 'purchaseType', 'purchaseUnitPrice', 'purchaseValue', 'receiverDisplayName', 'receiverId', 'recurrable', 'refundable', 'sellerDisplayName', 'sellerId', 'stackable', 'willRecur'],
 		inputSchema: z.object({
 			'productPurchaseId': z.string().describe("Must be a valid purchase ID.")
@@ -1197,6 +1266,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: ['n', 'dateMin', 'dateMax', 'fromUserId', 'toUserId', 'sort', 'order'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['endDate', 'startDate', 'transactions'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -1219,6 +1289,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['buyerId', 'sellerId', 'n', 'offset', 'mostRecent', 'sort', 'order'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['buyerDisplayName', 'buyerId', 'firstParty', 'isBuyer', 'isGift', 'isReceiver', 'isSeller', 'ledgerTransactionId', 'listingCurrentlyAvailable', 'listingDescription', 'listingDisplayName', 'listingId', 'listingImageId', 'listingSubtitle', 'listingType', 'products', 'purchaseActive', 'purchaseContext', 'purchaseCurrentStatus', 'purchaseDate', 'purchaseDuration', 'purchaseDurationType', 'purchaseEndDate', 'purchaseFee', 'purchaseId', 'purchaseLatest', 'purchasePrice', 'purchaseQuantity', 'purchaseStartDate', 'purchaseToken', 'purchaseType', 'purchaseUnitPrice', 'purchaseValue', 'receiverDisplayName', 'receiverId', 'recurrable', 'refundable', 'sellerDisplayName', 'sellerId', 'stackable', 'willRecur'],
 		inputSchema: z.object({
 			'buyerId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -1240,6 +1311,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['productPurchaseId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'productPurchaseId': z.string().describe("Must be a valid purchase ID.")
@@ -1255,6 +1327,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['active', 'amount', 'created_at', 'description', 'expires', 'id', 'isBulkGift', 'isGift', 'licenseGroups', 'period', 'starts', 'status', 'steamItemId', 'store', 'tier', 'transactionId', 'updated_at'],
 		inputSchema: z.object({})
 	},
@@ -1268,6 +1341,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['eligible'],
 		inputSchema: z.object({})
 	},
@@ -1281,6 +1355,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['transactionId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['agreement', 'created_at', 'error', 'id', 'isGift', 'isTokens', 'sandbox', 'status', 'steam', 'subscription', 'updated_at', 'userDisplayName', 'userId'],
 		inputSchema: z.object({
 			'transactionId': z.string().describe("Must be a valid transaction ID.")
@@ -1296,6 +1371,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['agreement', 'created_at', 'error', 'id', 'isGift', 'isTokens', 'sandbox', 'status', 'steam', 'subscription', 'updated_at', 'userDisplayName', 'userId'],
 		inputSchema: z.object({})
 	},
@@ -1309,6 +1385,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['storeId', 'hydrateListings', 'hydrateProducts'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['created', 'description', 'displayName', 'groupId', 'id', 'listingIds', 'listings', 'sellerDisplayName', 'sellerId', 'shelfIds', 'shelves', 'storeContext', 'storeId', 'storeStatus', 'storeType', 'tags', 'updated', 'worldId'],
 		inputSchema: z.object({
 			'storeId': z.string(),
@@ -1326,6 +1403,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['storeId', 'hydrateListings', 'fetch'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['highlightListing', 'highlightListingId', 'id', 'listingIds', 'listings', 'shelfDescription', 'shelfLayout', 'shelfTitle', 'updatedAt'],
 		inputSchema: z.object({
 			'storeId': z.string(),
@@ -1343,6 +1421,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['amount', 'appleProductId', 'description', 'googlePlanId', 'googleProductId', 'id', 'oculusSku', 'period', 'picoSku', 'steamItemId', 'tier'],
 		inputSchema: z.object({})
 	},
@@ -1356,6 +1435,7 @@ export const operations: Operation[] = [
 		kind: 'money',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['economyOnline', 'economyState', 'plannedOfflineWindowEnd', 'plannedOfflineWindowStart'],
 		inputSchema: z.object({})
 	},
@@ -1369,6 +1449,7 @@ export const operations: Operation[] = [
 		kind: 'money',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['signed_tos'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -1384,6 +1465,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['amount', 'appleProductId', 'description', 'googleProductId', 'id', 'imageUrl', 'oculusSku', 'steamItemId', 'tokens'],
 		inputSchema: z.object({})
 	},
@@ -1397,6 +1479,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: ['subscriptionId'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['eligible', 'reason'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -1413,6 +1496,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: ['steamId'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['activeCancelledSubscription', 'giftEligible', 'nonExtendVendorWillLoseGiftTime', 'purchaseEligible', 'subscriptionEligible', 'subscriptionOnAltAccount'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -1429,6 +1513,7 @@ export const operations: Operation[] = [
 		kind: 'money',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['account_id', 'kyc_id', 'kyc_requirements', 'match_checks', 'pii_level', 'rules', 'state', 'tilia_retry_rule_code'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -1444,6 +1529,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['sellerId', 'managementPov', 'n', 'offset'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['created', 'description', 'displayName', 'groupId', 'id', 'listingIds', 'listings', 'sellerDisplayName', 'sellerId', 'shelfIds', 'shelves', 'storeContext', 'storeId', 'storeStatus', 'storeType', 'tags', 'updated', 'worldId'],
 		inputSchema: z.object({
 			'sellerId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.").optional(),
@@ -1462,6 +1548,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: ['n', 'offset'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['archived', 'created', 'description', 'displayName', 'groupAccess', 'groupAccessRemove', 'groupId', 'groupRoleId', 'id', 'imageId', 'imageUrl', 'parentListings', 'productType', 'productTypeLabel', 'purchaseCount', 'purchaseCountQuantity', 'sellerDisplayName', 'sellerId', 'tags', 'updated', 'useForSubscriberList'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -1479,6 +1566,7 @@ export const operations: Operation[] = [
 		kind: 'money',
 		params: { path: [], query: [], body: ['contextData', 'listingId', 'listingVariantId', 'quantity', 'receiverId', 'stackable', 'totalPrice'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['buyerDisplayName', 'buyerId', 'firstParty', 'isBuyer', 'isGift', 'isReceiver', 'isSeller', 'ledgerTransactionId', 'listingCurrentlyAvailable', 'listingDescription', 'listingDisplayName', 'listingId', 'listingImageId', 'listingSubtitle', 'listingType', 'products', 'purchaseActive', 'purchaseContext', 'purchaseCurrentStatus', 'purchaseDate', 'purchaseDuration', 'purchaseDurationType', 'purchaseEndDate', 'purchaseFee', 'purchaseId', 'purchaseLatest', 'purchasePrice', 'purchaseQuantity', 'purchaseStartDate', 'purchaseToken', 'purchaseType', 'purchaseUnitPrice', 'purchaseValue', 'receiverDisplayName', 'receiverId', 'recurrable', 'refundable', 'sellerDisplayName', 'sellerId', 'stackable', 'willRecur'],
 		inputSchema: z.object({
 			'contextData': z.object({ "locationType": z.enum(["client_avatar_marketplace","client_creator_store","client_group_store","client_world_component","client_world_store","undefined","web_any","web_avatar_marketplace","web_creator_store","web_group_store","web_world_store"]).default("web_group_store"), "storeId": z.string().optional(), "worldId": z.string().describe("WorldID be \"offline\" on User profiles if you are not friends with that user.").optional() }),
@@ -1500,6 +1588,7 @@ export const operations: Operation[] = [
 		kind: 'money',
 		params: { path: ['productId'], query: [], body: ['description', 'displayName', 'imageId', 'tags', 'useForSubscriberList'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['archived', 'created', 'description', 'displayName', 'groupAccess', 'groupAccessRemove', 'groupId', 'groupRoleId', 'id', 'imageId', 'imageUrl', 'parentListings', 'productType', 'productTypeLabel', 'purchaseCount', 'purchaseCountQuantity', 'sellerDisplayName', 'sellerId', 'tags', 'updated', 'useForSubscriberList'],
 		inputSchema: z.object({
 			'productId': z.string().describe("Must be a valid product ID."),
@@ -1520,6 +1609,7 @@ export const operations: Operation[] = [
 		kind: 'money',
 		params: { path: ['productId'], query: ['hydrate'], body: ['active'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['active', 'archived', 'buyerRefundable', 'created', 'description', 'displayName', 'duration', 'durationType', 'groupIcon', 'groupId', 'groupName', 'hasAvatar', 'hasUdon', 'hydratedProducts', 'id', 'imageId', 'imageUrl', 'listingType', 'listingVariants', 'permanent', 'priceTokens', 'productIds', 'productType', 'products', 'purchaseCount', 'purchaseCountQuantity', 'quantifiable', 'recurrable', 'refundable', 'sellerDisplayName', 'sellerId', 'soldByVrc', 'stackable', 'storeIds', 'subtitle', 'tags', 'updated', 'vrcPlusDiscountPrice', 'whenToExpire'],
 		inputSchema: z.object({
 			'productId': z.string().describe("Must be a valid product ID."),
@@ -1537,6 +1627,7 @@ export const operations: Operation[] = [
 		kind: 'money',
 		params: { path: ['userId'], query: [], body: ['accepted'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -1553,6 +1644,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['favoriteId', 'tags', 'type'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['favoriteId', 'id', 'tags', 'type'],
 		inputSchema: z.object({
 			'favoriteId': z.string().describe("Must be either AvatarID, WorldID or UserID.").optional(),
@@ -1570,6 +1662,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['favoriteGroupType', 'favoriteGroupName', 'userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'favoriteGroupType': z.enum(["avatar","friend","vrcPlusWorld","world"]).describe("The type of group to fetch, must be a valid FavoriteType.").default("friend"),
@@ -1587,6 +1680,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['favoriteGroupType', 'favoriteGroupName', 'userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['displayName', 'id', 'name', 'ownerDisplayName', 'ownerId', 'tags', 'type', 'visibility'],
 		inputSchema: z.object({
 			'favoriteGroupType': z.enum(["avatar","friend","vrcPlusWorld","world"]).describe("The type of group to fetch, must be a valid FavoriteType.").default("friend"),
@@ -1604,6 +1698,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['n', 'offset', 'userId', 'ownerId'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['displayName', 'id', 'name', 'ownerDisplayName', 'ownerId', 'tags', 'type', 'visibility'],
 		inputSchema: z.object({
 			'n': z.number().int().gte(1).lte(100).describe("The number of objects to return. Max 100. One page per call.").default(25),
@@ -1622,6 +1717,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['defaultMaxFavoriteGroups', 'defaultMaxFavoritesPerGroup', 'maxFavoriteGroups', 'maxFavoritesPerGroup'],
 		inputSchema: z.object({})
 	},
@@ -1635,6 +1731,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['n', 'offset', 'type', 'tag'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['favoriteId', 'id', 'tags', 'type'],
 		inputSchema: z.object({
 			'n': z.number().int().gte(1).lte(100).describe("The number of objects to return. Max 100. One page per call.").default(25),
@@ -1653,6 +1750,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['favoriteId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'favoriteId': z.string().describe("Must be a valid favorite ID.")
@@ -1668,6 +1766,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['favoriteGroupType', 'favoriteGroupName', 'userId'], query: [], body: ['displayName', 'tags', 'visibility'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'favoriteGroupType': z.enum(["avatar","friend","vrcPlusWorld","world"]).describe("The type of group to fetch, must be a valid FavoriteType.").default("friend"),
@@ -1688,6 +1787,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['extension', 'mimeType', 'name', 'tags'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['animationStyle', 'extension', 'frames', 'framesOverTime', 'id', 'loopStyle', 'maskTag', 'mimeType', 'modifiedThumbnailFileName', 'name', 'ownerId', 'tags', 'versions'],
 		inputSchema: z.object({
 			'extension': z.string().min(1).optional(),
@@ -1706,6 +1806,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['fileId'], query: [], body: ['fileMd5', 'fileSizeInBytes', 'signatureMd5', 'signatureSizeInBytes'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['animationStyle', 'extension', 'frames', 'framesOverTime', 'id', 'loopStyle', 'maskTag', 'mimeType', 'modifiedThumbnailFileName', 'name', 'ownerId', 'tags', 'versions'],
 		inputSchema: z.object({
 			'fileId': z.string().describe("Must be a valid file ID."),
@@ -1725,6 +1826,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['fileId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['animationStyle', 'extension', 'frames', 'framesOverTime', 'id', 'loopStyle', 'maskTag', 'mimeType', 'modifiedThumbnailFileName', 'name', 'ownerId', 'tags', 'versions'],
 		inputSchema: z.object({
 			'fileId': z.string().describe("Must be a valid file ID.")
@@ -1740,6 +1842,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['fileId', 'versionId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['animationStyle', 'extension', 'frames', 'framesOverTime', 'id', 'loopStyle', 'maskTag', 'mimeType', 'modifiedThumbnailFileName', 'name', 'ownerId', 'tags', 'versions'],
 		inputSchema: z.object({
 			'fileId': z.string().describe("Must be a valid file ID."),
@@ -1756,6 +1859,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['fileId', 'versionId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'fileId': z.string().describe("Must be a valid file ID."),
@@ -1772,6 +1876,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['fileId', 'versionId', 'fileType'], query: [], body: ['etags', 'maxParts', 'nextPartNumber'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['animationStyle', 'extension', 'frames', 'framesOverTime', 'id', 'loopStyle', 'maskTag', 'mimeType', 'modifiedThumbnailFileName', 'name', 'ownerId', 'tags', 'versions'],
 		inputSchema: z.object({
 			'fileId': z.string().describe("Must be a valid file ID."),
@@ -1792,6 +1897,7 @@ export const operations: Operation[] = [
 		kind: 'admin',
 		params: { path: ['adminAssetBundleId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['_created_at', '_updated_at', 'assetType', 'authorId', 'authorName', 'description', 'imageUrl', 'name', 'releaseStatus', 'tags', 'thumbnailImageUrl', 'unityPackageUrl', 'unityPackages'],
 		inputSchema: z.object({
 			'adminAssetBundleId': z.string().describe("Must be a valid admin asset bundle ID.")
@@ -1807,6 +1913,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['agreementCode', 'contentId', 'version'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['agreed', 'agreementCode', 'contentId', 'userId', 'version'],
 		inputSchema: z.object({
 			'agreementCode': z.literal("content.copyright.owned").describe("The type of agreement.").default("content.copyright.owned"),
@@ -1824,6 +1931,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['fileId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['animationStyle', 'extension', 'frames', 'framesOverTime', 'id', 'loopStyle', 'maskTag', 'mimeType', 'modifiedThumbnailFileName', 'name', 'ownerId', 'tags', 'versions'],
 		inputSchema: z.object({
 			'fileId': z.string().describe("Must be a valid file ID.")
@@ -1839,6 +1947,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['fileId', 'versionId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['avatarStats', 'created_at', 'encryptionKey', 'fileSize', 'performanceRating', 'success', 'uncompressedSize'],
 		inputSchema: z.object({
 			'fileId': z.string().describe("Must be a valid file ID."),
@@ -1855,6 +1964,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['fileId', 'versionId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['avatarStats', 'created_at', 'encryptionKey', 'fileSize', 'performanceRating', 'success', 'uncompressedSize'],
 		inputSchema: z.object({
 			'fileId': z.string().describe("Must be a valid file ID."),
@@ -1871,6 +1981,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['fileId', 'versionId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['avatarStats', 'created_at', 'encryptionKey', 'fileSize', 'performanceRating', 'success', 'uncompressedSize'],
 		inputSchema: z.object({
 			'fileId': z.string().describe("Must be a valid file ID."),
@@ -1887,6 +1998,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['fileId', 'versionId', 'fileType'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['etags', 'fileName', 'maxParts', 'nextPartNumber', 'parts', 'uploadId'],
 		inputSchema: z.object({
 			'fileId': z.string().describe("Must be a valid file ID."),
@@ -1904,6 +2016,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['tag', 'userId', 'n', 'offset'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['animationStyle', 'extension', 'frames', 'framesOverTime', 'id', 'loopStyle', 'maskTag', 'mimeType', 'modifiedThumbnailFileName', 'name', 'ownerId', 'tags', 'versions'],
 		inputSchema: z.object({
 			'tag': z.string().min(1).describe("Tag, for example \"icon\" or \"gallery\", not included by default.").optional(),
@@ -1922,6 +2035,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['galleryId', 'ids'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['ids'],
 		inputSchema: z.object({
 			'galleryId': z.string().optional(),
@@ -1938,6 +2052,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['fileId', 'versionId', 'fileType'], query: ['partNumber'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['url'],
 		inputSchema: z.object({
 			'fileId': z.string().describe("Must be a valid file ID."),
@@ -1956,6 +2071,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['agreementCode', 'agreementFulltext', 'contentId', 'version'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['agreementCode', 'agreementFulltext', 'contentId', 'created', 'id', 'tags', 'userId', 'version'],
 		inputSchema: z.object({
 			'agreementCode': z.literal("content.copyright.owned").describe("The type of agreement.").default("content.copyright.owned"),
@@ -1974,6 +2090,7 @@ export const operations: Operation[] = [
 		kind: 'admin',
 		params: { path: ['assetReviewId'], query: [], body: ['reviewNotes'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'assetReviewId': z.string().describe("Must be an valid asset review ID."),
@@ -1990,9 +2107,10 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['file'] },
 		paginated: false,
+		binaryFields: ['file'],
 		responseKeys: ['animationStyle', 'extension', 'frames', 'framesOverTime', 'id', 'loopStyle', 'maskTag', 'mimeType', 'modifiedThumbnailFileName', 'name', 'ownerId', 'tags', 'versions'],
 		inputSchema: z.object({
-			'file': z.string().base64().describe("The binary blob of the png file.").optional()
+			'file': z.string().describe('Path to a local file to upload. The binary blob of the png file. Give an absolute path, or one relative to the server\'s working directory. Do not paste file contents.').optional()
 		})
 	},
 	{
@@ -2005,9 +2123,10 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['file'] },
 		paginated: false,
+		binaryFields: ['file'],
 		responseKeys: ['animationStyle', 'extension', 'frames', 'framesOverTime', 'id', 'loopStyle', 'maskTag', 'mimeType', 'modifiedThumbnailFileName', 'name', 'ownerId', 'tags', 'versions'],
 		inputSchema: z.object({
-			'file': z.string().base64().describe("The binary blob of the png file.").optional()
+			'file': z.string().describe('Path to a local file to upload. The binary blob of the png file. Give an absolute path, or one relative to the server\'s working directory. Do not paste file contents.').optional()
 		})
 	},
 	{
@@ -2020,10 +2139,11 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['animationStyle', 'file', 'frames', 'framesOverTime', 'loopStyle', 'maskTag', 'tag'] },
 		paginated: false,
+		binaryFields: ['file'],
 		responseKeys: ['animationStyle', 'extension', 'frames', 'framesOverTime', 'id', 'loopStyle', 'maskTag', 'mimeType', 'modifiedThumbnailFileName', 'name', 'ownerId', 'tags', 'versions'],
 		inputSchema: z.object({
 			'animationStyle': z.enum(["aura","bats","bees","bounce","cloud","confetti","crying","dislike","fire","idea","lasers","like","magnet","mistletoe","money","noise","orbit","pizza","rain","rotate","shake","snow","snowball","spin","splash","stop","zzz"]).describe("Animation style for images.").optional(),
-			'file': z.string().base64().describe("The binary blob of the png file.").optional(),
+			'file': z.string().describe('Path to a local file to upload. The binary blob of the png file. Give an absolute path, or one relative to the server\'s working directory. Do not paste file contents.').optional(),
 			'frames': z.number().int().gte(2).lte(64).describe("Required for animated images. Total number of frames of the spritesheet to be animated.").optional(),
 			'framesOverTime': z.number().int().gte(1).lte(64).describe("Required for animated images. Animation frames per second.").optional(),
 			'loopStyle': z.enum(["linear","pingpong"]).describe("Animation looping style for images.").default("linear"),
@@ -2041,6 +2161,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['userId'], query: [], body: ['emojiId', 'emojiVersion', 'inventoryItemId'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -2059,6 +2180,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -2074,6 +2196,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['created_at', 'details', 'id', 'message', 'receiverUserId', 'seen', 'senderUserId', 'senderUsername', 'type'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -2089,6 +2212,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['offset', 'n', 'offline'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['bio', 'bioLinks', 'currentAvatarImageUrl', 'currentAvatarTags', 'currentAvatarThumbnailImageUrl', 'developerType', 'displayName', 'friendKey', 'id', 'imageUrl', 'isFriend', 'last_activity', 'last_login', 'last_mobile', 'last_platform', 'location', 'platform', 'profilePicOverride', 'profilePicOverrideThumbnail', 'status', 'statusDescription', 'tags', 'userIcon'],
 		inputSchema: z.object({
 			'offset': z.number().int().gte(0).describe("A zero-based offset from the default object sorting from where search results start.").optional(),
@@ -2106,6 +2230,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['incomingRequest', 'isFriend', 'outgoingRequest'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -2121,6 +2246,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -2136,6 +2262,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId', 'groupGalleryId'], query: [], body: ['fileId'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['approved', 'approvedAt', 'approvedByUserId', 'createdAt', 'fileId', 'galleryId', 'groupId', 'id', 'imageUrl', 'submittedByUserId'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2153,6 +2280,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId', 'userId', 'groupRoleId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2170,6 +2298,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId'], query: [], body: ['imageId', 'roleIds', 'sendNotification', 'text', 'title', 'visibility'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['authorId', 'createdAt', 'editorId', 'groupId', 'id', 'imageId', 'imageUrl', 'roleId', 'text', 'title', 'updatedAt', 'visibility'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2191,6 +2320,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['groupId'], query: [], body: ['userId'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['acceptedByDisplayName', 'acceptedById', 'bannedAt', 'createdAt', 'groupId', 'hasJoinedFromPurchase', 'id', 'isRepresenting', 'isSubscribedToAnnouncements', 'isSubscribedToEventAnnouncements', 'joinedAt', 'lastPostReadAt', 'mRoleIds', 'managerNotes', 'membershipStatus', 'roleIds', 'user', 'userId', 'visibility'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2207,6 +2337,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID.")
@@ -2222,6 +2353,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['groupId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID.")
@@ -2237,6 +2369,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['groupId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID.")
@@ -2252,6 +2385,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['bannerId', 'description', 'iconId', 'joinState', 'name', 'privacy', 'roleTemplate', 'shortCode'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['ageVerificationBetaCode', 'ageVerificationBetaSlots', 'ageVerificationSlotsAvailable', 'allowGroupJoinPrompt', 'badges', 'bannerId', 'bannerUrl', 'createdAt', 'description', 'discriminator', 'galleries', 'iconId', 'iconUrl', 'id', 'isVerified', 'joinState', 'languages', 'lastPostCreatedAt', 'links', 'memberCount', 'memberCountSyncedAt', 'membershipStatus', 'myMember', 'name', 'onlineMemberCount', 'ownerId', 'privacy', 'roles', 'rules', 'shortCode', 'tags', 'transferTargetId', 'updatedAt'],
 		inputSchema: z.object({
 			'bannerId': z.string().nullable().default(null),
@@ -2274,6 +2408,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId'], query: [], body: ['imageId', 'sendNotification', 'text', 'title'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['authorId', 'createdAt', 'groupId', 'id', 'imageId', 'imageUrl', 'text', 'title', 'updatedAt'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2293,6 +2428,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId'], query: [], body: ['description', 'membersOnly', 'name', 'roleIdsToAutoApprove', 'roleIdsToManage', 'roleIdsToSubmit', 'roleIdsToView'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['createdAt', 'description', 'id', 'membersOnly', 'name', 'roleIdsToAutoApprove', 'roleIdsToManage', 'roleIdsToSubmit', 'roleIdsToView', 'updatedAt'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2315,6 +2451,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId'], query: [], body: ['confirmOverrideBlock', 'userId'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2332,6 +2469,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId'], query: [], body: ['description', 'id', 'isSelfAssignable', 'name', 'permissions'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['createdAt', 'description', 'groupId', 'id', 'isManagementRole', 'isSelfAssignable', 'name', 'order', 'permissions', 'requiresPurchase', 'requiresTwoFactor', 'updatedAt'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2352,6 +2490,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId'], query: [], body: ['block'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2368,6 +2507,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['groupId'], query: ['hardDelete'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2384,6 +2524,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['groupId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID.")
@@ -2399,6 +2540,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['groupId', 'groupGalleryId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2415,6 +2557,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['groupId', 'groupGalleryId', 'groupGalleryImageId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2432,6 +2575,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['groupId', 'userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2448,6 +2592,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['groupId', 'notificationId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2464,6 +2609,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['groupId', 'groupRoleId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['createdAt', 'description', 'groupId', 'id', 'isManagementRole', 'isSelfAssignable', 'name', 'order', 'permissions', 'requiresPurchase', 'requiresTwoFactor', 'updatedAt'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2480,6 +2626,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId'], query: ['includeRoles'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['ageVerificationBetaCode', 'ageVerificationBetaSlots', 'ageVerificationSlotsAvailable', 'allowGroupJoinPrompt', 'badges', 'bannerId', 'bannerUrl', 'createdAt', 'description', 'discriminator', 'galleries', 'iconId', 'iconUrl', 'id', 'isVerified', 'joinState', 'languages', 'lastPostCreatedAt', 'links', 'memberCount', 'memberCountSyncedAt', 'membershipStatus', 'myMember', 'name', 'onlineMemberCount', 'ownerId', 'privacy', 'roles', 'rules', 'shortCode', 'tags', 'transferTargetId', 'updatedAt'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2496,6 +2643,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['authorId', 'createdAt', 'groupId', 'id', 'imageId', 'imageUrl', 'text', 'title', 'updatedAt'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID.")
@@ -2511,6 +2659,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID.")
@@ -2526,6 +2675,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId'], query: ['n', 'offset', 'startDate', 'endDate', 'actorIds', 'eventTypes', 'targetIds'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['hasNext', 'results', 'totalCount'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2548,6 +2698,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId'], query: ['n', 'offset'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['acceptedByDisplayName', 'acceptedById', 'bannedAt', 'createdAt', 'groupId', 'hasJoinedFromPurchase', 'id', 'isRepresenting', 'isSubscribedToAnnouncements', 'isSubscribedToEventAnnouncements', 'joinedAt', 'lastPostReadAt', 'mRoleIds', 'managerNotes', 'membershipStatus', 'roleIds', 'user', 'userId', 'visibility'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2565,6 +2716,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId', 'groupGalleryId'], query: ['n', 'offset', 'approved'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['approved', 'approvedAt', 'approvedByUserId', 'createdAt', 'fileId', 'galleryId', 'groupId', 'id', 'imageUrl', 'submittedByUserId'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2584,6 +2736,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['instanceId', 'location', 'memberCount', 'world'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID.")
@@ -2599,6 +2752,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId'], query: ['n', 'offset'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['acceptedByDisplayName', 'acceptedById', 'bannedAt', 'createdAt', 'groupId', 'hasJoinedFromPurchase', 'id', 'isRepresenting', 'isSubscribedToAnnouncements', 'isSubscribedToEventAnnouncements', 'joinedAt', 'lastPostReadAt', 'mRoleIds', 'managerNotes', 'membershipStatus', 'roleIds', 'user', 'userId', 'visibility'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2616,6 +2770,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId', 'userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['acceptedByDisplayName', 'acceptedById', 'bannedAt', 'createdAt', 'groupId', 'hasJoinedFromPurchase', 'id', 'isRepresenting', 'isSubscribedToAnnouncements', 'isSubscribedToEventAnnouncements', 'joinedAt', 'lastPostReadAt', 'mRoleIds', 'managerNotes', 'membershipStatus', 'roleIds', 'user', 'userId', 'visibility'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2632,6 +2787,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId'], query: ['n', 'offset', 'sort', 'roleId'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['acceptedByDisplayName', 'acceptedById', 'bannedAt', 'createdAt', 'groupId', 'hasJoinedFromPurchase', 'id', 'isRepresenting', 'isSubscribedToAnnouncements', 'isSubscribedToEventAnnouncements', 'joinedAt', 'lastPostReadAt', 'mRoleIds', 'managerNotes', 'membershipStatus', 'roleIds', 'user', 'userId', 'visibility'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2651,6 +2807,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['allowedToAdd', 'displayName', 'help', 'isManagementPermission', 'name'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID.")
@@ -2666,6 +2823,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId'], query: ['n', 'offset', 'publicOnly'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['posts'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2684,6 +2842,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId'], query: ['n', 'offset', 'blocked'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['acceptedByDisplayName', 'acceptedById', 'bannedAt', 'createdAt', 'groupId', 'hasJoinedFromPurchase', 'id', 'isRepresenting', 'isSubscribedToAnnouncements', 'isSubscribedToEventAnnouncements', 'joinedAt', 'lastPostReadAt', 'mRoleIds', 'managerNotes', 'membershipStatus', 'roleIds', 'user', 'userId', 'visibility'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2702,6 +2861,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['createdAt', 'description', 'groupId', 'id', 'isManagementRole', 'isSelfAssignable', 'name', 'order', 'permissions', 'requiresPurchase', 'requiresTwoFactor', 'updatedAt'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID.")
@@ -2717,6 +2877,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({})
 	},
@@ -2730,6 +2891,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId'], query: ['transferTargetId'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['requirements'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2746,6 +2908,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId'], query: [], body: ['transferTargetId'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2762,6 +2925,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId'], query: ['confirmOverrideBlock'], body: ['inviteId'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['acceptedByDisplayName', 'acceptedById', 'bannedAt', 'createdAt', 'groupId', 'hasJoinedFromPurchase', 'id', 'isRepresenting', 'isSubscribedToAnnouncements', 'isSubscribedToEventAnnouncements', 'joinedAt', 'lastPostReadAt', 'mRoleIds', 'managerNotes', 'membershipStatus', 'roleIds', 'user', 'userId', 'visibility'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2779,6 +2943,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['groupId', 'userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2795,6 +2960,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID.")
@@ -2810,6 +2976,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['groupId', 'userId', 'groupRoleId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2827,6 +2994,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId', 'userId'], query: [], body: ['action', 'block'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2845,6 +3013,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['groupId'], query: ['n', 'offset', 'query'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['results', 'total'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2863,6 +3032,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['query', 'offset', 'n'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['bannerId', 'bannerUrl', 'createdAt', 'description', 'discriminator', 'galleries', 'iconId', 'iconUrl', 'id', 'isSearchable', 'memberCount', 'membershipStatus', 'name', 'ownerId', 'rules', 'shortCode', 'tags'],
 		inputSchema: z.object({
 			'query': z.string().describe("Query to search for, can be either Group Name or Group shortCode").optional(),
@@ -2880,6 +3050,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['groupId', 'userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['acceptedByDisplayName', 'acceptedById', 'bannedAt', 'createdAt', 'groupId', 'hasJoinedFromPurchase', 'id', 'isRepresenting', 'isSubscribedToAnnouncements', 'isSubscribedToEventAnnouncements', 'joinedAt', 'lastPostReadAt', 'mRoleIds', 'managerNotes', 'membershipStatus', 'roleIds', 'user', 'userId', 'visibility'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2896,6 +3067,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId'], query: [], body: ['bannerId', 'description', 'iconId', 'joinState', 'languages', 'links', 'name', 'rules', 'shortCode', 'tags'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['ageVerificationBetaCode', 'ageVerificationBetaSlots', 'ageVerificationSlotsAvailable', 'allowGroupJoinPrompt', 'badges', 'bannerId', 'bannerUrl', 'createdAt', 'description', 'discriminator', 'galleries', 'iconId', 'iconUrl', 'id', 'isVerified', 'joinState', 'languages', 'lastPostCreatedAt', 'links', 'memberCount', 'memberCountSyncedAt', 'membershipStatus', 'myMember', 'name', 'onlineMemberCount', 'ownerId', 'privacy', 'roles', 'rules', 'shortCode', 'tags', 'transferTargetId', 'updatedAt'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2921,6 +3093,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId', 'groupGalleryId'], query: [], body: ['description', 'membersOnly', 'name', 'roleIdsToAutoApprove', 'roleIdsToManage', 'roleIdsToSubmit', 'roleIdsToView'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['createdAt', 'description', 'id', 'membersOnly', 'name', 'roleIdsToAutoApprove', 'roleIdsToManage', 'roleIdsToSubmit', 'roleIdsToView', 'updatedAt'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2944,6 +3117,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId', 'userId'], query: [], body: ['isSubscribedToAnnouncements', 'isSubscribedToEventAnnouncements', 'managerNotes', 'visibility'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['acceptedByDisplayName', 'acceptedById', 'bannedAt', 'createdAt', 'groupId', 'hasJoinedFromPurchase', 'id', 'isRepresenting', 'isSubscribedToAnnouncements', 'isSubscribedToEventAnnouncements', 'joinedAt', 'lastPostReadAt', 'mRoleIds', 'managerNotes', 'membershipStatus', 'roleIds', 'user', 'userId', 'visibility'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2964,6 +3138,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId', 'notificationId'], query: [], body: ['imageId', 'roleIds', 'sendNotification', 'text', 'title', 'visibility'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['authorId', 'createdAt', 'editorId', 'groupId', 'id', 'imageId', 'imageUrl', 'roleId', 'text', 'title', 'updatedAt', 'visibility'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -2986,6 +3161,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId'], query: [], body: ['isRepresenting'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -3002,6 +3178,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['groupId', 'groupRoleId'], query: [], body: ['description', 'isSelfAssignable', 'name', 'order', 'permissions'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['createdAt', 'description', 'groupId', 'id', 'isManagementRole', 'isSelfAssignable', 'name', 'order', 'permissions', 'requiresPurchase', 'requiresTwoFactor', 'updatedAt'],
 		inputSchema: z.object({
 			'groupId': z.string().describe("Must be a valid group ID."),
@@ -3023,6 +3200,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['worldId', 'instanceId'], query: ['hardClose', 'closedAt'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['active', 'ageGate', 'calendarEntryId', 'canRequestInvite', 'capacity', 'clientNumber', 'closedAt', 'contentSettings', 'creatorId', 'displayName', 'friends', 'full', 'gameServerVersion', 'groupAccessType', 'hardClose', 'hasCapacityForYou', 'hidden', 'id', 'instanceId', 'instancePersistenceEnabled', 'location', 'n_users', 'name', 'nonce', 'ownerId', 'permanent', 'photonRegion', 'platforms', 'playerPersistenceEnabled', 'private', 'queueEnabled', 'queueSize', 'recommendedCapacity', 'region', 'roleRestricted', 'secureName', 'shortName', 'strict', 'tags', 'type', 'userCount', 'users', 'world', 'worldId'],
 		inputSchema: z.object({
 			'worldId': z.string().describe("WorldID be \"offline\" on User profiles if you are not friends with that user."),
@@ -3041,6 +3219,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['ageGate', 'calendarEntryId', 'canRequestInvite', 'closedAt', 'contentSettings', 'displayName', 'groupAccessType', 'hardClose', 'instancePersistenceEnabled', 'inviteOnly', 'ownerId', 'playerPersistenceEnabled', 'queueEnabled', 'region', 'roleIds', 'type', 'worldId'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['active', 'ageGate', 'calendarEntryId', 'canRequestInvite', 'capacity', 'clientNumber', 'closedAt', 'contentSettings', 'creatorId', 'displayName', 'friends', 'full', 'gameServerVersion', 'groupAccessType', 'hardClose', 'hasCapacityForYou', 'hidden', 'id', 'instanceId', 'instancePersistenceEnabled', 'location', 'n_users', 'name', 'nonce', 'ownerId', 'permanent', 'photonRegion', 'platforms', 'playerPersistenceEnabled', 'private', 'queueEnabled', 'queueSize', 'recommendedCapacity', 'region', 'roleRestricted', 'secureName', 'shortName', 'strict', 'tags', 'type', 'userCount', 'users', 'world', 'worldId'],
 		inputSchema: z.object({
 			'ageGate': z.boolean().default(false),
@@ -3072,6 +3251,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['worldId', 'instanceId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['active', 'ageGate', 'calendarEntryId', 'canRequestInvite', 'capacity', 'clientNumber', 'closedAt', 'contentSettings', 'creatorId', 'displayName', 'friends', 'full', 'gameServerVersion', 'groupAccessType', 'hardClose', 'hasCapacityForYou', 'hidden', 'id', 'instanceId', 'instancePersistenceEnabled', 'location', 'n_users', 'name', 'nonce', 'ownerId', 'permanent', 'photonRegion', 'platforms', 'playerPersistenceEnabled', 'private', 'queueEnabled', 'queueSize', 'recommendedCapacity', 'region', 'roleRestricted', 'secureName', 'shortName', 'strict', 'tags', 'type', 'userCount', 'users', 'world', 'worldId'],
 		inputSchema: z.object({
 			'worldId': z.string().describe("WorldID be \"offline\" on User profiles if you are not friends with that user."),
@@ -3088,6 +3268,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['shortName'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['active', 'ageGate', 'calendarEntryId', 'canRequestInvite', 'capacity', 'clientNumber', 'closedAt', 'contentSettings', 'creatorId', 'displayName', 'friends', 'full', 'gameServerVersion', 'groupAccessType', 'hardClose', 'hasCapacityForYou', 'hidden', 'id', 'instanceId', 'instancePersistenceEnabled', 'location', 'n_users', 'name', 'nonce', 'ownerId', 'permanent', 'photonRegion', 'platforms', 'playerPersistenceEnabled', 'private', 'queueEnabled', 'queueSize', 'recommendedCapacity', 'region', 'roleRestricted', 'secureName', 'shortName', 'strict', 'tags', 'type', 'userCount', 'users', 'world', 'worldId'],
 		inputSchema: z.object({
 			'shortName': z.string().describe("Must be a valid instance short name.")
@@ -3103,6 +3284,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['n', 'offset'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'n': z.number().int().gte(1).lte(100).describe("The number of objects to return. Max 100. One page per call.").default(25),
@@ -3119,6 +3301,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['worldId', 'instanceId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['secureName', 'shortName'],
 		inputSchema: z.object({
 			'worldId': z.string().describe("WorldID be \"offline\" on User profiles if you are not friends with that user."),
@@ -3135,6 +3318,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['inventoryItemId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['errors', 'inventoryItems', 'inventoryItemsCreated'],
 		inputSchema: z.object({
 			'inventoryItemId': z.string().describe("Must be a valid inventory item ID.")
@@ -3150,6 +3334,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['inventoryItemId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'inventoryItemId': z.string().describe("Must be a valid inventory item ID.")
@@ -3165,6 +3350,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['inventoryItemId'], query: [], body: ['equipSlot'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['collections', 'created_at', 'defaultAttributes', 'description', 'equipSlot', 'equipSlots', 'expiryDate', 'flags', 'holderId', 'id', 'imageUrl', 'isArchived', 'isSeen', 'itemType', 'itemTypeLabel', 'metadata', 'name', 'quantifiable', 'tags', 'templateId', 'template_created_at', 'template_updated_at', 'updated_at', 'userAttributes', 'validateUserAttributes'],
 		inputSchema: z.object({
 			'inventoryItemId': z.string().describe("Must be a valid inventory item ID."),
@@ -3181,6 +3367,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['n', 'offset', 'holderId', 'equipSlot', 'order', 'tags', 'types', 'flags', 'notTypes', 'notFlags', 'archived'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['data', 'totalCount'],
 		inputSchema: z.object({
 			'n': z.number().int().gte(1).lte(100).describe("The number of objects to return. Max 100. One page per call.").default(25),
@@ -3206,6 +3393,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({})
 	},
@@ -3219,6 +3407,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['active'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['authorId', 'created_at', 'dropExpiryDate', 'endDropDate', 'id', 'isDisabled', 'name', 'notificationDetails', 'startDropDate', 'status', 'tags', 'targetGroup', 'templateIds', 'updated_at'],
 		inputSchema: z.object({
 			'active': z.boolean().describe("Filter for users' listings and inventory bundles.").optional()
@@ -3234,6 +3423,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['inventoryTemplateId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['authorId', 'collections', 'created_at', 'defaultAttributes', 'description', 'equipSlots', 'flags', 'id', 'imageUrl', 'itemType', 'itemTypeLabel', 'metadata', 'name', 'notificationDetails', 'status', 'tags', 'updated_at', 'validateUserAttributes'],
 		inputSchema: z.object({
 			'inventoryTemplateId': z.string().describe("Must be a valid inventory template ID.")
@@ -3249,6 +3439,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['inventoryItemId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['collections', 'created_at', 'defaultAttributes', 'description', 'equipSlot', 'equipSlots', 'expiryDate', 'flags', 'holderId', 'id', 'imageUrl', 'isArchived', 'isSeen', 'itemType', 'itemTypeLabel', 'metadata', 'name', 'quantifiable', 'tags', 'templateId', 'template_created_at', 'template_updated_at', 'updated_at', 'userAttributes', 'validateUserAttributes'],
 		inputSchema: z.object({
 			'inventoryItemId': z.string().describe("Must be a valid inventory item ID.")
@@ -3264,6 +3455,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId', 'inventoryItemId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['collections', 'created_at', 'defaultAttributes', 'description', 'equipSlot', 'equipSlots', 'expiryDate', 'flags', 'holderId', 'id', 'imageUrl', 'isArchived', 'isSeen', 'itemType', 'itemTypeLabel', 'metadata', 'name', 'quantifiable', 'tags', 'templateId', 'template_created_at', 'template_updated_at', 'updated_at', 'userAttributes', 'validateUserAttributes'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -3280,6 +3472,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['code'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['redeemedRewards', 'redemptionCode'],
 		inputSchema: z.object({
 			'code': z.string()
@@ -3295,6 +3488,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: ['itemId', 'duration'], body: ['itemId', 'users'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['ok'],
 		inputSchema: z.object({
 			'itemId': z.string(),
@@ -3312,6 +3506,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['itemId', 'duration'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['token', 'version'],
 		inputSchema: z.object({
 			'itemId': z.string().describe("Id for inventory item sharing."),
@@ -3328,6 +3523,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['id'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['token', 'version'],
 		inputSchema: z.object({
 			'id': z.string().describe("Id for inventory item spawning.")
@@ -3343,6 +3539,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['inventoryItemId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'inventoryItemId': z.enum(["","drone","portal","warp"]).describe("Selector for inventory slot management.").default("")
@@ -3358,6 +3555,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['inventoryItemId'], query: [], body: ['isArchived', 'isSeen', 'userAttributes'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['collections', 'created_at', 'defaultAttributes', 'description', 'equipSlot', 'equipSlots', 'expiryDate', 'flags', 'holderId', 'id', 'imageUrl', 'isArchived', 'isSeen', 'itemType', 'itemTypeLabel', 'metadata', 'name', 'quantifiable', 'tags', 'templateId', 'template_created_at', 'template_updated_at', 'updated_at', 'userAttributes', 'validateUserAttributes'],
 		inputSchema: z.object({
 			'inventoryItemId': z.string().describe("Must be a valid inventory item ID."),
@@ -3376,6 +3574,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId', 'messageType', 'slot'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['canBeUpdated', 'id', 'message', 'messageType', 'remainingCooldownMinutes', 'slot', 'updatedAt'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -3393,6 +3592,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId', 'messageType'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['canBeUpdated', 'id', 'message', 'messageType', 'remainingCooldownMinutes', 'slot', 'updatedAt'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -3409,6 +3609,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['worldId', 'instanceId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['created_at', 'details', 'id', 'message', 'receiverUserId', 'senderUserId', 'senderUsername', 'type'],
 		inputSchema: z.object({
 			'worldId': z.string().describe("WorldID be \"offline\" on User profiles if you are not friends with that user."),
@@ -3425,6 +3626,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['userId'], query: [], body: ['instanceId', 'messageSlot'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['created_at', 'details', 'id', 'message', 'receiverUserId', 'senderUserId', 'senderUsername', 'type'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -3442,11 +3644,12 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['userId'], query: [], body: ['data', 'image'] },
 		paginated: false,
+		binaryFields: ['image'],
 		responseKeys: ['created_at', 'details', 'id', 'message', 'receiverUserId', 'senderUserId', 'senderUsername', 'type'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
 			'data': z.object({ "instanceId": z.string().describe("InstanceID can be \"offline\" on User profiles if you are not friends with that user and \"private\" if you are friends and user is in private instance."), "messageSlot": z.number().int().gte(0).lte(11).optional() }),
-			'image': z.string().base64().describe("The binary blob of the png file.")
+			'image': z.string().describe('Path to a local file to upload. The binary blob of the png file. Give an absolute path, or one relative to the server\'s working directory. Do not paste file contents.')
 		})
 	},
 	{
@@ -3459,6 +3662,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['userId'], query: [], body: ['requestSlot'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['created_at', 'details', 'id', 'message', 'receiverUserId', 'seen', 'senderUserId', 'senderUsername', 'type'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -3475,11 +3679,12 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['userId'], query: [], body: ['data', 'image'] },
 		paginated: false,
+		binaryFields: ['image'],
 		responseKeys: ['created_at', 'details', 'id', 'message', 'receiverUserId', 'seen', 'senderUserId', 'senderUsername', 'type'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
 			'data': z.object({ "requestSlot": z.number().int().gte(0).lte(11).optional() }).optional(),
-			'image': z.string().base64().describe("The binary blob of the png file.").optional()
+			'image': z.string().describe('Path to a local file to upload. The binary blob of the png file. Give an absolute path, or one relative to the server\'s working directory. Do not paste file contents.').optional()
 		})
 	},
 	{
@@ -3492,6 +3697,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['userId', 'messageType', 'slot'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['canBeUpdated', 'id', 'message', 'messageType', 'remainingCooldownMinutes', 'slot', 'updatedAt'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -3509,6 +3715,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['notificationId'], query: [], body: ['responseSlot'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['created_at', 'details', 'id', 'message', 'receiverUserId', 'seen', 'senderUserId', 'senderUsername', 'type'],
 		inputSchema: z.object({
 			'notificationId': z.string().describe("Must be a valid notification ID."),
@@ -3525,11 +3732,12 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['notificationId'], query: [], body: ['data', 'image'] },
 		paginated: false,
+		binaryFields: ['image'],
 		responseKeys: ['created_at', 'details', 'id', 'message', 'receiverUserId', 'seen', 'senderUserId', 'senderUsername', 'type'],
 		inputSchema: z.object({
 			'notificationId': z.string().describe("Must be a valid notification ID."),
 			'data': z.object({ "responseSlot": z.number().int().gte(0).lte(11) }),
-			'image': z.string().base64().describe("The binary blob of the png file.")
+			'image': z.string().describe('Path to a local file to upload. The binary blob of the png file. Give an absolute path, or one relative to the server\'s working directory. Do not paste file contents.')
 		})
 	},
 	{
@@ -3542,6 +3750,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['userId', 'messageType', 'slot'], query: [], body: ['message'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['canBeUpdated', 'id', 'message', 'messageType', 'remainingCooldownMinutes', 'slot', 'updatedAt'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -3560,6 +3769,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['jamId', 'jamSubmissionId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'jamId': z.string().describe("Must be a valid jam ID."),
@@ -3576,6 +3786,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['jamId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['description', 'id', 'isVisible', 'moreInfo', 'state', 'stateChangeDates', 'submissionContentGateDate', 'submissionContentGated', 'title', 'updated_at'],
 		inputSchema: z.object({
 			'jamId': z.string().describe("Must be a valid jam ID.")
@@ -3591,6 +3802,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['type'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['description', 'id', 'isVisible', 'moreInfo', 'state', 'stateChangeDates', 'submissionContentGateDate', 'submissionContentGated', 'title', 'updated_at'],
 		inputSchema: z.object({
 			'type': z.string().describe("Only show jams of this type (`avatar` or `world`).").optional()
@@ -3606,6 +3818,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['jamId'], query: ['contentId', 'submitterId'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['contentId', 'created_at', 'description', 'id', 'jamId', 'ratingScore', 'submitterId'],
 		inputSchema: z.object({
 			'jamId': z.string().describe("Must be a valid jam ID."),
@@ -3623,6 +3836,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['jamId'], query: [], body: ['contentId', 'description'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['contentId', 'created_at', 'description', 'id', 'jamId', 'ratingScore', 'submitterId'],
 		inputSchema: z.object({
 			'jamId': z.string().describe("Must be a valid jam ID."),
@@ -3640,6 +3854,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['data', 'description', 'displayName', 'id', 'name', 'ownerDisplayName', 'ownerId', 'type'],
 		inputSchema: z.object({})
 	},
@@ -3653,6 +3868,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['CampaignStatus', 'DisableBackgroundPreloads', 'LocationGiftingNonSubPrioEnabled', 'VoiceEnableDegradation', 'VoiceEnableReceiverLimiting', 'accessLogsUrls', 'address', 'ageVerificationInviteVisible', 'ageVerificationP', 'ageVerificationStatusVisible', 'analysisMaxRetries', 'analysisRetryInterval', 'analyticsSegment_NewUI_PctOfUsers', 'analyticsSegment_NewUI_Salt', 'announcements', 'audioConfig', 'availableLanguageCodes', 'availableLanguages', 'avatarPerfLimiter', 'chatboxLogBufferSeconds', 'clientApiKey', 'clientBPSCeiling', 'clientDisconnectTimeout', 'clientNetDispatchThread', 'clientNetDispatchThreadMobile', 'clientNetInThread', 'clientNetInThread2', 'clientNetInThreadMobile', 'clientNetInThreadMobile2', 'clientNetOutThread', 'clientNetOutThread2', 'clientNetOutThreadMobile', 'clientNetOutThreadMobile2', 'clientQR', 'clientReservedPlayerBPS', 'clientSentCountAllowance', 'constants', 'contactEmail', 'copyrightEmail', 'copyrightFormUrl', 'currentPrivacyVersion', 'currentTOSVersion', 'defaultAvatar', 'defaultStickerSet', 'devLanguageCodes', 'devSdkUrl', 'devSdkVersion', 'dis-countdown', 'disableAVProInProton', 'disableAvatarCopying', 'disableAvatarGating', 'disableCaptcha', 'disableCommunityLabs', 'disableCommunityLabsPromotion', 'disableEmail', 'disableEventStream', 'disableFeedbackGating', 'disableFrontendBuilds', 'disableGiftDrops', 'disableHello', 'disableOculusSubs', 'disableRegistration', 'disableSteamNetworking', 'disableTwoFactorAuth', 'disableUdon', 'disableUpgradeAccount', 'downloadLinkWindows', 'downloadUrls', 'dynamicWorldRows', 'economyLedgerBackfill', 'economyLedgerMigrationStop', 'economyLedgerMode', 'economyPauseEnd', 'economyPauseStart', 'economyPurchaseRepairEnabled', 'economyState', 'events', 'forceUseLatestWorld', 'giftDisplayType', 'googleApiClientId', 'homeWorldId', 'homepageRedirectTarget', 'hubWorldId', 'imageHostUrlList', 'iosAppVersion', 'iosVersion', 'jobsEmail', 'maxUserEmoji', 'maxUserStickers', 'minSupportedClientBuildNumber', 'minimumUnityVersionForUploads', 'moderationEmail', 'notAllowedToSelectAvatarInPrivateWorldMessage', 'offlineAnalysis', 'photonNameserverOverrides', 'photonPublicKeys', 'player-url-resolver-sha1', 'player-url-resolver-version', 'publicKey', 'reportCategories', 'reportFormUrl', 'reportOptions', 'reportReasons', 'requireAgeVerificationBetaTag', 'sdkDeveloperFaqUrl', 'sdkDiscordUrl', 'sdkNotAllowedToPublishMessage', 'sdkUnityVersion', 'stringHostUrlList', 'supportEmail', 'supportFormUrl', 'timeOutWorldId', 'timekeeping', 'tutorialWorldId', 'updateRateMsMaximum', 'updateRateMsMinimum', 'updateRateMsNormal', 'updateRateMsUdonManual', 'uploadAnalysisPercent', 'urlList', 'useReliableUdpForVoice', 'viveWindowsUrl', 'websocketMaxFriendsRefreshDelay', 'websocketQuickReconnectTime', 'websocketReconnectMaxDelay', 'whiteListedAssetUrls'],
 		inputSchema: z.object({})
 	},
@@ -3666,6 +3882,7 @@ export const operations: Operation[] = [
 		kind: 'admin',
 		params: { path: [], query: ['variant', 'branch'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'variant': z.enum(["internal","public"]).describe("Specifies which `variant` of the site. Public is the end-user site, while `internal` is the staff-only site with special pages for moderation and management.").default("public"),
@@ -3682,6 +3899,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({})
 	},
@@ -3695,6 +3913,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['buildVersionTag', 'ok', 'serverName'],
 		inputSchema: z.object({})
 	},
@@ -3708,6 +3927,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['require', 'include'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['createdAt', 'data', 'endDate', 'hash', 'id', 'isEnabled', 'priority', 'releaseStatus', 'startDate', 'tags', 'updatedAt'],
 		inputSchema: z.object({
 			'require': z.string().min(1).describe("Tags are a way to grant various access, assign restrictions or other kinds of metadata to various to objects such as worlds, users and avatars.\n\nSystem tags starting with `system_` are granted automatically by the system, while admin tags with `admin_` are granted manually. More prefixes such as `language_ ` (to indicate that a player can speak the tagged language), and `author_tag_` (provided by a world author for search and sorting) exist as well.").optional(),
@@ -3724,6 +3944,7 @@ export const operations: Operation[] = [
 		kind: 'admin',
 		params: { path: [], query: ['variant', 'branch'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'variant': z.enum(["internal","public"]).describe("Specifies which `variant` of the site. Public is the end-user site, while `internal` is the staff-only site with special pages for moderation and management.").default("public"),
@@ -3740,6 +3961,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['permissionId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['data', 'description', 'displayName', 'id', 'name', 'ownerDisplayName', 'ownerId', 'type'],
 		inputSchema: z.object({
 			'permissionId': z.string().describe("Must be a valid permission ID.")
@@ -3755,6 +3977,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({})
 	},
@@ -3768,6 +3991,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['notificationId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'notificationId': z.string().describe("Must be a valid notification ID.")
@@ -3783,6 +4007,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['notificationId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['canDelete', 'category', 'createdAt', 'data', 'details', 'expiresAt', 'expiryAfterSeen', 'id', 'ignoreDND', 'imageUrl', 'isSystem', 'link', 'linkText', 'linkTextKey', 'message', 'messageKey', 'receiverUserId', 'relatedNotificationsId', 'requireSeen', 'responses', 'seen', 'senderUserId', 'senderUsername', 'title', 'titleKey', 'type', 'updatedAt', 'version'],
 		inputSchema: z.object({
 			'notificationId': z.string().describe("Must be a valid notification ID.")
@@ -3798,6 +4023,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({})
 	},
@@ -3811,6 +4037,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({})
 	},
@@ -3824,6 +4051,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['notificationId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['created_at', 'details', 'id', 'message', 'receiverUserId', 'seen', 'senderUserId', 'senderUsername', 'type'],
 		inputSchema: z.object({
 			'notificationId': z.string().describe("Must be a valid notification ID.")
@@ -3839,6 +4067,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['notificationId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'notificationId': z.string().describe("Must be a valid notification ID.")
@@ -3854,6 +4083,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['notificationId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['created_at', 'details', 'id', 'message', 'receiverUserId', 'seen', 'senderUserId', 'senderUsername', 'type'],
 		inputSchema: z.object({
 			'notificationId': z.string().describe("Must be a valid notification ID.")
@@ -3869,6 +4099,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['type', 'sent', 'hidden', 'after', 'n', 'offset'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['created_at', 'details', 'id', 'message', 'receiverUserId', 'seen', 'senderUserId', 'senderUsername', 'type'],
 		inputSchema: z.object({
 			'type': z.string().describe("Only send notifications of this type (can use `all` for all). This parameter no longer does anything, and is deprecated.").optional(),
@@ -3889,6 +4120,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['notificationId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['canDelete', 'category', 'createdAt', 'data', 'details', 'expiresAt', 'expiryAfterSeen', 'id', 'ignoreDND', 'imageUrl', 'isSystem', 'link', 'linkText', 'linkTextKey', 'message', 'messageKey', 'receiverUserId', 'relatedNotificationsId', 'requireSeen', 'responses', 'seen', 'senderUserId', 'senderUsername', 'title', 'titleKey', 'type', 'updatedAt', 'version'],
 		inputSchema: z.object({
 			'notificationId': z.string().describe("Must be a valid notification ID.")
@@ -3904,6 +4136,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['limit'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['canDelete', 'category', 'createdAt', 'data', 'details', 'expiresAt', 'expiryAfterSeen', 'id', 'ignoreDND', 'imageUrl', 'isSystem', 'link', 'linkText', 'linkTextKey', 'message', 'messageKey', 'receiverUserId', 'relatedNotificationsId', 'requireSeen', 'responses', 'seen', 'senderUserId', 'senderUsername', 'title', 'titleKey', 'type', 'updatedAt', 'version'],
 		inputSchema: z.object({
 			'limit': z.number().int().describe("The maximum number of entries to get.").optional()
@@ -3919,6 +4152,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['notificationId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['created_at', 'details', 'id', 'message', 'receiverUserId', 'seen', 'senderUserId', 'senderUsername', 'type'],
 		inputSchema: z.object({
 			'notificationId': z.string().describe("Must be a valid notification ID.")
@@ -3934,6 +4168,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['notificationId'], query: [], body: [] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['canDelete', 'category', 'createdAt', 'data', 'details', 'expiresAt', 'expiryAfterSeen', 'id', 'ignoreDND', 'imageUrl', 'isSystem', 'link', 'linkText', 'linkTextKey', 'message', 'messageKey', 'receiverUserId', 'relatedNotificationsId', 'requireSeen', 'responses', 'seen', 'senderUserId', 'senderUsername', 'title', 'titleKey', 'type', 'updatedAt', 'version'],
 		inputSchema: z.object({
 			'notificationId': z.string().describe("Must be a valid notification ID.")
@@ -3949,6 +4184,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['notificationId'], query: [], body: ['responseData', 'responseType'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['canDelete', 'category', 'createdAt', 'data', 'details', 'expiresAt', 'expiryAfterSeen', 'id', 'ignoreDND', 'imageUrl', 'isSystem', 'link', 'linkText', 'linkTextKey', 'message', 'messageKey', 'receiverUserId', 'relatedNotificationsId', 'requireSeen', 'responses', 'seen', 'senderUserId', 'senderUsername', 'title', 'titleKey', 'type', 'updatedAt', 'version'],
 		inputSchema: z.object({
 			'notificationId': z.string().describe("Must be a valid notification ID."),
@@ -3966,6 +4202,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: [], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({})
 	},
@@ -3979,6 +4216,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['type', 'targetUserId'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['created', 'id', 'sourceDisplayName', 'sourceUserId', 'targetDisplayName', 'targetUserId', 'type'],
 		inputSchema: z.object({
 			'type': z.enum(["block","hideAvatar","interactOff","interactOn","mute","muteChat","showAvatar","unmute","unmuteChat"]).describe("Must be one of PlayerModerationType.").default("unmute"),
@@ -3995,6 +4233,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: [], query: [], body: ['moderated', 'type'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['created', 'id', 'sourceDisplayName', 'sourceUserId', 'targetDisplayName', 'targetUserId', 'type'],
 		inputSchema: z.object({
 			'moderated': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -4011,6 +4250,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: [], query: [], body: ['moderated', 'type'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['success'],
 		inputSchema: z.object({
 			'moderated': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -4027,6 +4267,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['printId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'printId': z.string().describe("Print ID.")
@@ -4042,10 +4283,11 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['printId'], query: [], body: ['image', 'note'] },
 		paginated: false,
+		binaryFields: ['image'],
 		responseKeys: ['authorId', 'authorName', 'createdAt', 'files', 'id', 'note', 'ownerId', 'timestamp', 'worldId', 'worldName'],
 		inputSchema: z.object({
 			'printId': z.string().describe("Print ID."),
-			'image': z.string().base64().describe("The binary blob of the png file.").optional(),
+			'image': z.string().describe('Path to a local file to upload. The binary blob of the png file. Give an absolute path, or one relative to the server\'s working directory. Do not paste file contents.').optional(),
 			'note': z.string().describe("The caption for the image.").optional()
 		})
 	},
@@ -4059,6 +4301,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['printId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['authorId', 'authorName', 'createdAt', 'files', 'id', 'note', 'ownerId', 'timestamp', 'worldId', 'worldName'],
 		inputSchema: z.object({
 			'printId': z.string().describe("Print ID.")
@@ -4074,6 +4317,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['authorId', 'authorName', 'createdAt', 'files', 'id', 'note', 'ownerId', 'timestamp', 'worldId', 'worldName'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -4089,9 +4333,10 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['image', 'note', 'timestamp', 'worldId', 'worldName'] },
 		paginated: false,
+		binaryFields: ['image'],
 		responseKeys: ['authorId', 'authorName', 'createdAt', 'files', 'id', 'note', 'ownerId', 'timestamp', 'worldId', 'worldName'],
 		inputSchema: z.object({
-			'image': z.string().base64().describe("The binary blob of the png file.").optional(),
+			'image': z.string().describe('Path to a local file to upload. The binary blob of the png file. Give an absolute path, or one relative to the server\'s working directory. Do not paste file contents.').optional(),
 			'note': z.string().describe("The caption for the image.").optional(),
 			'timestamp': z.string().datetime({ offset: true }).describe("The time the image was captured.").optional(),
 			'worldId': z.string().describe("The id of the world in which the image was captured.").optional(),
@@ -4108,6 +4353,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['assetUrl', 'assetVersion', 'description', 'id', 'imageUrl', 'name', 'platform', 'propSignature', 'spawnType', 'tags', 'unityVersion', 'worldPlacementMask'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['_created_at', '_updated_at', 'authorId', 'authorName', 'description', 'id', 'imageUrl', 'maxCountPerUser', 'name', 'releaseStatus', 'spawnType', 'tags', 'thumbnailImageUrl', 'unityPackageUrl', 'unityPackages', 'worldPlacementMask'],
 		inputSchema: z.object({
 			'assetUrl': z.string(),
@@ -4134,6 +4380,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['propId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'propId': z.string().describe("Prop ID.")
@@ -4149,6 +4396,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['propId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['_created_at', '_updated_at', 'authorId', 'authorName', 'description', 'id', 'imageUrl', 'maxCountPerUser', 'name', 'releaseStatus', 'spawnType', 'tags', 'thumbnailImageUrl', 'unityPackageUrl', 'unityPackages', 'worldPlacementMask'],
 		inputSchema: z.object({
 			'propId': z.string().describe("Prop ID.")
@@ -4164,6 +4412,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['propId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['canPublish'],
 		inputSchema: z.object({
 			'propId': z.string().describe("Prop ID.")
@@ -4179,6 +4428,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['n', 'offset', 'authorId'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['_created_at', '_updated_at', 'authorId', 'authorName', 'description', 'id', 'imageUrl', 'maxCountPerUser', 'name', 'releaseStatus', 'spawnType', 'tags', 'thumbnailImageUrl', 'unityPackageUrl', 'unityPackages', 'worldPlacementMask'],
 		inputSchema: z.object({
 			'n': z.number().int().gte(1).lte(100).describe("The number of objects to return. Max 100. One page per call.").default(25),
@@ -4196,6 +4446,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['propId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['canPublish'],
 		inputSchema: z.object({
 			'propId': z.string().describe("Prop ID.")
@@ -4211,6 +4462,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['propId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['canPublish'],
 		inputSchema: z.object({
 			'propId': z.string().describe("Prop ID.")
@@ -4226,6 +4478,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['propId'], query: [], body: ['assetUrl', 'assetVersion', 'description', 'imageUrl', 'name', 'platform', 'propSignature', 'spawnType', 'tags', 'unityVersion', 'worldPlacementMask'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['_created_at', '_updated_at', 'authorId', 'authorName', 'description', 'id', 'imageUrl', 'maxCountPerUser', 'name', 'releaseStatus', 'spawnType', 'tags', 'thumbnailImageUrl', 'unityPackageUrl', 'unityPackages', 'worldPlacementMask'],
 		inputSchema: z.object({
 			'propId': z.string().describe("Prop ID."),
@@ -4252,6 +4505,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['userId'], query: [], body: ['tags'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['acceptedPrivacyVersion', 'acceptedTOSVersion', 'accountDeletionDate', 'accountDeletionLog', 'activeFriends', 'ageVerificationStatus', 'ageVerified', 'allowAvatarCopying', 'appleDetails', 'appleId', 'authToken', 'badges', 'bio', 'bioLinks', 'contentFilters', 'currentAvatar', 'currentAvatarImageUrl', 'currentAvatarTags', 'currentAvatarThumbnailImageUrl', 'date_joined', 'developerType', 'discordDetails', 'discordId', 'displayName', 'emailVerified', 'fallbackAvatar', 'friendGroupNames', 'friendKey', 'friends', 'googleDetails', 'googleId', 'hasBirthday', 'hasDiscordFriendsOptOut', 'hasEmail', 'hasLoggedInFromClient', 'hasPendingEmail', 'hasSharedConnectionsOptOut', 'hideContentFilterSettings', 'homeLocation', 'id', 'isAdult', 'isBoopingEnabled', 'isFriend', 'last_activity', 'last_login', 'last_mobile', 'last_platform', 'obfuscatedEmail', 'obfuscatedPendingEmail', 'oculusId', 'offlineFriends', 'onlineFriends', 'pastDisplayNames', 'picoId', 'platform_history', 'presence', 'profilePicOverride', 'profilePicOverrideThumbnail', 'pronouns', 'pronounsHistory', 'queuedInstance', 'receiveMobileInvitations', 'state', 'status', 'statusDescription', 'statusFirstTime', 'statusHistory', 'steamDetails', 'steamId', 'tags', 'twitchDetails', 'twitchId', 'twoFactorAuthEnabled', 'twoFactorAuthEnabledDate', 'unsubscribe', 'updated_at', 'userIcon', 'userLanguage', 'userLanguageCode', 'username', 'usesGeneratedPassword', 'viveId'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -4268,6 +4522,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId', 'worldId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -4284,6 +4539,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -4299,6 +4555,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['userId', 'worldId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -4315,6 +4572,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['ageVerificationBetaCode', 'ageVerificationBetaSlots', 'ageVerificationSlotsAvailable', 'allowGroupJoinPrompt', 'badges', 'bannerId', 'bannerUrl', 'createdAt', 'description', 'discriminator', 'galleries', 'iconId', 'iconUrl', 'id', 'isVerified', 'joinState', 'languages', 'lastPostCreatedAt', 'links', 'memberCount', 'memberCountSyncedAt', 'membershipStatus', 'myMember', 'name', 'onlineMemberCount', 'ownerId', 'privacy', 'roles', 'rules', 'shortCode', 'tags', 'transferTargetId', 'updatedAt'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -4330,6 +4588,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['ageVerificationBetaCode', 'ageVerificationBetaSlots', 'ageVerificationSlotsAvailable', 'allowGroupJoinPrompt', 'badges', 'bannerId', 'bannerUrl', 'createdAt', 'description', 'discriminator', 'galleries', 'iconId', 'iconUrl', 'id', 'isVerified', 'joinState', 'languages', 'lastPostCreatedAt', 'links', 'memberCount', 'memberCountSyncedAt', 'membershipStatus', 'myMember', 'name', 'onlineMemberCount', 'ownerId', 'privacy', 'roles', 'rules', 'shortCode', 'tags', 'transferTargetId', 'updatedAt'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -4345,6 +4604,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: ['n', 'offset'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['avatarThumbnail', 'currentAvatarImageUrl', 'currentAvatarTags', 'currentAvatarThumbnailImageUrl', 'displayName', 'id', 'imageUrl', 'profilePicOverride', 'status', 'statusDescription'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -4362,6 +4622,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: ['n', 'offset'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['bannerId', 'bannerUrl', 'description', 'discriminator', 'groupId', 'iconId', 'iconUrl', 'id', 'isRepresenting', 'lastPostCreatedAt', 'lastPostReadAt', 'memberCount', 'memberVisibility', 'mutualGroup', 'name', 'ownerId', 'privacy', 'shortCode'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -4379,6 +4640,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['friends', 'groups'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -4394,6 +4656,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['activity', 'id', 'isFriend', 'note', 'status', 'statusDescription'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -4409,6 +4672,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['ageVerificationStatus', 'ageVerified', 'backgroundType', 'badges', 'bannerColor', 'bannerType', 'bio', 'bioLinks', 'displayName', 'hasVrcPlus', 'iconFrame', 'iconUrl', 'id', 'isEconomyCreator', 'languages', 'nameplateEffect', 'profileEffect', 'pronouns', 'representedGroup', 'themeId', 'trustTags'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -4424,6 +4688,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['ageVerificationStatus', 'ageVerified', 'allowAvatarCopying', 'badges', 'bannerType', 'bannerUrl', 'bio', 'bioLinks', 'currentAvatarImageUrl', 'currentAvatarTags', 'currentAvatarThumbnailImageUrl', 'date_joined', 'developerType', 'displayName', 'friendKey', 'friendRequestStatus', 'iconFrame', 'iconUrl', 'id', 'instanceId', 'isEconomyCreator', 'isFriend', 'last_activity', 'last_login', 'last_mobile', 'last_platform', 'location', 'nameplateEffect', 'note', 'platform', 'profileEffect', 'profilePicOverride', 'profilePicOverrideThumbnail', 'pronouns', 'state', 'status', 'statusDescription', 'tags', 'travelingToInstance', 'travelingToLocation', 'travelingToWorld', 'userIcon', 'username', 'worldId'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -4439,6 +4704,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: ['groupIds'], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -4455,6 +4721,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['username'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['ageVerificationStatus', 'ageVerified', 'allowAvatarCopying', 'badges', 'bannerType', 'bannerUrl', 'bio', 'bioLinks', 'currentAvatarImageUrl', 'currentAvatarTags', 'currentAvatarThumbnailImageUrl', 'date_joined', 'developerType', 'displayName', 'friendKey', 'friendRequestStatus', 'iconFrame', 'iconUrl', 'id', 'instanceId', 'isEconomyCreator', 'isFriend', 'last_activity', 'last_login', 'last_mobile', 'last_platform', 'location', 'nameplateEffect', 'note', 'platform', 'profileEffect', 'profilePicOverride', 'profilePicOverrideThumbnail', 'pronouns', 'state', 'status', 'statusDescription', 'tags', 'travelingToInstance', 'travelingToLocation', 'travelingToWorld', 'userIcon', 'username', 'worldId'],
 		inputSchema: z.object({
 			'username': z.string().describe("Username of the user")
@@ -4470,6 +4737,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: ['contentId', 'n', 'offset'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['commenterId', 'commenterName', 'contentAuthorId', 'contentAuthorName', 'contentId', 'contentName', 'contentType', 'contentVersion', 'description', 'id', 'reason', 'tags', 'type'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -4488,6 +4756,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['fetchedAt', 'instances'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -4503,6 +4772,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId', 'groupId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['fetchedAt', 'instances'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -4519,6 +4789,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['ageVerificationBetaCode', 'ageVerificationBetaSlots', 'ageVerificationSlotsAvailable', 'allowGroupJoinPrompt', 'badges', 'bannerId', 'bannerUrl', 'createdAt', 'description', 'discriminator', 'galleries', 'iconId', 'iconUrl', 'id', 'isVerified', 'joinState', 'languages', 'lastPostCreatedAt', 'links', 'memberCount', 'memberCountSyncedAt', 'membershipStatus', 'myMember', 'name', 'onlineMemberCount', 'ownerId', 'privacy', 'roles', 'rules', 'shortCode', 'tags', 'transferTargetId', 'updatedAt'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -4534,6 +4805,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['bannerId', 'bannerUrl', 'description', 'discriminator', 'groupId', 'iconId', 'iconUrl', 'id', 'isRepresenting', 'lastPostCreatedAt', 'lastPostReadAt', 'memberCount', 'memberVisibility', 'mutualGroup', 'name', 'ownerId', 'privacy', 'shortCode'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -4549,6 +4821,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userNoteId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['createdAt', 'id', 'note', 'targetUser', 'targetUserId', 'userId'],
 		inputSchema: z.object({
 			'userNoteId': z.string().describe("Must be a valid user note ID.")
@@ -4564,6 +4837,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['n', 'offset'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['createdAt', 'id', 'note', 'targetUser', 'targetUserId', 'userId'],
 		inputSchema: z.object({
 			'n': z.number().int().gte(1).lte(100).describe("The number of objects to return. Max 100. One page per call.").default(25),
@@ -4580,6 +4854,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['bannerId', 'bannerUrl', 'description', 'discriminator', 'groupId', 'iconId', 'iconUrl', 'isRepresenting', 'memberCount', 'memberVisibility', 'name', 'ownerId', 'privacy', 'shortCode'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -4595,6 +4870,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['userId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['completed', 'completedAnyTutorial', 'completedTutorials', 'tutorialKey'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed.")
@@ -4610,6 +4886,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['userId'], query: [], body: ['tags'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['acceptedPrivacyVersion', 'acceptedTOSVersion', 'accountDeletionDate', 'accountDeletionLog', 'activeFriends', 'ageVerificationStatus', 'ageVerified', 'allowAvatarCopying', 'appleDetails', 'appleId', 'authToken', 'badges', 'bio', 'bioLinks', 'contentFilters', 'currentAvatar', 'currentAvatarImageUrl', 'currentAvatarTags', 'currentAvatarThumbnailImageUrl', 'date_joined', 'developerType', 'discordDetails', 'discordId', 'displayName', 'emailVerified', 'fallbackAvatar', 'friendGroupNames', 'friendKey', 'friends', 'googleDetails', 'googleId', 'hasBirthday', 'hasDiscordFriendsOptOut', 'hasEmail', 'hasLoggedInFromClient', 'hasPendingEmail', 'hasSharedConnectionsOptOut', 'hideContentFilterSettings', 'homeLocation', 'id', 'isAdult', 'isBoopingEnabled', 'isFriend', 'last_activity', 'last_login', 'last_mobile', 'last_platform', 'obfuscatedEmail', 'obfuscatedPendingEmail', 'oculusId', 'offlineFriends', 'onlineFriends', 'pastDisplayNames', 'picoId', 'platform_history', 'presence', 'profilePicOverride', 'profilePicOverrideThumbnail', 'pronouns', 'pronounsHistory', 'queuedInstance', 'receiveMobileInvitations', 'state', 'status', 'statusDescription', 'statusFirstTime', 'statusHistory', 'steamDetails', 'steamId', 'tags', 'twitchDetails', 'twitchId', 'twoFactorAuthEnabled', 'twoFactorAuthEnabledDate', 'unsubscribe', 'updated_at', 'userIcon', 'userLanguage', 'userLanguageCode', 'username', 'usesGeneratedPassword', 'viveId'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -4626,6 +4903,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['search', 'developerType', 'n', 'offset', 'isInternalVariant'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['bannerColor', 'bannerType', 'bannerUrl', 'bio', 'bioLinks', 'currentAvatarImageUrl', 'currentAvatarTags', 'currentAvatarThumbnailImageUrl', 'developerType', 'displayName', 'iconFrame', 'iconUrl', 'id', 'isFriend', 'last_platform', 'nameplateEffect', 'profileEffect', 'profilePicOverride', 'pronouns', 'status', 'statusDescription', 'tags', 'userIcon'],
 		inputSchema: z.object({
 			'search': z.string().min(0).describe("Searches by `displayName`. Will return empty array if search query is empty or missing.").optional(),
@@ -4645,6 +4923,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['userId', 'badgeId'], query: [], body: ['hidden', 'showcased'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -4663,6 +4942,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['userId'], query: [], body: ['acceptedTOSVersion', 'bio', 'bioLinks', 'birthday', 'contentFilters', 'currentPassword', 'displayName', 'email', 'hasDiscordFriendsOptOut', 'hasSharedConnectionsOptOut', 'isBoopingEnabled', 'password', 'pronouns', 'revertDisplayName', 'status', 'statusDescription', 'tags', 'unsubscribe', 'userIcon'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['acceptedPrivacyVersion', 'acceptedTOSVersion', 'accountDeletionDate', 'accountDeletionLog', 'activeFriends', 'ageVerificationStatus', 'ageVerified', 'allowAvatarCopying', 'appleDetails', 'appleId', 'authToken', 'badges', 'bio', 'bioLinks', 'contentFilters', 'currentAvatar', 'currentAvatarImageUrl', 'currentAvatarTags', 'currentAvatarThumbnailImageUrl', 'date_joined', 'developerType', 'discordDetails', 'discordId', 'displayName', 'emailVerified', 'fallbackAvatar', 'friendGroupNames', 'friendKey', 'friends', 'googleDetails', 'googleId', 'hasBirthday', 'hasDiscordFriendsOptOut', 'hasEmail', 'hasLoggedInFromClient', 'hasPendingEmail', 'hasSharedConnectionsOptOut', 'hideContentFilterSettings', 'homeLocation', 'id', 'isAdult', 'isBoopingEnabled', 'isFriend', 'last_activity', 'last_login', 'last_mobile', 'last_platform', 'obfuscatedEmail', 'obfuscatedPendingEmail', 'oculusId', 'offlineFriends', 'onlineFriends', 'pastDisplayNames', 'picoId', 'platform_history', 'presence', 'profilePicOverride', 'profilePicOverrideThumbnail', 'pronouns', 'pronounsHistory', 'queuedInstance', 'receiveMobileInvitations', 'state', 'status', 'statusDescription', 'statusFirstTime', 'statusHistory', 'steamDetails', 'steamId', 'tags', 'twitchDetails', 'twitchId', 'twoFactorAuthEnabled', 'twoFactorAuthEnabledDate', 'unsubscribe', 'updated_at', 'userIcon', 'userLanguage', 'userLanguageCode', 'username', 'usesGeneratedPassword', 'viveId'],
 		inputSchema: z.object({
 			'userId': z.string().describe("A users unique ID, usually in the form of `usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469`. Legacy players can have old IDs in the form of `8JoV9XEdpo`. The ID can never be changed."),
@@ -4697,6 +4977,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['note', 'targetUserId'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['createdAt', 'id', 'note', 'targetUser', 'targetUserId', 'userId'],
 		inputSchema: z.object({
 			'note': z.string(),
@@ -4713,6 +4994,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['worldId'], query: [], body: ['tags'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['authorId', 'authorName', 'capacity', 'created_at', 'defaultContentSettings', 'description', 'favorites', 'featured', 'heat', 'id', 'imageUrl', 'instances', 'labsPublicationDate', 'name', 'namespace', 'occupants', 'organization', 'popularity', 'previewYoutubeId', 'privateOccupants', 'publicOccupants', 'publicationDate', 'recommendedCapacity', 'releaseStatus', 'storeId', 'tags', 'thumbnailImageUrl', 'udonProducts', 'unityPackages', 'updated_at', 'urlList', 'version', 'visits'],
 		inputSchema: z.object({
 			'worldId': z.string().describe("WorldID be \"offline\" on User profiles if you are not friends with that user."),
@@ -4729,6 +5011,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: [], query: [], body: ['assetUrl', 'assetVersion', 'authorId', 'authorName', 'capacity', 'description', 'id', 'imageUrl', 'name', 'platform', 'releaseStatus', 'tags', 'unityPackageUrl', 'unityVersion'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['authorId', 'authorName', 'capacity', 'created_at', 'defaultContentSettings', 'description', 'favorites', 'featured', 'heat', 'id', 'imageUrl', 'instances', 'labsPublicationDate', 'name', 'namespace', 'occupants', 'organization', 'popularity', 'previewYoutubeId', 'privateOccupants', 'publicOccupants', 'publicationDate', 'recommendedCapacity', 'releaseStatus', 'storeId', 'tags', 'thumbnailImageUrl', 'udonProducts', 'unityPackages', 'updated_at', 'urlList', 'version', 'visits'],
 		inputSchema: z.object({
 			'assetUrl': z.string().min(1).optional(),
@@ -4757,6 +5040,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['worldId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'worldId': z.string().describe("WorldID be \"offline\" on User profiles if you are not friends with that user.")
@@ -4772,6 +5056,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['worldId', 'publishedPlatform'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'worldId': z.string().describe("WorldID be \"offline\" on User profiles if you are not friends with that user."),
@@ -4788,6 +5073,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['featured', 'sort', 'n', 'order', 'offset', 'search', 'tag', 'notag', 'releaseStatus', 'maxUnityVersion', 'minUnityVersion', 'platform', 'noplatform'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['authorId', 'authorName', 'capacity', 'created_at', 'defaultContentSettings', 'favorites', 'heat', 'id', 'imageUrl', 'labsPublicationDate', 'name', 'occupants', 'organization', 'popularity', 'previewYoutubeId', 'publicationDate', 'recommendedCapacity', 'releaseStatus', 'storeId', 'tags', 'thumbnailImageUrl', 'udonProducts', 'unityPackages', 'updated_at', 'visits'],
 		inputSchema: z.object({
 			'featured': z.boolean().describe("Filters on featured results.").optional(),
@@ -4815,6 +5101,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['featured', 'sort', 'n', 'order', 'offset', 'search', 'tag', 'notag', 'releaseStatus', 'maxUnityVersion', 'minUnityVersion', 'platform', 'userId'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['authorId', 'authorName', 'capacity', 'created_at', 'defaultContentSettings', 'description', 'favoriteGroup', 'favoriteId', 'favorites', 'featured', 'heat', 'id', 'imageUrl', 'labsPublicationDate', 'name', 'occupants', 'organization', 'popularity', 'previewYoutubeId', 'publicationDate', 'recommendedCapacity', 'releaseStatus', 'tags', 'thumbnailImageUrl', 'udonProducts', 'unityPackages', 'updated_at', 'urlList', 'version', 'visits'],
 		inputSchema: z.object({
 			'featured': z.boolean().describe("Filters on featured results.").optional(),
@@ -4842,6 +5129,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['featured', 'sort', 'n', 'order', 'offset', 'search', 'tag', 'notag', 'releaseStatus', 'maxUnityVersion', 'minUnityVersion', 'platform', 'userId'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['authorId', 'authorName', 'capacity', 'created_at', 'defaultContentSettings', 'favorites', 'heat', 'id', 'imageUrl', 'labsPublicationDate', 'name', 'occupants', 'organization', 'popularity', 'previewYoutubeId', 'publicationDate', 'recommendedCapacity', 'releaseStatus', 'storeId', 'tags', 'thumbnailImageUrl', 'udonProducts', 'unityPackages', 'updated_at', 'visits'],
 		inputSchema: z.object({
 			'featured': z.boolean().describe("Filters on featured results.").optional(),
@@ -4869,6 +5157,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['worldId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['authorId', 'authorName', 'capacity', 'created_at', 'defaultContentSettings', 'description', 'favorites', 'featured', 'heat', 'id', 'imageUrl', 'instances', 'labsPublicationDate', 'name', 'namespace', 'occupants', 'organization', 'popularity', 'previewYoutubeId', 'privateOccupants', 'publicOccupants', 'publicationDate', 'recommendedCapacity', 'releaseStatus', 'storeId', 'tags', 'thumbnailImageUrl', 'udonProducts', 'unityPackages', 'updated_at', 'urlList', 'version', 'visits'],
 		inputSchema: z.object({
 			'worldId': z.string().describe("WorldID be \"offline\" on User profiles if you are not friends with that user.")
@@ -4884,6 +5173,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['worldId', 'instanceId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['active', 'ageGate', 'calendarEntryId', 'canRequestInvite', 'capacity', 'clientNumber', 'closedAt', 'contentSettings', 'creatorId', 'displayName', 'friends', 'full', 'gameServerVersion', 'groupAccessType', 'hardClose', 'hasCapacityForYou', 'hidden', 'id', 'instanceId', 'instancePersistenceEnabled', 'location', 'n_users', 'name', 'nonce', 'ownerId', 'permanent', 'photonRegion', 'platforms', 'playerPersistenceEnabled', 'private', 'queueEnabled', 'queueSize', 'recommendedCapacity', 'region', 'roleRestricted', 'secureName', 'shortName', 'strict', 'tags', 'type', 'userCount', 'users', 'world', 'worldId'],
 		inputSchema: z.object({
 			'worldId': z.string().describe("WorldID be \"offline\" on User profiles if you are not friends with that user."),
@@ -4900,6 +5190,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['worldId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['id', 'metadata'],
 		inputSchema: z.object({
 			'worldId': z.string().describe("WorldID be \"offline\" on User profiles if you are not friends with that user.")
@@ -4915,6 +5206,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: ['worldId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['canPublish'],
 		inputSchema: z.object({
 			'worldId': z.string().describe("WorldID be \"offline\" on User profiles if you are not friends with that user.")
@@ -4930,6 +5222,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['worldId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'worldId': z.string().describe("WorldID be \"offline\" on User profiles if you are not friends with that user.")
@@ -4945,6 +5238,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['worldId'], query: [], body: ['tags'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['authorId', 'authorName', 'capacity', 'created_at', 'defaultContentSettings', 'description', 'favorites', 'featured', 'heat', 'id', 'imageUrl', 'instances', 'labsPublicationDate', 'name', 'namespace', 'occupants', 'organization', 'popularity', 'previewYoutubeId', 'privateOccupants', 'publicOccupants', 'publicationDate', 'recommendedCapacity', 'releaseStatus', 'storeId', 'tags', 'thumbnailImageUrl', 'udonProducts', 'unityPackages', 'updated_at', 'urlList', 'version', 'visits'],
 		inputSchema: z.object({
 			'worldId': z.string().describe("WorldID be \"offline\" on User profiles if you are not friends with that user."),
@@ -4961,6 +5255,7 @@ export const operations: Operation[] = [
 		kind: 'read',
 		params: { path: [], query: ['featured', 'sort', 'user', 'userId', 'n', 'order', 'offset', 'search', 'tag', 'notag', 'releaseStatus', 'maxUnityVersion', 'minUnityVersion', 'platform', 'noplatform', 'fuzzy', 'avatarSpecific'], body: null },
 		paginated: true,
+		binaryFields: [],
 		responseKeys: ['authorId', 'authorName', 'capacity', 'created_at', 'defaultContentSettings', 'favorites', 'heat', 'id', 'imageUrl', 'labsPublicationDate', 'name', 'occupants', 'organization', 'popularity', 'previewYoutubeId', 'publicationDate', 'recommendedCapacity', 'releaseStatus', 'storeId', 'tags', 'thumbnailImageUrl', 'udonProducts', 'unityPackages', 'updated_at', 'visits'],
 		inputSchema: z.object({
 			'featured': z.boolean().describe("Filters on featured results.").optional(),
@@ -4992,6 +5287,7 @@ export const operations: Operation[] = [
 		kind: 'destructive',
 		params: { path: ['worldId'], query: [], body: null },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: [],
 		inputSchema: z.object({
 			'worldId': z.string().describe("WorldID be \"offline\" on User profiles if you are not friends with that user.")
@@ -5007,6 +5303,7 @@ export const operations: Operation[] = [
 		kind: 'write',
 		params: { path: ['worldId'], query: [], body: ['assetUrl', 'assetVersion', 'authorId', 'authorName', 'capacity', 'description', 'imageUrl', 'name', 'platform', 'releaseStatus', 'tags', 'unityPackageUrl', 'unityVersion'] },
 		paginated: false,
+		binaryFields: [],
 		responseKeys: ['authorId', 'authorName', 'capacity', 'created_at', 'defaultContentSettings', 'description', 'favorites', 'featured', 'heat', 'id', 'imageUrl', 'instances', 'labsPublicationDate', 'name', 'namespace', 'occupants', 'organization', 'popularity', 'previewYoutubeId', 'privateOccupants', 'publicOccupants', 'publicationDate', 'recommendedCapacity', 'releaseStatus', 'storeId', 'tags', 'thumbnailImageUrl', 'udonProducts', 'unityPackages', 'updated_at', 'urlList', 'version', 'visits'],
 		inputSchema: z.object({
 			'worldId': z.string().describe("WorldID be \"offline\" on User profiles if you are not friends with that user."),

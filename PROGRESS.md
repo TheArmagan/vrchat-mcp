@@ -376,6 +376,69 @@ Concurrency: a caller that did not start the login waits 3s, then returns
 `login_pending` instead of blocking. One slow login stalls one tool call rather
 than every tool the agent fired at once.
 
+## File uploads
+
+The spec declares upload fields as `format: binary`, and codegen was rendering
+those as `z.string().base64()`. That shape is unusable: the agent would have to
+inline a whole PNG into the tool arguments, roughly 2.7 MB of base64 for a 2 MB
+file, and the SDK's form serializer wants a `Blob` anyway, so it would not have
+worked even at that cost.
+
+Since the server runs on the same machine as the files, it reads them itself.
+
+- **Codegen marks binary fields** (`Operation.binaryFields`) and emits a path
+  argument with a description telling the agent not to paste contents. Eight
+  operations qualify: `uploadImage`, `uploadPrint`, `uploadIcon`,
+  `uploadGalleryImage`, `editPrint`, and the three invite-photo ops.
+- **`src/upload.ts`** turns a path into a `File`. A `File` and not a `Blob`
+  because the SDK appends the value straight to `FormData`, and only a `File`
+  carries a filename through; VRChat refuses a body announcing itself as `blob`
+  with no extension. Rejects directories, empty files (VRChat accepts those and
+  stores a broken record) and anything over 100 MB.
+- **The registry swaps paths for files** before the call and reports the bytes
+  sent, so a successful upload of the wrong file is distinguishable from a
+  successful upload of the right one.
+- **`vrchat_uploadFile`** (hand-written) runs the four-step sequence for
+  arbitrary files: `createFile` → `startFileDataUpload` → PUT to the presigned
+  URL → `finishFileDataUpload`. It is registered even when writes are off so it
+  can explain the gate rather than silently not existing.
+  - **The presigned PUT uses a bare `fetch`, not the VRChat client.** The URL
+    points at a third-party storage host, and the client attaches the VRChat
+    session cookie to every request it makes. Routing the upload through it
+    would hand the session cookie to Amazon. The proxy and limiter still apply.
+  - On a partway failure it names the file record it created. Deleting it
+    automatically is not safe, since the id may belong to a version that did
+    land, so the hint points at `vrchat__getFile` / `vrchat__deleteFile`.
+
+**Not verified live.** The path handling has 11 unit tests and the tools were
+driven over stdio (registration, the write gate, and a bad path all behave), but
+no upload has been sent to VRChat. `vrchat_uploadFile`'s four-step sequence in
+particular is written from the spec alone. Needs a real account and
+`VRCHAT_MCP_ALLOW_WRITES=1`.
+
+## Gate split: `VRCHAT_MCP_ALLOW_DESTRUCTIVE_WRITES`
+
+`write` and `destructive` used to share one flag, so enabling writes also handed
+over every `DELETE`, plus `banGroupMember`, `kickGroupMember`, `moderateUser`,
+`closeInstance` and `deleteAllUserPersistenceData`. They are now separate, and
+destructive layers on writes exactly as money does:
+
+| kind | needs |
+|---|---|
+| `read` | nothing |
+| `write` | `VRCHAT_MCP_ALLOW_WRITES` |
+| `destructive` | `VRCHAT_MCP_ALLOW_WRITES` **and** `VRCHAT_MCP_ALLOW_DESTRUCTIVE_WRITES` |
+| `money` | `VRCHAT_MCP_ALLOW_WRITES` **and** `VRCHAT_MCP_ALLOW_PURCHASES` |
+| `admin` | `VRCHAT_MCP_ALLOW_ADMIN` (independent of everything) |
+
+Layered rather than standalone on purpose: a delete is a write, so the flag on
+its own grants nothing. Letting it work alone would make it a route to deletes
+*without* writes, which is backwards for a safety gate. A test pins that.
+
+**This is a behaviour change.** `VRCHAT_MCP_ALLOW_WRITES=1` alone no longer
+registers `vrchat__deleteProduct`; the gate test that asserted it did was
+updated to assert the opposite, plus the new four-level ladder.
+
 ## Blocked / open
 
 - **SOCKS proxy support is deliberately NOT implemented — decided, not pending.**
