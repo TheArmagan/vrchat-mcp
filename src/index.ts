@@ -1,3 +1,4 @@
+#!/usr/bin/env bun
 /**
  * stdio entry point.
  *

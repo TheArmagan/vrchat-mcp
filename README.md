@@ -17,14 +17,48 @@ bun install
 cp .env.example .env      # then fill in VRCHAT_USERNAME, VRCHAT_PASSWORD, VRCHAT_CONTACT
 ```
 
-Register with Claude Code (use an **absolute** path — the server is spawned from an
-arbitrary working directory):
+### Install the `vrchat-mcp` command (recommended)
+
+`bun link` puts a `vrchat-mcp` executable on your PATH, so nothing downstream needs to know
+where the checkout lives:
+
+```bash
+bun link          # run once, from the repo root
+vrchat-mcp        # now on PATH; speaks MCP over stdio
+```
+
+Then register it by name:
+
+```bash
+claude mcp add vrchat -- vrchat-mcp
+```
+
+Or, for Claude Desktop, in `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "vrchat": {
+      "command": "vrchat-mcp"
+    }
+  }
+}
+```
+
+That is the whole config. Credentials come from the repo's `.env` (see
+[Where the command reads its data](#where-the-command-reads-its-data)), so they do not have
+to be repeated here — though anything you *do* put in `env` takes precedence.
+
+To remove it: `bun unlink` from the repo root.
+
+### Without linking
+
+If you would rather not put anything on your PATH, point at the entry file with an
+**absolute** path — the server is spawned from an arbitrary working directory:
 
 ```bash
 claude mcp add vrchat -- bun run /abs/path/to/vrchat-mcp/src/index.ts
 ```
-
-Or, for Claude Desktop, in `claude_desktop_config.json`:
 
 ```json
 {
@@ -41,6 +75,20 @@ Or, for Claude Desktop, in `claude_desktop_config.json`:
   }
 }
 ```
+
+### Where the command reads its data
+
+Once `vrchat-mcp` is on your PATH it can be launched from anywhere, so nothing that matters
+is resolved against the working directory:
+
+| What | Where | Why |
+|---|---|---|
+| `.env` | the **repo root**, as a fallback | Bun only auto-loads `.env` from the working directory. A linked server would otherwise start with no credentials and fail on the first tool call. Real environment variables — including an MCP client's `env` block — always win. |
+| `.vrchat-mcp/session.json` | the **repo root** | A CWD-relative session would be re-created wherever you happened to launch from, silently losing your login (and its 2FA) every time. |
+| `.vrchat-mcp/events.db` | the **repo root** | Same reason; event history would fragment across directories. |
+
+`VRCHAT_MCP_SESSION` and `VRCHAT_MCP_DB` still override those paths, and a relative value
+there is resolved against the working directory, as you would expect.
 
 The server starts read-only. Nothing that writes, spends, or moderates is registered until
 you set the corresponding gate — see [Safety gates](#safety-gates).
@@ -348,6 +396,8 @@ embed credentials.
 ## Development
 
 ```bash
+bun link                    # install the `vrchat-mcp` command on PATH
+bun unlink                  # remove it again
 bun run generate            # regenerate tools from the latest upstream spec
 bun run generate --offline  # regenerate from the committed spec/openapi.bundled.json, no network
 bun test                    # offline unit suite

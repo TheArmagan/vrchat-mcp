@@ -287,6 +287,29 @@ are present, so `bun test` still needs neither. `liveLogin()` fails fast with an
 actionable message when an account would park on an interactive 2FA prompt —
 otherwise a run hangs for the full five-minute broker timeout, per describe block.
 
+## `bun link` support
+
+`vrchat-mcp` installs as a PATH command (`bun link`), so a client registers it
+as `claude mcp add vrchat -- vrchat-mcp` with no absolute paths anywhere.
+Three things had to change for that to actually work:
+
+- **A `#!/usr/bin/env bun` shebang on `src/index.ts`**, which the `bin` entry needs.
+- **Data paths anchor to the package root, not `process.cwd()`.** A linked
+  binary is launched from wherever the MCP client happens to be, so a
+  CWD-relative `.vrchat-mcp/` would be re-created in random directories —
+  silently losing the persisted session, and its 2FA, on every launch from a
+  new place. `config.ts` derives `packageRoot` from `import.meta.dir`. The
+  resolved paths are identical to before when CWD is the repo, so no migration.
+- **The package's own `.env` is loaded as a fallback.** Bun auto-loads `.env`
+  from the working directory only, so a linked server would start with no
+  credentials and fail on the first tool call. Precedence is preserved:
+  anything already in `process.env` — including an MCP client's `env` block —
+  wins over the file.
+
+Verified end-to-end from an unrelated working directory: `tools/list` returns
+144 read-only tools, and `vrchat__getCurrentUser` with
+`_responseKeys: ["displayName","id"]` returns real projected data.
+
 ## Blocked / open
 
 - **SOCKS proxy support is deliberately NOT implemented — decided, not pending.**

@@ -7,7 +7,68 @@
  * startup crash, so `tools/list` works with no configuration at all.
  */
 
+import { readFileSync } from 'node:fs'
+import { dirname, isAbsolute, join, resolve } from 'node:path'
+
 const env = process.env
+
+/**
+ * The installed package root, derived from this file's own location.
+ *
+ * Data paths resolve against this rather than `process.cwd()`. Once the server
+ * is on PATH via `bun link`, its working directory is whatever the MCP client
+ * happened to launch it from — with a CWD-relative default, a `.vrchat-mcp/`
+ * would be created wherever you happened to be, scattering session files and
+ * silently losing a login every time the client started somewhere new.
+ * Anchoring to the package keeps the data in one predictable, gitignored place.
+ */
+const packageRoot = dirname(import.meta.dir)
+
+/**
+ * Loads the package's own `.env`, without overriding anything already set.
+ *
+ * Bun auto-loads `.env` from the working directory, which is the repo during
+ * development but is arbitrary once `vrchat-mcp` is on PATH via `bun link` —
+ * so a linked server would silently start with no credentials and fail on the
+ * first tool call. Reading the package's `.env` as a *fallback* fixes that
+ * while leaving precedence intact: anything the MCP client passes in `env`,
+ * or the shell exports, still wins.
+ */
+function loadPackageEnv(): void {
+	const file = join(packageRoot, '.env')
+
+	let contents: string
+	try {
+		contents = readFileSync(file, 'utf8')
+	} catch {
+		// No package .env is the normal case for a client-configured install.
+		return
+	}
+
+	for (const line of contents.split(/\r?\n/)) {
+		const trimmed = line.trim()
+		if (!trimmed || trimmed.startsWith('#')) continue
+
+		const separator = trimmed.indexOf('=')
+		if (separator === -1) continue
+
+		const key = trimmed.slice(0, separator).trim()
+		if (!key || env[key] !== undefined) continue
+
+		let value = trimmed.slice(separator + 1).trim()
+		if (value.length > 1 && /^(".*"|'.*')$/s.test(value)) value = value.slice(1, -1)
+
+		env[key] = value
+	}
+}
+
+loadPackageEnv()
+
+/** Env-supplied paths honour the user's intent; bare defaults anchor to the package. */
+function dataPath(override: string | undefined, fallback: string): string {
+	if (override) return isAbsolute(override) ? override : resolve(override)
+	return join(packageRoot, fallback)
+}
 
 function bool(name: string): boolean {
 	const value = env[name]
@@ -124,9 +185,9 @@ export const config = {
 	/** 0 disables the age sweep entirely. */
 	historyMaxAge: parsePerType(env.VRCHAT_MCP_HISTORY_MAX_AGE, 30 * 86_400_000, parseDuration),
 
-	dataDir: '.vrchat-mcp',
-	dbPath: env.VRCHAT_MCP_DB ?? '.vrchat-mcp/events.db',
-	sessionPath: env.VRCHAT_MCP_SESSION ?? '.vrchat-mcp/session.json',
+	dataDir: join(packageRoot, '.vrchat-mcp'),
+	dbPath: dataPath(env.VRCHAT_MCP_DB, '.vrchat-mcp/events.db'),
+	sessionPath: dataPath(env.VRCHAT_MCP_SESSION, '.vrchat-mcp/session.json'),
 
 	/** Never log this — it may embed credentials. */
 	proxy: env.VRCHAT_MCP_PROXY,
