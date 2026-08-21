@@ -15,7 +15,7 @@ import { describeError, toToolError } from './errors.ts'
 import { operations } from './generated/operations.ts'
 import { PROJECTION_HELP, project } from './project.ts'
 import type { Operation, OperationKind } from './types.ts'
-import { ensureAuthenticated, getClient } from './vrchat/client.ts'
+import { ensureAuthenticated, getClient, LoginPendingError, TwoFactorRequiredError } from './vrchat/client.ts'
 
 /** Default page size for paginated operations, mirrored from codegen. */
 const DEFAULT_PAGE_SIZE = 25
@@ -228,6 +228,32 @@ async function handle(operation: Operation, rawArgs: Record<string, unknown>) {
 		const nextOffset = nextOffsetFor(args, result.data)
 		return textResult({ data: projected, nextOffset })
 	} catch (error) {
+		// A parked login is not a failure, and reporting it as one invites the
+		// agent to give up. The login is still running: answering the prompt
+		// completes it and the retry then succeeds.
+		if (error instanceof TwoFactorRequiredError) {
+			return textResult({
+				status: 'login_paused',
+				requestId: error.pending.requestId,
+				method: error.pending.method,
+				message: error.message,
+				retryTool: toolNameFor(operation)
+			})
+		}
+
+		// Someone else's login is still running. Reporting that plainly is far
+		// better than holding this call open: the agent retries one tool instead
+		// of stalling every tool it fired off at once.
+		if (error instanceof LoginPendingError) {
+			return textResult({
+				status: 'login_pending',
+				message: error.message,
+				retryTool: toolNameFor(operation),
+				nextStep:
+					'Wait a moment and call this tool again. If it keeps reporting this, call vrchat_authStatus.'
+			})
+		}
+
 		return toToolError(error)
 	}
 }

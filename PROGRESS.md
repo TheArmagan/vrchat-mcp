@@ -334,6 +334,48 @@ Verified end-to-end from an unrelated working directory: `tools/list` returns
 144 read-only tools, and `vrchat__getCurrentUser` with
 `_responseKeys: ["displayName","id"]` returns real projected data.
 
+## Login was getting stuck. Four separate causes, all fixed
+
+Reported as "logging in from a different proxy hangs". Digging in found four
+independent problems, three of which affect every login, not just proxied ones.
+
+1. **`twoFactorPrompt` was written but never called.** A parked login blocked
+   the tool call for the broker's full timeout (five minutes) while the agent
+   was never told a code was wanted. `raceAgainstPrompt()` now ends the wait the
+   moment the broker parks, and the registry returns a `login_paused` result
+   naming the requestId and the tool to retry.
+
+2. **VRChat's new-location check was reported as an expired session.** It comes
+   back as `401 "It looks like you're logging in from somewhere new!"`, and the
+   generic 401 hint told the agent to call `vrchat_authStatus` and re-auth,
+   which can never clear it. The email holds a **link**, not a code. Detected
+   now by message, with a hint that says so and points at `vrchat_retryLogin`.
+
+3. **The same challenge also appears as `429 "Logging in from too many
+   places?"`** once attempts pile up. That read as rate limiting, so the agent
+   would wait it out, and worse, it paused the shared token bucket. `vrchatFetch`
+   now inspects a 429 body and skips `limiter.noteResponse` for auth challenges.
+
+4. **A fanned-out burst became a burst of logins.** The first login failed, the
+   in-flight guard cleared, and the next tool call started another one. Three
+   parallel tool calls meant three real login attempts, each costing a session
+   slot and each capable of sending another email. Measured at 3 upstream
+   attempts; a 30-second failure cache collapses it to 1. `restartLogin()` and
+   `logout()` clear the cache, so the user-driven retry stays immediate.
+
+`vrchat_retryLogin` is the new tool that drives round two: it cancels the parked
+request, clears the failure cache, and starts a fresh login, reporting either
+success or the freshly-parked code request.
+
+Also fixed alongside: `describeError` discarded the `hint` on our own
+`ConfigurationError` / `ProxyError`, replacing "Set VRCHAT_USERNAME and
+VRCHAT_PASSWORD" with a generic "unexpected failure" shrug. Typed hints now win
+over the status table.
+
+Concurrency: a caller that did not start the login waits 3s, then returns
+`login_pending` instead of blocking. One slow login stalls one tool call rather
+than every tool the agent fired at once.
+
 ## Blocked / open
 
 - **SOCKS proxy support is deliberately NOT implemented — decided, not pending.**

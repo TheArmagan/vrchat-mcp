@@ -162,10 +162,26 @@ export class TwoFactorBroker {
 /**
  * The message the blocked tool call should hand back to the agent, naming the
  * method so the user is told where to look for the code.
+ *
+ * The new-location warning is not decoration. VRChat reports this state as an
+ * ordinary `emailOtp` request, so the two cases are indistinguishable from the
+ * API alone, and a user who was sent a confirmation link will otherwise sit
+ * hunting for a six-digit code that was never in the message.
  */
 export function twoFactorPrompt(pending: PendingTwoFactor, retryTool?: string): string {
-	const retry = retryTool ? ` then retry ${retryTool}.` : ' then retry the original call.'
-	return `Login paused: ${describeMethod(pending.method)}. Ask the user for it, call vrchat_submitTwoFactorCode { requestId: '${pending.requestId}', code: '……' },${retry}`
+	const retry = retryTool ? `retry ${retryTool}` : 'retry the original call'
+
+	if (pending.method === 'emailOtp' || pending.method === 'unknown') {
+		return (
+			`Login paused: ${describeMethod(pending.method)}. Ask the user what the email contains. ` +
+			`If it is a code, call vrchat_submitTwoFactorCode { requestId: '${pending.requestId}', code: '……' } and ${retry}. ` +
+			'If instead it says the account is being accessed from somewhere new and offers a link, ' +
+			'that is VRChat verifying the location, not a code. Have the user open the link, then call ' +
+			`vrchat_retryLogin: the code email only arrives on the next attempt. Do not ${retry} until one of those succeeds.`
+		)
+	}
+
+	return `Login paused: ${describeMethod(pending.method)}. Ask the user for it, call vrchat_submitTwoFactorCode { requestId: '${pending.requestId}', code: '……' }, then ${retry}.`
 }
 
 function randomRequestId(): string {

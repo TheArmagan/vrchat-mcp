@@ -7,7 +7,7 @@
 
 import type { McpServer } from '@modelcontextprotocol/server'
 import { z } from 'zod'
-import { authStatus, getClient, logout } from '../vrchat/client.ts'
+import { authStatus, getClient, logout, restartLogin, TwoFactorRequiredError } from '../vrchat/client.ts'
 import { getBroker } from '../vrchat/twofactor.ts'
 
 /** MCP results are text blocks; JSON keeps them machine-readable for the agent. */
@@ -52,6 +52,50 @@ export function registerAuthTools(server: McpServer): void {
 					? 'Retry the tool call that reported the paused login.'
 					: 'Ask the user to re-read the code, then retry the original tool call to start a new login.'
 			})
+		}
+	)
+
+	server.registerTool(
+		'vrchat_retryLogin',
+		{
+			title: 'Retry a stuck VRChat login',
+			description:
+				'Abandons a parked VRChat login and starts a fresh one. Use this when the login email turned out to be a new-location confirmation link rather than a six-digit code: VRChat only sends the code on the attempt *after* the link is opened, so the parked login can never succeed. Have the user open the link first, then call this. Also useful if a login has simply gone stale.',
+			inputSchema: z.object({}),
+			annotations: { title: 'Retry a stuck VRChat login', readOnlyHint: false, openWorldHint: true }
+		},
+		async () => {
+			try {
+				await restartLogin()
+				return json({
+					ok: true,
+					state: 'authenticated',
+					message: 'Login succeeded; the session is now persisted.',
+					nextStep: 'Retry the tool call that reported the paused login.'
+				})
+			} catch (cause) {
+				// Parking again is the expected outcome of the new-location flow:
+				// the link is verified, so this attempt is the one VRChat answers
+				// with an actual code.
+				if (cause instanceof TwoFactorRequiredError) {
+					return json({
+						ok: true,
+						state: 'awaiting_code',
+						requestId: cause.pending.requestId,
+						method: cause.pending.method,
+						message: cause.message,
+						nextStep:
+							'A fresh code should now be in their inbox. Ask the user for it and call vrchat_submitTwoFactorCode with the requestId above.'
+					})
+				}
+
+				return json({
+					ok: false,
+					state: 'failed',
+					message: cause instanceof Error ? cause.message : String(cause),
+					nextStep: 'Call vrchat_authStatus to see what the server thinks is wrong.'
+				})
+			}
 		}
 	)
 

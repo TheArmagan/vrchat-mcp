@@ -12,8 +12,9 @@ import { dirname } from 'node:path'
 import { VRChat } from 'vrchat'
 import { KeyvFile } from 'keyv-file'
 import { config, ensureDataDir, hasCredentials } from '../config.ts'
+import { isVerifyLinkChallenge } from '../errors.ts'
 import type { LimiterStatus, PendingTwoFactor } from '../types.ts'
-import { getBroker } from './twofactor.ts'
+import { getBroker, twoFactorPrompt } from './twofactor.ts'
 import { getLimiter } from './ratelimit.ts'
 
 /** Thrown when the server cannot build a client from the environment it has. */
@@ -147,9 +148,26 @@ export async function vrchatFetch(input: Request | string | URL, init?: RequestI
 		}
 	})
 
-	limiter.noteResponse(response)
+	// VRChat reuses 429 for "too many login places", which is an auth challenge
+	// wearing a rate-limit status. Pausing the shared bucket for it would stall
+	// every tool waiting out a limit that only an emailed link can clear.
+	if (!(await isAuthChallenge(response))) limiter.noteResponse(response)
+
 	await sniff(request, response)
 	return response
+}
+
+/** Reads a 429 body to tell an auth challenge from a genuine rate limit. */
+async function isAuthChallenge(response: Response): Promise<boolean> {
+	if (response.status !== 429) return false
+
+	try {
+		return isVerifyLinkChallenge(429, await response.clone().text())
+	} catch {
+		// Unreadable body: treat it as a real rate limit, which is the safe
+		// reading — backing off needlessly beats hammering a throttled API.
+		return false
+	}
 }
 
 /** Endpoints whose bodies can carry `requiresTwoFactorAuth`. */
@@ -255,6 +273,94 @@ const HINTS: Record<AuthState, string> = {
 let authenticating: Promise<void> | undefined
 
 /**
+ * Raised when a login is parked on a code instead of failing.
+ *
+ * The login keeps running in the background, so the caller must not treat this
+ * as a dead end: once `vrchat_submitTwoFactorCode` resolves the broker, the
+ * same login finishes and the session persists.
+ */
+export class TwoFactorRequiredError extends Error {
+	override readonly name = 'TwoFactorRequiredError'
+
+	constructor(
+		readonly pending: PendingTwoFactor,
+		message: string
+	) {
+		super(message)
+	}
+}
+
+/** Polling interval while watching for the broker to park. */
+const PARK_POLL_MS = 100
+
+/**
+ * How long a call that did *not* start the login will wait for it.
+ *
+ * Agents fan several tools out at once, and on a cold start every one of them
+ * lands on the same unauthenticated client. Queueing them all behind the login
+ * turns one slow authentication into N stalled tool calls, and a login that
+ * parks on a code turns them into N duplicate prompts. Waiting briefly covers
+ * the common case, where a stored session logs in within a second, and anything
+ * slower is reported as pending so the agent can retry one call instead of
+ * blocking on all of them.
+ */
+const CONCURRENT_WAIT_MS = 3_000
+
+/**
+ * How long a failed login is remembered before another is attempted.
+ *
+ * Without this, a fanned-out burst of tool calls becomes a burst of *logins*:
+ * the first fails, clears the in-flight guard, and the next call starts another
+ * one. Every attempt costs a VRChat session slot, and on the new-location check
+ * every attempt sends the user another email. Retrying cannot help until either
+ * the credentials or the account state changes, so the failure is cached and
+ * replayed. `restartLogin()` and `logout()` clear it, which is what makes the
+ * user-driven retry immediate.
+ */
+const FAILURE_COOLDOWN_MS = 30_000
+
+/** The last login failure, replayed to callers until the cooldown expires. */
+let lastFailure: { error: unknown; at: number } | undefined
+
+/** Raised to a caller that arrived while someone else's login was still running. */
+export class LoginPendingError extends Error {
+	override readonly name = 'LoginPendingError'
+
+	constructor() {
+		super('A VRChat login is already in progress. Retry this call in a moment.')
+	}
+}
+
+/**
+ * Waits for the login to finish, or for the broker to park on a code.
+ *
+ * Awaiting the login outright would block the tool call for the broker's full
+ * timeout (five minutes by default) while the agent has no idea a code is
+ * wanted. Nobody can answer a prompt they were never shown, so the wait has to
+ * end the moment a code is requested, not when it times out.
+ */
+async function raceAgainstPrompt(login: Promise<void>, waitMs?: number): Promise<void> {
+	const broker = getBroker()
+	const deadline = waitMs === undefined ? undefined : Date.now() + waitMs
+
+	for (;;) {
+		const settled = await Promise.race([
+			login.then(() => 'done' as const),
+			Bun.sleep(PARK_POLL_MS).then(() => undefined)
+		])
+
+		if (settled === 'done') return
+
+		const status = broker.status()
+		if (status.state === 'awaiting_code' && status.pending) {
+			throw new TwoFactorRequiredError(status.pending, twoFactorPrompt(status.pending))
+		}
+
+		if (deadline !== undefined && Date.now() >= deadline) throw new LoginPendingError()
+	}
+}
+
+/**
  * Drives a login if this process does not already hold a live session.
  *
  * The plan assumed the SDK's 401 interceptor would make login lazy for free.
@@ -270,7 +376,17 @@ let authenticating: Promise<void> | undefined
  */
 export async function ensureAuthenticated(): Promise<void> {
 	if (sessionActive) return
-	if (authenticating) return authenticating
+
+	// A login already parked on a code: report it now rather than queueing
+	// behind a prompt that only the user can clear.
+	const parked = getBroker().status()
+	if (parked.state === 'awaiting_code' && parked.pending) {
+		throw new TwoFactorRequiredError(parked.pending, twoFactorPrompt(parked.pending))
+	}
+
+	if (lastFailure && Date.now() - lastFailure.at < FAILURE_COOLDOWN_MS) throw lastFailure.error
+
+	if (authenticating) return raceAgainstPrompt(authenticating, CONCURRENT_WAIT_MS)
 
 	// `authenticate` is public at runtime but marked private in the SDK's types.
 	const client = getClient() as unknown as {
@@ -294,11 +410,48 @@ export async function ensureAuthenticated(): Promise<void> {
 					: 'Login did not produce a session.'
 			)
 		}
-	})().finally(() => {
-		authenticating = undefined
-	})
+	})()
+		.catch((error: unknown) => {
+			// A parked prompt is not a failure; caching it would make the code the
+			// user is about to submit unusable for the next thirty seconds.
+			if (!(error instanceof TwoFactorRequiredError)) lastFailure = { error, at: Date.now() }
+			throw error
+		})
+		.finally(() => {
+			authenticating = undefined
+		})
 
-	return authenticating
+	// Keep a handle on the rejection so parking on a prompt does not surface as
+	// an unhandled rejection when nobody is awaiting the login any more.
+	authenticating.catch(() => {})
+
+	return raceAgainstPrompt(authenticating)
+}
+
+/**
+ * Abandons a parked login and starts a clean one.
+ *
+ * This is the escape hatch for VRChat's new-location check: logging in from an
+ * unfamiliar IP (a new proxy, say) emails a confirmation *link* rather than a
+ * code, and the parked login is waiting for a code that email never contained.
+ * Clicking the link does not retroactively unblock the attempt, so the only way
+ * forward is to drop it and log in again, which is when VRChat finally sends
+ * the one-time code.
+ */
+export async function restartLogin(): Promise<void> {
+	getBroker().cancel('Login restarted.')
+	sessionActive = false
+
+	// The whole point of an explicit retry is to bypass the cooldown: the user
+	// has just done the thing the cached failure was waiting on.
+	lastFailure = undefined
+
+	// Let the abandoned attempt unwind before starting another, so the SDK's own
+	// in-flight guard does not hand us back the very login we just cancelled.
+	const previous = authenticating
+	if (previous) await previous.catch(() => {})
+
+	return ensureAuthenticated()
 }
 
 /**
@@ -308,6 +461,7 @@ export async function ensureAuthenticated(): Promise<void> {
 export async function logout(): Promise<void> {
 	getBroker().cancel('Logged out before the two-factor code arrived.')
 	sessionActive = false
+	lastFailure = undefined
 
 	// Clear the file even when no client was ever built this process — a session
 	// persisted by an earlier launch is exactly what logout is for.
@@ -325,4 +479,5 @@ export function resetClient(): void {
 	client = undefined
 	sessionStore = undefined
 	sessionActive = false
+	lastFailure = undefined
 }

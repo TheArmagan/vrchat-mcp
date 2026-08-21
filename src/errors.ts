@@ -33,8 +33,46 @@ const SERVER_HINT = 'VRChat-side failure — not your request; retry shortly, an
 const UNKNOWN_HINT = 'unexpected failure — retry once; if it repeats the arguments or the session are likely at fault'
 
 /** Maps a status (or `null`, for local failures) to the hint the agent acts on. */
-export function hintForStatus(status: number | null, local?: 'timeout'): string {
+/**
+ * VRChat's wording when a login needs a confirmation link opened first.
+ *
+ * Two variants share one remedy. A login from an unfamiliar IP returns 401
+ * ("logging in from somewhere new"); once enough attempts have piled up it
+ * becomes 429 ("logging in from too many places"). Matched on the prose, which
+ * is not part of any contract, so the patterns stay loose. The shared giveaway
+ * is that VRChat points at an email containing a link.
+ */
+const VERIFY_LINK_PATTERN =
+	/logging in from somewhere new|from too many places|check your email for (a message|verification)/i
+
+const VERIFY_LINK_ADVICE =
+	'The email holds a confirmation LINK, not a six-digit code, so vrchat_submitTwoFactorCode ' +
+	'cannot help here. Ask the user to open the link, then call vrchat_retryLogin — VRChat only ' +
+	'sends the one-time code on the attempt after the link is opened.'
+
+const NEW_LOCATION_HINT =
+	`VRChat is verifying the new location, not asking for a code. ${VERIFY_LINK_ADVICE} ` +
+	'This is normal after changing proxy, VPN or network.'
+
+const TOO_MANY_PLACES_HINT =
+	`VRChat has seen too many login attempts from new locations and is throttling them. ${VERIFY_LINK_ADVICE} ` +
+	'This is not the local rate limiter, so waiting alone will not clear it. Each login consumes ' +
+	'a session slot, so avoid repeat attempts until the link is opened.'
+
+/** True when the remedy is opening an emailed link rather than supplying a code. */
+export function isVerifyLinkChallenge(status: number | null, message: string): boolean {
+	return (status === 401 || status === 429) && VERIFY_LINK_PATTERN.test(message)
+}
+
+export function hintForStatus(status: number | null, local?: 'timeout', message = ''): string {
 	if (local === 'timeout') return LOCAL_TIMEOUT_HINT
+
+	// Checked before the status table: the credentials were fine and the session
+	// is not expired, so the generic "re-auth" and "back off" hints would both
+	// send the agent chasing the wrong problem.
+	if (isVerifyLinkChallenge(status, message)) {
+		return status === 429 ? TOO_MANY_PLACES_HINT : NEW_LOCATION_HINT
+	}
 	if (status === null) return UNKNOWN_HINT
 	if (HINTS[status]) return HINTS[status]
 	if (status >= 500) return SERVER_HINT
@@ -146,6 +184,17 @@ export function describeError(error: unknown): ToolErrorDetail {
 		return { status: null, message: 'unknown error', hint: hintForStatus(null) }
 	}
 
+	// Our own configuration and proxy errors already know what the user should
+	// do about them. Falling through to the status table would replace a precise
+	// instruction ("set VRCHAT_CONTACT to a real address") with a generic shrug.
+	if (typeof object.hint === 'string' && object.hint) {
+		return {
+			status: numeric(object.statusCode) ?? numeric(object.status),
+			message: unquote(sanitize(object.message)) || 'configuration error',
+			hint: object.hint
+		}
+	}
+
 	// A `throwOnError: false` result: never an Error, carries the parsed body in
 	// `error` and the transport status on `response`.
 	const response = object.response
@@ -186,7 +235,7 @@ function detail(status: number | null, message: string): ToolErrorDetail {
 	return {
 		status,
 		message: message || (status === null ? 'unknown error' : `HTTP ${status}`),
-		hint: hintForStatus(status)
+		hint: hintForStatus(status, undefined, message)
 	}
 }
 

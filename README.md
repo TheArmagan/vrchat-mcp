@@ -287,6 +287,39 @@ On clients that negotiate the `2026-07-28` protocol revision, the same flow is s
 `input_required` result instead: you get a proper input box and the original call completes on
 its own, no manual retry. The transcript above is the fallback, and works everywhere.
 
+### Logging in from a new network
+
+Changing proxy, VPN or ISP triggers a check that is not a two-factor code, and the two look
+alike enough to waste a lot of time. VRChat answers the login with one of these:
+
+```
+401  It looks like you're logging in from somewhere new! Check your email for a message from VRChat.
+429  Logging in from too many places? Check your email for verification link
+```
+
+Both mean the same thing. The email holds a **link**, not a six-digit code, so
+`vrchat_submitTwoFactorCode` cannot help. The login takes two rounds:
+
+1. A tool call fails with one of the messages above.
+2. The user opens the link in the email.
+3. Call `vrchat_retryLogin`. VRChat only sends the one-time code on this second attempt.
+4. The user reads the code from the second email; call `vrchat_submitTwoFactorCode`.
+5. Retry the original tool.
+
+The 429 is an auth challenge wearing a rate-limit status, so the local limiter ignores it.
+Waiting does not clear it, and every extra attempt costs one of the account's limited session
+slots, which is what produces the 429 in the first place. A failed login is cached for 30
+seconds so a burst of tool calls cannot turn into a burst of login attempts.
+`vrchat_retryLogin` clears that cache, because by then the user has done the thing the
+failure was waiting on.
+
+### Concurrent tool calls during login
+
+Agents fan tools out in parallel, and on a cold start they all land on an unauthenticated
+client. One call drives the login. The others wait up to three seconds and then come back
+with `login_pending` rather than blocking, so a slow login stalls one tool call instead of
+every tool call, and a login that parks on a code raises one prompt instead of several.
+
 ## `_responseKeys`
 
 Every tool — generated and hand-written alike — takes a `_responseKeys: string[]` argument,
