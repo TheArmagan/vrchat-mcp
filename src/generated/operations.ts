@@ -1020,13 +1020,13 @@ export const operations: Operation[] = [
 		responseKeys: ['active', 'archived', 'buyerRefundable', 'created', 'description', 'displayName', 'duration', 'durationType', 'groupIcon', 'groupId', 'groupName', 'hasAvatar', 'hasUdon', 'hydratedProducts', 'id', 'imageId', 'imageUrl', 'listingType', 'listingVariants', 'permanent', 'priceTokens', 'productIds', 'productType', 'products', 'purchaseCount', 'purchaseCountQuantity', 'quantifiable', 'recurrable', 'refundable', 'sellerDisplayName', 'sellerId', 'soldByVrc', 'stackable', 'storeIds', 'subtitle', 'tags', 'updated', 'vrcPlusDiscountPrice', 'whenToExpire'],
 		inputSchema: z.object({
 			'active': z.boolean().optional(),
-			'description': z.string(),
-			'displayName': z.string(),
-			'imageId': z.string(),
+			'description': z.string().optional(),
+			'displayName': z.string().optional(),
+			'imageId': z.string().optional(),
 			'listingType': z.enum(["duration","instant","permanent","subscription"]).default("subscription"),
-			'priceTokens': z.number().int(),
-			'productIds': z.array(z.string()),
-			'storeIds': z.array(z.string())
+			'priceTokens': z.number().int().optional(),
+			'productIds': z.array(z.string()).optional(),
+			'storeIds': z.array(z.string()).optional()
 		})
 	},
 	{

@@ -38,7 +38,7 @@ describe('status hints', () => {
 		[403, 'insufficient permissions'],
 		[404, 'check the id'],
 		[429, 'retry shortly'],
-		[400, 'check required arguments'],
+		[400, 'Check the arguments against the tool schema'],
 		[500, 'VRChat-side failure'],
 		[503, 'VRChat-side failure']
 	]
@@ -53,6 +53,16 @@ describe('status hints', () => {
 			expect(detail.hint).toContain(fragment)
 		})
 	}
+
+	test('the 400 hint points at the way out when the spec is wrong', () => {
+		// Parts of the VRChat spec are documented upstream as incomplete, so a
+		// 400 is as likely to mean "the schema is wrong" as "you are". The hint
+		// has to say so, or the agent keeps rewriting a correct call.
+		const detail = textOf(toToolError(new FakeVRChatError(400, '"bad"')))
+
+		expect(detail.hint).toContain('vrchat_request')
+		expect(detail.hint).toContain('extra properties are passed through')
+	})
 
 	test('an unrecognized 4xx falls back to the malformed-request hint', () => {
 		expect(hintForStatus(418)).toBe(hintForStatus(400))

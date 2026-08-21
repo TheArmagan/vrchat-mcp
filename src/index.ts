@@ -15,6 +15,7 @@ import { knownTags, registerGeneratedTools, unknownTags } from './registry.ts'
 import { registerAuthTools } from './tools/auth.ts'
 import { registerEventTools } from './tools/events.ts'
 import { registerImageTools } from './tools/images.ts'
+import { registerRequestTools } from './tools/request.ts'
 import { registerUploadTools } from './tools/upload.ts'
 import { getClient } from './vrchat/client.ts'
 import { type EventClientLike, startEventPipeline } from './vrchat/events.ts'
@@ -35,6 +36,9 @@ function createServer() {
 
 	// Read-only, so it needs no gate.
 	registerImageTools(server)
+
+	// Gates itself per call, from the method and path.
+	registerRequestTools(server)
 
 	if (config.websocket) {
 		registerEventTools(server)

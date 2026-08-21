@@ -40,6 +40,7 @@ VRCHAT_CONTACT=you@your-domain.tld     # must be real, VRChat 403s generic agent
 | See an image | `vrchat_getImage` with an `imageUrl` |
 | Upload a picture | `vrchat__uploadImage` with a path, or `{ data, mimeType }` |
 | Fix a login stuck on a new network | open the emailed link, then `vrchat_retryLogin` |
+| Send a field the schema does not have | just include it, or use `vrchat_request` |
 
 Tool names carry their origin. Two underscores means generated from the spec
 (`vrchat__getCurrentUser`), so the name is searchable in VRChat's own docs. One underscore
@@ -53,6 +54,7 @@ Hand-written tools, in full:
 | `vrchat_submitTwoFactorCode` | Answers a parked login with the code the user read out |
 | `vrchat_retryLogin` | Restarts a login after a new-network email link is opened |
 | `vrchat_logout` | Clears the stored session |
+| `vrchat_request` | Calls any endpoint directly, for when a generated schema is wrong |
 | `vrchat_getImage` | Downloads a VRChat image and returns it as a viewable image |
 | `vrchat_uploadFile` | Runs VRChat's four-step upload for non-image files |
 | `vrchat_setProductImage` | Uploads an image and attaches it to a store product |
@@ -438,6 +440,44 @@ One thing VRChat itself does not allow: a listing exposes only `active` for edit
 price, title and description cannot be changed after creation. Delete the listing and create a
 new one. The name, description and image live on the product and are editable through
 `vrchat__updateProduct`.
+
+## When the spec is wrong
+
+The VRChat spec is community-maintained and says so in places. `createProductListingDirect`
+documents its own request body as "based on observed fields and may be incomplete", and the API
+does ask for a field the spec does not list. Two things follow.
+
+**Extra properties are kept and sent.** A schema that strips what it does not recognise makes
+those endpoints impossible to call, and does it invisibly: the field vanishes before the
+request is built, the API returns the identical error, and nothing looks wrong. So an
+undocumented field passes straight through.
+
+```json
+{ "name": "vrchat__createProductListingDirect",
+  "arguments": { "displayName": "Thing", "products": [{ "productId": "prod_..." }] } }
+```
+
+Operations with a body send extras in the body. Operations without one send them as query
+parameters, the only other place a `GET` could want them.
+
+**Bodies the spec calls observed do not enforce their required list.** If upstream admits the
+fields were reverse-engineered, the `required` list is reverse-engineered too, and enforcing it
+blocks the workaround that makes the endpoint callable. This is driven by the spec's own
+wording, so ordinary endpoints keep their guarantees.
+
+**`vrchat_request` calls anything directly** when even that is not enough:
+
+```json
+{ "name": "vrchat_request",
+  "arguments": { "method": "post", "path": "/listing", "body": { "products": [] } } }
+```
+
+`path` is relative to `https://api.vrchat.cloud/api/1`. It runs through the same session,
+proxy and rate limiter as every other tool, and obeys the same gates, worked out from the
+method and path: `GET` needs nothing, `POST`/`PUT`/`PATCH` need the write gate, `DELETE` also
+needs the destructive gate, and anything under a Tilia, KYC, payout or purchase path counts as
+money. Without an operationId there is no override list to consult, so the path alone decides
+and it errs toward the stricter reading.
 
 ## Pagination
 

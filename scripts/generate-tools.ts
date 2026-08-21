@@ -300,10 +300,13 @@ interface Field {
  * Merges path, query and body properties into one flat object shape. Agents get
  * a single argument list; the handler splits it back apart using `op.params`.
  */
+/** Wording upstream uses when a request body was reverse-engineered. */
+const OBSERVED_BODY = /may be incomplete|additional fields may exist|observed/i
+
 function buildFields(
 	operationId: string,
 	parameters: Json[],
-	body: { schema: Json | null; required: boolean }
+	body: { schema: Json | null; required: boolean; description?: string }
 ): {
 	fields: Field[]
 	params: { path: string[]; query: string[]; body: string[] | null }
@@ -363,9 +366,21 @@ function buildFields(
 		const properties = (body.schema.properties ?? {}) as Json
 		const names = Object.keys(properties)
 		params.body = names
-		const requiredBody = new Set<string>(
-			Array.isArray(body.schema.required) ? body.schema.required : []
+
+		// Some request bodies are documented as guesswork. `createProductListingDirect`
+		// says its own body "is based on observed fields and may be incomplete",
+		// and the API does ask for a field it does not list. A `required` list
+		// derived from observation is guesswork too, and enforcing it blocks the
+		// very workaround that makes the endpoint callable, so it is treated as
+		// advisory for these operations and the fields become optional.
+		const observed = OBSERVED_BODY.test(
+			`${body.schema.description ?? ''} ${body.schema.title ?? ''} ${body.description ?? ''}`
 		)
+
+		const requiredBody = new Set<string>(
+			observed || !Array.isArray(body.schema.required) ? [] : body.schema.required
+		)
+
 		for (const name of names) {
 			push(name, 'body', properties[name] as Json, body.required && requiredBody.has(name))
 		}
@@ -555,7 +570,11 @@ async function main(): Promise<void> {
 			const { fields, params, binaryFields } = buildFields(
 				operationId,
 				parameters.map((p) => (paginated ? { ...p, schema: paginationSchema(p) } : p)),
-				{ schema: bodySchema, required: Boolean(operation.requestBody?.required) }
+				{
+					schema: bodySchema,
+					required: Boolean(operation.requestBody?.required),
+					description: String(operation.description ?? '')
+				}
 			)
 
 			if (fields.some((field) => field.name === PROJECTION_ARG)) {

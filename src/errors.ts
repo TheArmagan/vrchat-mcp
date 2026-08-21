@@ -21,7 +21,8 @@ import type { ToolErrorDetail } from './types.ts'
 const MAX_MESSAGE = 500
 
 const HINTS: Record<number, string> = {
-	400: 'malformed request — check required arguments and their formats against the tool schema',
+	400:
+		'malformed request. Check the arguments against the tool schema. If VRChat is asking for a field the schema does not have, the spec is incomplete for this endpoint rather than you being wrong: extra properties are passed through, so try adding it, and fall back to vrchat_request for full control of the body.',
 	401: 'session expired — call `vrchat_authStatus`, re-auth may need a 2FA code',
 	403: 'insufficient permissions (or an admin-only endpoint on a normal account)',
 	404: 'resource not found — check the id',

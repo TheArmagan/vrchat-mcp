@@ -540,6 +540,39 @@ Verified over stdio with a real 1x1 PNG: the object form and the data: URI form
 both decoded and reached the auth step, and `{ data: 'not base64!!!' }` was
 refused before any network call.
 
+## Spec drift: three escape hatches
+
+Reported: `createProductListingDirect` fails because the API wants `products`
+while the spec says `productIds`, and passing `products` anyway changed nothing
+because the MCP layer stripped it. The stripping was ours, and it is the worse
+half of the bug: the field vanished before the request was built, so the API
+returned a byte-identical error and nothing looked wrong.
+
+The spec is honest about this. That operation's description reads "The request
+body is based on observed fields and may be incomplete", and the body schema
+adds "Additional fields may exist". So the fixes are general, not a patch for
+one endpoint:
+
+1. **Unknown properties are kept and forwarded.** `inputSchemaFor` adds
+   `.catchall(z.unknown())`, and `splitArguments` routes anything unrecognised
+   into the body, or into the query string for operations without one. It also
+   returns `extras`, naming what was passed through.
+2. **Observed bodies do not enforce their required list.** Codegen matches the
+   upstream wording (`may be incomplete` / `additional fields may exist` /
+   `observed`) and makes those properties optional. If the field list is
+   guesswork, the `required` list is guesswork too, and enforcing it blocks the
+   workaround. Driven by the spec's own text, so ordinary endpoints are
+   untouched: `getUser` still rejects `{}`.
+3. **`vrchat_request`** calls any path with a body under full caller control.
+   Same session, proxy and limiter; same gates, classified from method and path
+   rather than by operationId. Money and admin paths outrank the method, so a
+   `GET` under `/tilia` is still money. Only `api.vrchat.cloud` is accepted if a
+   full URL is given, since the request carries the session cookie.
+
+The 400 hint now says all of this, because a 400 here is as likely to mean the
+schema is wrong as the caller is, and without the hint an agent keeps rewriting
+a call that was already correct.
+
 ## Blocked / open
 
 - **SOCKS proxy support is deliberately NOT implemented — decided, not pending.**

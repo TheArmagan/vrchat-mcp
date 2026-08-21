@@ -244,10 +244,19 @@ const responseKeysSchema = z
  *
  * Codegen already asserts no VRChat parameter is named `_responseKeys`, so
  * this extension cannot silently shadow a real API argument.
+ *
+ * Unknown properties are kept rather than stripped. The VRChat spec is
+ * community-maintained and openly incomplete in places: `createProductListingDirect`
+ * says outright that its body "is based on observed fields and may be
+ * incomplete". A schema that silently drops anything it does not recognise
+ * makes those endpoints unusable, and the failure is invisible, since the
+ * request goes out without the field and comes back with the same error as
+ * before. Keeping them lets a caller work around spec drift instead of waiting
+ * for a codegen run.
  */
-function inputSchemaFor(operation: Operation) {
+export function inputSchemaFor(operation: Operation) {
 	const base = operation.inputSchema as z.ZodObject<z.ZodRawShape>
-	return base.extend({ _responseKeys: responseKeysSchema })
+	return base.extend({ _responseKeys: responseKeysSchema }).catchall(z.unknown())
 }
 
 /**
@@ -259,23 +268,41 @@ export function splitArguments(operation: Operation, args: Record<string, unknow
 	const path: Record<string, unknown> = {}
 	const query: Record<string, unknown> = {}
 	const body: Record<string, unknown> = {}
+	const known = new Set<string>()
 
 	for (const name of operation.params.path) {
+		known.add(name)
 		if (args[name] !== undefined) path[name] = args[name]
 	}
 
 	for (const name of operation.params.query) {
+		known.add(name)
 		if (args[name] !== undefined) query[name] = args[name]
 	}
 
 	for (const name of operation.params.body ?? []) {
+		known.add(name)
 		if (args[name] !== undefined) body[name] = args[name]
+	}
+
+	// Anything the spec did not describe still has to reach VRChat, or letting
+	// the schema keep it would have achieved nothing. An operation with a body
+	// takes it there; otherwise it goes to the query string, which is the only
+	// other place a GET could want it.
+	const extras: string[] = []
+	const target = operation.params.body === null ? query : body
+
+	for (const [name, value] of Object.entries(args)) {
+		if (known.has(name) || value === undefined) continue
+		target[name] = value
+		extras.push(name)
 	}
 
 	return {
 		path,
 		query,
-		body: operation.params.body === null ? undefined : body
+		body: operation.params.body === null ? undefined : body,
+		extras
 	}
 }
 
