@@ -15,6 +15,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'cancelPending2FA',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'delete',
 		path: '/auth/twofactorauth/totp/pending',
 		summary: 'Cancel pending enabling of time-based 2FA codes',
@@ -29,6 +30,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'checkUserExists',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'get',
 		path: '/auth/exists',
 		summary: 'Check User Exists',
@@ -48,6 +50,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'confirmEmail',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'get',
 		path: '/auth/confirmEmail',
 		summary: 'Confirm Email',
@@ -65,6 +68,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'createGlobalAvatarModeration',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'post',
 		path: '/auth/user/avatarmoderations',
 		summary: 'Create Global Avatar Moderation',
@@ -82,6 +86,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteGlobalAvatarModeration',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'delete',
 		path: '/auth/user/avatarmoderations',
 		summary: 'Delete Global Avatar Moderation',
@@ -99,6 +104,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteModerationReport',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'delete',
 		path: '/moderationReports/{moderationReportId}',
 		summary: 'Delete Moderation Report',
@@ -115,6 +121,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteUser',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'put',
 		path: '/users/{userId}/delete',
 		summary: 'Delete User',
@@ -131,6 +138,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'disable2FA',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'delete',
 		path: '/auth/twofactorauth',
 		summary: 'Disable 2FA',
@@ -145,6 +153,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'enable2FA',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'post',
 		path: '/auth/twofactorauth/totp/pending',
 		summary: 'Enable time-based 2FA codes',
@@ -159,6 +168,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getCurrentUser',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'get',
 		path: '/auth/user',
 		summary: 'Login and/or Get Current User Info',
@@ -173,6 +183,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGlobalAvatarModerations',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'get',
 		path: '/auth/user/avatarmoderations',
 		summary: 'Get Global Avatar Moderations',
@@ -187,6 +198,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getModerationReports',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'get',
 		path: '/moderationReports',
 		summary: 'Get Moderation Reports',
@@ -207,6 +219,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getRecoveryCodes',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'get',
 		path: '/auth/user/twofactorauth/otp',
 		summary: 'Get 2FA Recovery codes',
@@ -221,6 +234,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'logout',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'put',
 		path: '/logout',
 		summary: 'Logout',
@@ -235,6 +249,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'registerUserAccount',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'post',
 		path: '/auth/register',
 		summary: 'Register User Account',
@@ -259,6 +274,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'resendEmailConfirmation',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'post',
 		path: '/auth/user/resendEmail',
 		summary: 'Resend Email Confirmation',
@@ -273,6 +289,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'submitModerationReport',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'post',
 		path: '/moderationReports',
 		summary: 'Submit Moderation Report',
@@ -294,6 +311,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'verify2FA',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'post',
 		path: '/auth/twofactorauth/totp/verify',
 		summary: 'Verify 2FA code',
@@ -310,6 +328,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'verify2FAEmailCode',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'post',
 		path: '/auth/twofactorauth/emailotp/verify',
 		summary: 'Verify 2FA email code',
@@ -326,6 +345,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'verifyAuthToken',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'get',
 		path: '/auth',
 		summary: 'Verify Auth Token',
@@ -340,6 +360,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'verifyLoginPlace',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'get',
 		path: '/auth/verifyLoginPlace',
 		summary: 'Verify Login Place',
@@ -357,6 +378,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'verifyPending2FA',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'post',
 		path: '/auth/twofactorauth/totp/pending/verify',
 		summary: 'Verify Pending 2FA code',
@@ -373,6 +395,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'verifyRecoveryCode',
 		tag: 'authentication',
+		tags: ['authentication'],
 		method: 'post',
 		path: '/auth/twofactorauth/otp/verify',
 		summary: 'Verify 2FA code with Recovery code',
@@ -389,6 +412,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'createAvatar',
 		tag: 'avatars',
+		tags: ['avatars'],
 		method: 'post',
 		path: '/avatars',
 		summary: 'Create Avatar',
@@ -419,6 +443,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteAvatar',
 		tag: 'avatars',
+		tags: ['avatars'],
 		method: 'delete',
 		path: '/avatars/{avatarId}',
 		summary: 'Delete Avatar',
@@ -435,6 +460,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteImpostor',
 		tag: 'avatars',
+		tags: ['avatars'],
 		method: 'delete',
 		path: '/avatars/{avatarId}/impostor',
 		summary: 'Delete generated Impostor',
@@ -451,6 +477,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'enqueueImpostor',
 		tag: 'avatars',
+		tags: ['avatars'],
 		method: 'post',
 		path: '/avatars/{avatarId}/impostor/enqueue',
 		summary: 'Enqueue Impostor generation',
@@ -467,6 +494,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getAvatar',
 		tag: 'avatars',
+		tags: ['avatars'],
 		method: 'get',
 		path: '/avatars/{avatarId}',
 		summary: 'Get Avatar',
@@ -483,6 +511,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getAvatarStyles',
 		tag: 'avatars',
+		tags: ['avatars'],
 		method: 'get',
 		path: '/avatarStyles',
 		summary: 'Get Avatar Styles',
@@ -497,6 +526,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getFavoritedAvatars',
 		tag: 'avatars',
+		tags: ['avatars'],
 		method: 'get',
 		path: '/avatars/favorites',
 		summary: 'List Favorited Avatars',
@@ -525,6 +555,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getImpostorQueueStats',
 		tag: 'avatars',
+		tags: ['avatars'],
 		method: 'get',
 		path: '/avatars/impostor/queue/stats',
 		summary: 'Get Impostor Queue Stats',
@@ -539,6 +570,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getLicensedAvatars',
 		tag: 'avatars',
+		tags: ['avatars'],
 		method: 'get',
 		path: '/avatars/licensed',
 		summary: 'List Licensed Avatars',
@@ -556,6 +588,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getOwnAvatar',
 		tag: 'avatars',
+		tags: ['avatars'],
 		method: 'get',
 		path: '/users/{userId}/avatar',
 		summary: 'Get Own Avatar',
@@ -572,6 +605,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'searchAvatars',
 		tag: 'avatars',
+		tags: ['avatars'],
 		method: 'get',
 		path: '/avatars',
 		summary: 'Search Avatars',
@@ -601,6 +635,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'selectAvatar',
 		tag: 'avatars',
+		tags: ['avatars'],
 		method: 'put',
 		path: '/avatars/{avatarId}/select',
 		summary: 'Select Avatar',
@@ -617,6 +652,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'selectFallbackAvatar',
 		tag: 'avatars',
+		tags: ['avatars'],
 		method: 'put',
 		path: '/avatars/{avatarId}/selectFallback',
 		summary: 'Select Fallback Avatar',
@@ -633,6 +669,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateAvatar',
 		tag: 'avatars',
+		tags: ['avatars'],
 		method: 'put',
 		path: '/avatars/{avatarId}',
 		summary: 'Update Avatar',
@@ -659,6 +696,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'createGroupCalendarEvent',
 		tag: 'calendar',
+		tags: ['calendar'],
 		method: 'post',
 		path: '/calendar/{groupId}/event',
 		summary: 'Create a calendar event',
@@ -696,6 +734,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteGroupCalendarEvent',
 		tag: 'calendar',
+		tags: ['calendar'],
 		method: 'delete',
 		path: '/calendar/{groupId}/{calendarId}',
 		summary: 'Delete a calendar event',
@@ -713,6 +752,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'discoverCalendarEvents',
 		tag: 'calendar',
+		tags: ['calendar'],
 		method: 'get',
 		path: '/calendar/discover',
 		summary: 'Discover calendar events',
@@ -739,6 +779,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'followGroupCalendarEvent',
 		tag: 'calendar',
+		tags: ['calendar'],
 		method: 'post',
 		path: '/calendar/{groupId}/{calendarId}/follow',
 		summary: 'Follow a calendar event',
@@ -757,6 +798,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getCalendarEvents',
 		tag: 'calendar',
+		tags: ['calendar'],
 		method: 'get',
 		path: '/calendar',
 		summary: 'List calendar events',
@@ -775,6 +817,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getFeaturedCalendarEvents',
 		tag: 'calendar',
+		tags: ['calendar'],
 		method: 'get',
 		path: '/calendar/featured',
 		summary: 'List featured calendar events',
@@ -793,6 +836,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getFollowedCalendarEvents',
 		tag: 'calendar',
+		tags: ['calendar'],
 		method: 'get',
 		path: '/calendar/following',
 		summary: 'List followed calendar events',
@@ -811,6 +855,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupCalendarEvent',
 		tag: 'calendar',
+		tags: ['calendar'],
 		method: 'get',
 		path: '/calendar/{groupId}/{calendarId}',
 		summary: 'Get a calendar event',
@@ -828,6 +873,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupCalendarEventICS',
 		tag: 'calendar',
+		tags: ['calendar'],
 		method: 'get',
 		path: '/calendar/{groupId}/{calendarId}.ics',
 		summary: 'Download calendar event as ICS',
@@ -845,6 +891,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupCalendarEvents',
 		tag: 'calendar',
+		tags: ['calendar'],
 		method: 'get',
 		path: '/calendar/{groupId}',
 		summary: 'List a group\'s calendar events',
@@ -864,6 +911,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupNextCalendarEvent',
 		tag: 'calendar',
+		tags: ['calendar'],
 		method: 'get',
 		path: '/calendar/{groupId}/next',
 		summary: 'Get next calendar event',
@@ -880,6 +928,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'searchCalendarEvents',
 		tag: 'calendar',
+		tags: ['calendar'],
 		method: 'get',
 		path: '/calendar/search',
 		summary: 'Search for calendar events',
@@ -900,6 +949,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateGroupCalendarEvent',
 		tag: 'calendar',
+		tags: ['calendar'],
 		method: 'put',
 		path: '/calendar/{groupId}/{calendarId}/event',
 		summary: 'Update a calendar event',
@@ -936,11 +986,12 @@ export const operations: Operation[] = [
 	{
 		operationId: 'createProduct',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'post',
 		path: '/products',
 		summary: 'Create Product',
 		description: 'Creates a product and returns the new Product object.',
-		kind: 'money',
+		kind: 'write',
 		params: { path: [], query: [], body: ['description', 'displayName', 'imageId', 'productType', 'tags', 'useForSubscriberList'] },
 		paginated: false,
 		binaryFields: [],
@@ -957,11 +1008,12 @@ export const operations: Operation[] = [
 	{
 		operationId: 'createProductListingDirect',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'post',
 		path: '/listing',
 		summary: 'Create Product Listing',
 		description: 'Creates a listing and returns the new ProductListing object. The request body is based on observed fields and may be incomplete.',
-		kind: 'money',
+		kind: 'write',
 		params: { path: [], query: [], body: ['active', 'description', 'displayName', 'imageId', 'listingType', 'priceTokens', 'productIds', 'storeIds'] },
 		paginated: false,
 		binaryFields: [],
@@ -980,6 +1032,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteProduct',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'delete',
 		path: '/products/{productId}',
 		summary: 'Delete Product',
@@ -996,6 +1049,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteProductListingDirect',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'delete',
 		path: '/listing/{productId}',
 		summary: 'Delete Product Listing',
@@ -1013,6 +1067,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getActiveLicenses',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/economy/licenses/active',
 		summary: 'Get Active Licenses',
@@ -1027,6 +1082,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getBalance',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/user/{userId}/balance',
 		summary: 'Get Balance',
@@ -1043,6 +1099,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getBalanceEarnings',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/user/{userId}/balance/earnings',
 		summary: 'Get Balance Earnings',
@@ -1059,6 +1116,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getBulkGiftPurchases',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/user/bulk/gift/purchases',
 		summary: 'Get Bulk Gift Purchases',
@@ -1075,6 +1133,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getCurrentSubscriptions',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/auth/user/subscription',
 		summary: 'Get Current Subscriptions',
@@ -1089,6 +1148,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getEarningsMetrics',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/economy/metrics/earnings',
 		summary: 'Get Earnings Metrics',
@@ -1108,6 +1168,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getEconomyAccount',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/user/{userId}/economy/account',
 		summary: 'Get Economy Account',
@@ -1124,6 +1185,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getEconomyBalances',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/user/{userId}/economy/balances',
 		summary: 'Get Economy Balances',
@@ -1140,6 +1202,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getEconomyPayouts',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/user/{userId}/economy/payouts/list',
 		summary: 'Get Economy Payouts',
@@ -1156,6 +1219,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getEconomyPayoutStatus',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/user/{userId}/economy/payouts/status',
 		summary: 'Get Economy Payout Status',
@@ -1172,6 +1236,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getLicenseGroup',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/licenseGroups/{licenseGroupId}',
 		summary: 'Get License Group',
@@ -1188,6 +1253,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getProductListing',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'get',
 		path: '/listing/{productId}',
 		summary: 'Get Product Listing',
@@ -1205,6 +1271,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getProductListingAlternate',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'get',
 		path: '/products/{productId}',
 		summary: 'Get Product Listing (alternate)',
@@ -1221,6 +1288,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getProductListings',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'get',
 		path: '/user/{userId}/listings',
 		summary: 'Get User Product Listings',
@@ -1243,6 +1311,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getProductPurchase',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'get',
 		path: '/economy/purchases/{productPurchaseId}',
 		summary: 'Get Product Purchase',
@@ -1259,6 +1328,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getProductPurchaseHistory',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'get',
 		path: '/user/{userId}/economy/transactions',
 		summary: 'Get Product Purchase History',
@@ -1282,6 +1352,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getProductPurchases',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'get',
 		path: '/economy/purchases',
 		summary: 'Get Product Purchases',
@@ -1304,6 +1375,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getProductPurchaseStacks',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'get',
 		path: '/economy/purchases/{productPurchaseId}/stacks',
 		summary: 'Get Product Purchase Stacks',
@@ -1320,6 +1392,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getRecentSubscription',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/user/subscription/recent',
 		summary: 'Get Recent Subscription',
@@ -1334,6 +1407,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getSellerEligibility',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'get',
 		path: '/economy/seller/eligibility',
 		summary: 'Get Seller Eligibility',
@@ -1348,6 +1422,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getSteamTransaction',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/Steam/transactions/{transactionId}',
 		summary: 'Get Steam Transaction',
@@ -1364,6 +1439,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getSteamTransactions',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/Steam/transactions',
 		summary: 'List Steam Transactions',
@@ -1378,6 +1454,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getStore',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'get',
 		path: '/economy/store',
 		summary: 'Get Store',
@@ -1396,6 +1473,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getStoreShelves',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'get',
 		path: '/economy/store/shelves',
 		summary: 'Get Store Shelves',
@@ -1414,6 +1492,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getSubscriptions',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/subscriptions',
 		summary: 'List Subscriptions',
@@ -1428,6 +1507,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getTiliaStatus',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/tilia/status',
 		summary: 'Get Tilia Status',
@@ -1442,6 +1522,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getTiliaTos',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/user/{userId}/tilia/tos',
 		summary: 'Get Tilia TOS Agreement Status',
@@ -1458,6 +1539,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getTokenBundles',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/tokenBundles',
 		summary: 'List Token Bundles',
@@ -1472,6 +1554,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getUserCreditsEligible',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/users/{userId}/credits/eligible',
 		summary: 'Get User Credits Eligibility',
@@ -1489,6 +1572,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getUserSubscriptionEligible',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/users/{userId}/subscription/eligible',
 		summary: 'Get User Subscription Eligibility',
@@ -1506,6 +1590,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getUserTiliaKyc',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'get',
 		path: '/user/{userId}/tilia/kyc',
 		summary: 'Get User Tilia KYC',
@@ -1522,6 +1607,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'listStores',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'get',
 		path: '/economy/stores',
 		summary: 'List Stores',
@@ -1541,6 +1627,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'listUserProducts',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'get',
 		path: '/user/{userId}/products',
 		summary: 'List User Products',
@@ -1559,6 +1646,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'purchaseProductListing',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'post',
 		path: '/economy/purchase/listing',
 		summary: 'Purchase Product Listing',
@@ -1581,11 +1669,12 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateProduct',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'put',
 		path: '/products/{productId}',
 		summary: 'Update Product',
 		description: 'Updates a product and returns the updated Product object.',
-		kind: 'money',
+		kind: 'write',
 		params: { path: ['productId'], query: [], body: ['description', 'displayName', 'imageId', 'tags', 'useForSubscriberList'] },
 		paginated: false,
 		binaryFields: [],
@@ -1602,11 +1691,12 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateProductListingDirect',
 		tag: 'economy',
+		tags: ['economy', 'store'],
 		method: 'put',
 		path: '/listing/{productId}',
 		summary: 'Update Product Listing',
 		description: 'Updates the active state of a listing. Setting `active` to `true` publishes the listing, while `false` unpublishes it.',
-		kind: 'money',
+		kind: 'write',
 		params: { path: ['productId'], query: ['hydrate'], body: ['active'] },
 		paginated: false,
 		binaryFields: [],
@@ -1620,6 +1710,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateTiliaTos',
 		tag: 'economy',
+		tags: ['economy'],
 		method: 'put',
 		path: '/user/{userId}/tilia/tos',
 		summary: 'Update Tilia TOS Agreement Status',
@@ -1637,6 +1728,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'addFavorite',
 		tag: 'favorites',
+		tags: ['favorites'],
 		method: 'post',
 		path: '/favorites',
 		summary: 'Add Favorite',
@@ -1655,6 +1747,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'clearFavoriteGroup',
 		tag: 'favorites',
+		tags: ['favorites'],
 		method: 'delete',
 		path: '/favorite/group/{favoriteGroupType}/{favoriteGroupName}/{userId}',
 		summary: 'Clear Favorite Group',
@@ -1673,6 +1766,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getFavoriteGroup',
 		tag: 'favorites',
+		tags: ['favorites'],
 		method: 'get',
 		path: '/favorite/group/{favoriteGroupType}/{favoriteGroupName}/{userId}',
 		summary: 'Show Favorite Group',
@@ -1691,6 +1785,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getFavoriteGroups',
 		tag: 'favorites',
+		tags: ['favorites'],
 		method: 'get',
 		path: '/favorite/groups',
 		summary: 'List Favorite Groups',
@@ -1710,6 +1805,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getFavoriteLimits',
 		tag: 'favorites',
+		tags: ['favorites'],
 		method: 'get',
 		path: '/auth/user/favoritelimits',
 		summary: 'Get Favorite Limits',
@@ -1724,6 +1820,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getFavorites',
 		tag: 'favorites',
+		tags: ['favorites'],
 		method: 'get',
 		path: '/favorites',
 		summary: 'List Favorites',
@@ -1743,6 +1840,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'removeFavorite',
 		tag: 'favorites',
+		tags: ['favorites'],
 		method: 'delete',
 		path: '/favorites/{favoriteId}',
 		summary: 'Remove Favorite',
@@ -1759,6 +1857,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateFavoriteGroup',
 		tag: 'favorites',
+		tags: ['favorites'],
 		method: 'put',
 		path: '/favorite/group/{favoriteGroupType}/{favoriteGroupName}/{userId}',
 		summary: 'Update Favorite Group',
@@ -1780,6 +1879,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'createFile',
 		tag: 'files',
+		tags: ['files'],
 		method: 'post',
 		path: '/file',
 		summary: 'Create File',
@@ -1799,6 +1899,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'createFileVersion',
 		tag: 'files',
+		tags: ['files'],
 		method: 'post',
 		path: '/file/{fileId}',
 		summary: 'Create File Version',
@@ -1819,6 +1920,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteFile',
 		tag: 'files',
+		tags: ['files'],
 		method: 'delete',
 		path: '/file/{fileId}',
 		summary: 'Delete File',
@@ -1835,6 +1937,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteFileVersion',
 		tag: 'files',
+		tags: ['files'],
 		method: 'delete',
 		path: '/file/{fileId}/{versionId}',
 		summary: 'Delete File Version',
@@ -1852,6 +1955,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'downloadFileVersion',
 		tag: 'files',
+		tags: ['files'],
 		method: 'get',
 		path: '/file/{fileId}/{versionId}',
 		summary: 'Download File Version',
@@ -1869,6 +1973,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'finishFileDataUpload',
 		tag: 'files',
+		tags: ['files'],
 		method: 'put',
 		path: '/file/{fileId}/{versionId}/{fileType}/finish',
 		summary: 'Finish FileData Upload',
@@ -1890,6 +1995,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getAdminAssetBundle',
 		tag: 'files',
+		tags: ['files'],
 		method: 'get',
 		path: '/adminassetbundles/{adminAssetBundleId}',
 		summary: 'Get AdminAssetBundle',
@@ -1906,6 +2012,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getContentAgreementStatus',
 		tag: 'files',
+		tags: ['files'],
 		method: 'get',
 		path: '/agreement',
 		summary: 'Get Content Agreement Status',
@@ -1924,6 +2031,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getFile',
 		tag: 'files',
+		tags: ['files'],
 		method: 'get',
 		path: '/file/{fileId}',
 		summary: 'Show File',
@@ -1940,6 +2048,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getFileAnalysis',
 		tag: 'files',
+		tags: ['files'],
 		method: 'get',
 		path: '/analysis/{fileId}/{versionId}',
 		summary: 'Get File Version Analysis',
@@ -1957,6 +2066,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getFileAnalysisSecurity',
 		tag: 'files',
+		tags: ['files'],
 		method: 'get',
 		path: '/analysis/{fileId}/{versionId}/security',
 		summary: 'Get File Version Analysis Security',
@@ -1974,6 +2084,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getFileAnalysisStandard',
 		tag: 'files',
+		tags: ['files'],
 		method: 'get',
 		path: '/analysis/{fileId}/{versionId}/standard',
 		summary: 'Get File Version Analysis Standard',
@@ -1991,6 +2102,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getFileDataUploadStatus',
 		tag: 'files',
+		tags: ['files'],
 		method: 'get',
 		path: '/file/{fileId}/{versionId}/{fileType}/status',
 		summary: 'Check FileData Upload Status',
@@ -2009,6 +2121,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getFiles',
 		tag: 'files',
+		tags: ['files'],
 		method: 'get',
 		path: '/files',
 		summary: 'List Files',
@@ -2028,6 +2141,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'setGroupGalleryFileOrder',
 		tag: 'files',
+		tags: ['files'],
 		method: 'put',
 		path: '/files/order',
 		summary: 'Set Group Gallery File Order',
@@ -2045,6 +2159,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'startFileDataUpload',
 		tag: 'files',
+		tags: ['files'],
 		method: 'put',
 		path: '/file/{fileId}/{versionId}/{fileType}/start',
 		summary: 'Start FileData Upload',
@@ -2064,6 +2179,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'submitContentAgreement',
 		tag: 'files',
+		tags: ['files'],
 		method: 'post',
 		path: '/agreement',
 		summary: 'Submit Content Agreement',
@@ -2083,6 +2199,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateAssetReviewNotes',
 		tag: 'files',
+		tags: ['files'],
 		method: 'put',
 		path: '/assetReview/{assetReviewId}/notes',
 		summary: 'Update Asset Review Notes',
@@ -2100,6 +2217,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'uploadGalleryImage',
 		tag: 'files',
+		tags: ['files'],
 		method: 'post',
 		path: '/gallery',
 		summary: 'Upload gallery image',
@@ -2116,6 +2234,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'uploadIcon',
 		tag: 'files',
+		tags: ['files'],
 		method: 'post',
 		path: '/icon',
 		summary: 'Upload icon',
@@ -2132,6 +2251,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'uploadImage',
 		tag: 'files',
+		tags: ['files'],
 		method: 'post',
 		path: '/file/image',
 		summary: 'Upload gallery image, icon, emoji or sticker',
@@ -2154,6 +2274,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'boop',
 		tag: 'friends',
+		tags: ['friends'],
 		method: 'post',
 		path: '/users/{userId}/boop',
 		summary: 'Send Boop',
@@ -2173,6 +2294,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteFriendRequest',
 		tag: 'friends',
+		tags: ['friends'],
 		method: 'delete',
 		path: '/user/{userId}/friendRequest',
 		summary: 'Delete Friend Request',
@@ -2189,6 +2311,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'friend',
 		tag: 'friends',
+		tags: ['friends'],
 		method: 'post',
 		path: '/user/{userId}/friendRequest',
 		summary: 'Send Friend Request',
@@ -2205,6 +2328,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getFriends',
 		tag: 'friends',
+		tags: ['friends'],
 		method: 'get',
 		path: '/auth/user/friends',
 		summary: 'List Friends',
@@ -2223,6 +2347,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getFriendStatus',
 		tag: 'friends',
+		tags: ['friends'],
 		method: 'get',
 		path: '/user/{userId}/friendStatus',
 		summary: 'Check Friend Status',
@@ -2239,6 +2364,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'unfriend',
 		tag: 'friends',
+		tags: ['friends'],
 		method: 'delete',
 		path: '/auth/user/friends/{userId}',
 		summary: 'Unfriend',
@@ -2255,6 +2381,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'addGroupGalleryImage',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'post',
 		path: '/groups/{groupId}/galleries/{groupGalleryId}/images',
 		summary: 'Add Group Gallery Image',
@@ -2273,6 +2400,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'addGroupMemberRole',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'put',
 		path: '/groups/{groupId}/members/{userId}/roles/{groupRoleId}',
 		summary: 'Add Role to GroupMember',
@@ -2291,6 +2419,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'addGroupPost',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'post',
 		path: '/groups/{groupId}/posts',
 		summary: 'Create a post in a Group',
@@ -2313,6 +2442,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'banGroupMember',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'post',
 		path: '/groups/{groupId}/bans',
 		summary: 'Ban Group Member',
@@ -2330,6 +2460,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'blockGroup',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'post',
 		path: '/groups/{groupId}/block',
 		summary: 'Block Group',
@@ -2346,6 +2477,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'cancelGroupRequest',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'delete',
 		path: '/groups/{groupId}/requests',
 		summary: 'Cancel Group Join Request',
@@ -2362,6 +2494,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'cancelGroupTransfer',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'delete',
 		path: '/groups/{groupId}/transfer',
 		summary: 'Cancel Group Transfer',
@@ -2378,6 +2511,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'createGroup',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'post',
 		path: '/groups',
 		summary: 'Create Group',
@@ -2401,6 +2535,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'createGroupAnnouncement',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'post',
 		path: '/groups/{groupId}/announcement',
 		summary: 'Create Group Announcement',
@@ -2421,6 +2556,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'createGroupGallery',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'post',
 		path: '/groups/{groupId}/galleries',
 		summary: 'Create Group Gallery',
@@ -2444,6 +2580,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'createGroupInvite',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'post',
 		path: '/groups/{groupId}/invites',
 		summary: 'Invite User to Group',
@@ -2462,6 +2599,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'createGroupRole',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'post',
 		path: '/groups/{groupId}/roles',
 		summary: 'Create GroupRole',
@@ -2483,6 +2621,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'declineGroupInvite',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'put',
 		path: '/groups/{groupId}/invites',
 		summary: 'Decline Invite from Group',
@@ -2500,6 +2639,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteGroup',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'delete',
 		path: '/groups/{groupId}',
 		summary: 'Delete Group',
@@ -2517,6 +2657,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteGroupAnnouncement',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'delete',
 		path: '/groups/{groupId}/announcement',
 		summary: 'Delete Group Announcement',
@@ -2533,6 +2674,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteGroupGallery',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'delete',
 		path: '/groups/{groupId}/galleries/{groupGalleryId}',
 		summary: 'Delete Group Gallery',
@@ -2550,6 +2692,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteGroupGalleryImage',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'delete',
 		path: '/groups/{groupId}/galleries/{groupGalleryId}/images/{groupGalleryImageId}',
 		summary: 'Delete Group Gallery Image',
@@ -2568,6 +2711,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteGroupInvite',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'delete',
 		path: '/groups/{groupId}/invites/{userId}',
 		summary: 'Delete User Invite',
@@ -2585,6 +2729,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteGroupPost',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'delete',
 		path: '/groups/{groupId}/posts/{notificationId}',
 		summary: 'Delete a Group post',
@@ -2602,6 +2747,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteGroupRole',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'delete',
 		path: '/groups/{groupId}/roles/{groupRoleId}',
 		summary: 'Delete Group Role',
@@ -2619,6 +2765,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroup',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'get',
 		path: '/groups/{groupId}',
 		summary: 'Get Group by ID',
@@ -2636,6 +2783,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupAnnouncements',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'get',
 		path: '/groups/{groupId}/announcement',
 		summary: 'Get Group Announcement',
@@ -2652,6 +2800,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupAuditLogEntryTypes',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'get',
 		path: '/groups/{groupId}/auditLogTypes',
 		summary: 'Get Group Audit Log Entry Types',
@@ -2668,6 +2817,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupAuditLogs',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'get',
 		path: '/groups/{groupId}/auditLogs',
 		summary: 'Get Group Audit Logs',
@@ -2691,6 +2841,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupBans',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'get',
 		path: '/groups/{groupId}/bans',
 		summary: 'Get Group Bans',
@@ -2709,6 +2860,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupGalleryImages',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'get',
 		path: '/groups/{groupId}/galleries/{groupGalleryId}',
 		summary: 'Get Group Gallery Images',
@@ -2729,6 +2881,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupInstances',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'get',
 		path: '/groups/{groupId}/instances',
 		summary: 'Get Group Instances',
@@ -2745,6 +2898,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupInvites',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'get',
 		path: '/groups/{groupId}/invites',
 		summary: 'Get Group Invites Sent',
@@ -2763,6 +2917,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupMember',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'get',
 		path: '/groups/{groupId}/members/{userId}',
 		summary: 'Get Group Member',
@@ -2780,6 +2935,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupMembers',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'get',
 		path: '/groups/{groupId}/members',
 		summary: 'List Group Members',
@@ -2800,6 +2956,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupPermissions',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'get',
 		path: '/groups/{groupId}/permissions',
 		summary: 'List Group Permissions',
@@ -2816,6 +2973,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupPosts',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'get',
 		path: '/groups/{groupId}/posts',
 		summary: 'Get posts from a Group',
@@ -2835,6 +2993,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupRequests',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'get',
 		path: '/groups/{groupId}/requests',
 		summary: 'Get Group Join Requests',
@@ -2854,6 +3013,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupRoles',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'get',
 		path: '/groups/{groupId}/roles',
 		summary: 'Get Group Roles',
@@ -2870,6 +3030,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupRoleTemplates',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'get',
 		path: '/groups/roleTemplates',
 		summary: 'Get Group Role Templates',
@@ -2884,6 +3045,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getGroupTransferability',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'get',
 		path: '/groups/{groupId}/transfer',
 		summary: 'Get Group Transferability',
@@ -2901,6 +3063,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'initiateOrAcceptGroupTransfer',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'post',
 		path: '/groups/{groupId}/transfer',
 		summary: 'Initiate or Accept Group Transfer',
@@ -2918,6 +3081,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'joinGroup',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'post',
 		path: '/groups/{groupId}/join',
 		summary: 'Join Group',
@@ -2936,6 +3100,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'kickGroupMember',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'delete',
 		path: '/groups/{groupId}/members/{userId}',
 		summary: 'Kick Group Member',
@@ -2953,6 +3118,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'leaveGroup',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'post',
 		path: '/groups/{groupId}/leave',
 		summary: 'Leave Group',
@@ -2969,6 +3135,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'removeGroupMemberRole',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'delete',
 		path: '/groups/{groupId}/members/{userId}/roles/{groupRoleId}',
 		summary: 'Remove Role from GroupMember',
@@ -2987,6 +3154,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'respondGroupJoinRequest',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'put',
 		path: '/groups/{groupId}/requests/{userId}',
 		summary: 'Respond Group Join request',
@@ -3006,6 +3174,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'searchGroupMembers',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'get',
 		path: '/groups/{groupId}/members/search',
 		summary: 'Search Group Members',
@@ -3025,6 +3194,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'searchGroups',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'get',
 		path: '/groups',
 		summary: 'Search Group',
@@ -3043,6 +3213,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'unbanGroupMember',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'delete',
 		path: '/groups/{groupId}/bans/{userId}',
 		summary: 'Unban Group Member',
@@ -3060,6 +3231,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateGroup',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'put',
 		path: '/groups/{groupId}',
 		summary: 'Update Group',
@@ -3086,6 +3258,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateGroupGallery',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'put',
 		path: '/groups/{groupId}/galleries/{groupGalleryId}',
 		summary: 'Update Group Gallery',
@@ -3110,6 +3283,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateGroupMember',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'put',
 		path: '/groups/{groupId}/members/{userId}',
 		summary: 'Update Group Member',
@@ -3131,6 +3305,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateGroupPost',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'put',
 		path: '/groups/{groupId}/posts/{notificationId}',
 		summary: 'Edits a Group post',
@@ -3154,6 +3329,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateGroupRepresentation',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'put',
 		path: '/groups/{groupId}/representation',
 		summary: 'Update Group Representation',
@@ -3171,6 +3347,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateGroupRole',
 		tag: 'groups',
+		tags: ['groups'],
 		method: 'put',
 		path: '/groups/{groupId}/roles/{groupRoleId}',
 		summary: 'Update Group Role',
@@ -3193,6 +3370,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'closeInstance',
 		tag: 'instances',
+		tags: ['instances'],
 		method: 'delete',
 		path: '/instances/{worldId}:{instanceId}',
 		summary: 'Close Instance',
@@ -3212,6 +3390,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'createInstance',
 		tag: 'instances',
+		tags: ['instances'],
 		method: 'post',
 		path: '/instances',
 		summary: 'Create Instance',
@@ -3244,6 +3423,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getInstance',
 		tag: 'instances',
+		tags: ['instances'],
 		method: 'get',
 		path: '/instances/{worldId}:{instanceId}',
 		summary: 'Get Instance',
@@ -3261,6 +3441,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getInstanceByShortName',
 		tag: 'instances',
+		tags: ['instances'],
 		method: 'get',
 		path: '/instances/s/{shortName}',
 		summary: 'Get Instance By Short Name',
@@ -3277,6 +3458,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getRecentLocations',
 		tag: 'instances',
+		tags: ['instances'],
 		method: 'get',
 		path: '/instances/recent',
 		summary: 'List Recent Locations',
@@ -3294,6 +3476,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getShortName',
 		tag: 'instances',
+		tags: ['instances'],
 		method: 'get',
 		path: '/instances/{worldId}:{instanceId}/shortName',
 		summary: 'Get Instance Short Name',
@@ -3311,6 +3494,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'consumeOwnInventoryItem',
 		tag: 'inventory',
+		tags: ['inventory'],
 		method: 'put',
 		path: '/inventory/{inventoryItemId}/consume',
 		summary: 'Consume Own Inventory Item',
@@ -3327,6 +3511,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteOwnInventoryItem',
 		tag: 'inventory',
+		tags: ['inventory'],
 		method: 'delete',
 		path: '/inventory/{inventoryItemId}',
 		summary: 'Delete Own Inventory Item',
@@ -3343,6 +3528,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'equipOwnInventoryItem',
 		tag: 'inventory',
+		tags: ['inventory'],
 		method: 'put',
 		path: '/inventory/{inventoryItemId}/equip',
 		summary: 'Equip Own Inventory Item',
@@ -3360,6 +3546,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getInventory',
 		tag: 'inventory',
+		tags: ['inventory'],
 		method: 'get',
 		path: '/inventory',
 		summary: 'Get Inventory',
@@ -3386,6 +3573,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getInventoryCollections',
 		tag: 'inventory',
+		tags: ['inventory'],
 		method: 'get',
 		path: '/inventory/collections',
 		summary: 'List Inventory Collections',
@@ -3400,6 +3588,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getInventoryDrops',
 		tag: 'inventory',
+		tags: ['inventory'],
 		method: 'get',
 		path: '/inventory/drops',
 		summary: 'List Inventory Drops',
@@ -3416,6 +3605,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getInventoryTemplate',
 		tag: 'inventory',
+		tags: ['inventory'],
 		method: 'get',
 		path: '/inventory/template/{inventoryTemplateId}',
 		summary: 'Get Inventory Template',
@@ -3432,6 +3622,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getOwnInventoryItem',
 		tag: 'inventory',
+		tags: ['inventory'],
 		method: 'get',
 		path: '/inventory/{inventoryItemId}',
 		summary: 'Get Own Inventory Item',
@@ -3448,6 +3639,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getUserInventoryItem',
 		tag: 'inventory',
+		tags: ['inventory'],
 		method: 'get',
 		path: '/user/{userId}/inventory/{inventoryItemId}',
 		summary: 'Get User Inventory Item',
@@ -3465,6 +3657,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'redeemReward',
 		tag: 'inventory',
+		tags: ['inventory'],
 		method: 'post',
 		path: '/reward/redeem',
 		summary: 'Redeem Reward',
@@ -3481,6 +3674,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'shareInventoryItemDirect',
 		tag: 'inventory',
+		tags: ['inventory'],
 		method: 'post',
 		path: '/inventory/cloning/direct',
 		summary: 'Share Inventory Item Direct',
@@ -3499,6 +3693,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'shareInventoryItemPedestal',
 		tag: 'inventory',
+		tags: ['inventory'],
 		method: 'get',
 		path: '/inventory/cloning/pedestal',
 		summary: 'Share Inventory Item by Pedestal',
@@ -3516,6 +3711,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'spawnInventoryItem',
 		tag: 'inventory',
+		tags: ['inventory'],
 		method: 'get',
 		path: '/inventory/spawn',
 		summary: 'Spawn Inventory Item',
@@ -3532,6 +3728,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'unequipOwnInventorySlot',
 		tag: 'inventory',
+		tags: ['inventory'],
 		method: 'delete',
 		path: '/inventory/{inventoryItemId}/equip',
 		summary: 'Unequip Own Inventory Slot',
@@ -3548,6 +3745,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateOwnInventoryItem',
 		tag: 'inventory',
+		tags: ['inventory'],
 		method: 'put',
 		path: '/inventory/{inventoryItemId}',
 		summary: 'Update Own Inventory Item',
@@ -3567,6 +3765,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getInviteMessage',
 		tag: 'invite',
+		tags: ['invite'],
 		method: 'get',
 		path: '/message/{userId}/{messageType}/{slot}',
 		summary: 'Get Invite Message',
@@ -3585,6 +3784,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getInviteMessages',
 		tag: 'invite',
+		tags: ['invite'],
 		method: 'get',
 		path: '/message/{userId}/{messageType}',
 		summary: 'List Invite Messages',
@@ -3602,6 +3802,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'inviteMyselfTo',
 		tag: 'invite',
+		tags: ['invite'],
 		method: 'post',
 		path: '/invite/myself/to/{worldId}:{instanceId}',
 		summary: 'Invite Myself To Instance',
@@ -3619,6 +3820,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'inviteUser',
 		tag: 'invite',
+		tags: ['invite'],
 		method: 'post',
 		path: '/invite/{userId}',
 		summary: 'Invite User',
@@ -3637,6 +3839,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'inviteUserWithPhoto',
 		tag: 'invite',
+		tags: ['invite'],
 		method: 'post',
 		path: '/invite/{userId}/photo',
 		summary: 'Invite User with photo',
@@ -3655,6 +3858,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'requestInvite',
 		tag: 'invite',
+		tags: ['invite'],
 		method: 'post',
 		path: '/requestInvite/{userId}',
 		summary: 'Request Invite',
@@ -3672,6 +3876,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'requestInviteWithPhoto',
 		tag: 'invite',
+		tags: ['invite'],
 		method: 'post',
 		path: '/requestInvite/{userId}/photo',
 		summary: 'Request Invite with photo',
@@ -3690,6 +3895,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'resetInviteMessage',
 		tag: 'invite',
+		tags: ['invite'],
 		method: 'delete',
 		path: '/message/{userId}/{messageType}/{slot}',
 		summary: 'Reset Invite Message',
@@ -3708,6 +3914,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'respondInvite',
 		tag: 'invite',
+		tags: ['invite'],
 		method: 'post',
 		path: '/invite/{notificationId}/response',
 		summary: 'Respond Invite',
@@ -3725,6 +3932,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'respondInviteWithPhoto',
 		tag: 'invite',
+		tags: ['invite'],
 		method: 'post',
 		path: '/invite/{notificationId}/response/photo',
 		summary: 'Respond Invite with photo',
@@ -3743,6 +3951,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateInviteMessage',
 		tag: 'invite',
+		tags: ['invite'],
 		method: 'put',
 		path: '/message/{userId}/{messageType}/{slot}',
 		summary: 'Update Invite Message',
@@ -3762,6 +3971,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteJamSubmission',
 		tag: 'jams',
+		tags: ['jams'],
 		method: 'delete',
 		path: '/jams/{jamId}/submissions/{jamSubmissionId}',
 		summary: 'Delete Jam Submission',
@@ -3779,6 +3989,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getJam',
 		tag: 'jams',
+		tags: ['jams'],
 		method: 'get',
 		path: '/jams/{jamId}',
 		summary: 'Show jam information',
@@ -3795,6 +4006,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getJams',
 		tag: 'jams',
+		tags: ['jams'],
 		method: 'get',
 		path: '/jams',
 		summary: 'Show jams list',
@@ -3811,6 +4023,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getJamSubmissions',
 		tag: 'jams',
+		tags: ['jams'],
 		method: 'get',
 		path: '/jams/{jamId}/submissions',
 		summary: 'Show jam submissions',
@@ -3829,6 +4042,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'submitJamContent',
 		tag: 'jams',
+		tags: ['jams'],
 		method: 'post',
 		path: '/jams/{jamId}/submissions',
 		summary: 'Submit Jam Content',
@@ -3847,6 +4061,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getAssignedPermissions',
 		tag: 'miscellaneous',
+		tags: ['miscellaneous'],
 		method: 'get',
 		path: '/auth/permissions',
 		summary: 'Get Assigned Permissions',
@@ -3861,6 +4076,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getConfig',
 		tag: 'miscellaneous',
+		tags: ['miscellaneous'],
 		method: 'get',
 		path: '/config',
 		summary: 'Fetch API Config',
@@ -3875,6 +4091,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getCSS',
 		tag: 'miscellaneous',
+		tags: ['miscellaneous'],
 		method: 'get',
 		path: '/css/app.css',
 		summary: 'Download CSS',
@@ -3892,6 +4109,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getCurrentOnlineUsers',
 		tag: 'miscellaneous',
+		tags: ['miscellaneous'],
 		method: 'get',
 		path: '/visits',
 		summary: 'Current Online Users',
@@ -3906,6 +4124,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getHealth',
 		tag: 'miscellaneous',
+		tags: ['miscellaneous'],
 		method: 'get',
 		path: '/health',
 		summary: 'Check API Health',
@@ -3920,6 +4139,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getInfoPush',
 		tag: 'miscellaneous',
+		tags: ['miscellaneous'],
 		method: 'get',
 		path: '/infoPush',
 		summary: 'Show Information Notices',
@@ -3937,6 +4157,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getJavaScript',
 		tag: 'miscellaneous',
+		tags: ['miscellaneous'],
 		method: 'get',
 		path: '/js/app.js',
 		summary: 'Download JavaScript',
@@ -3954,6 +4175,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getPermission',
 		tag: 'miscellaneous',
+		tags: ['miscellaneous'],
 		method: 'get',
 		path: '/permissions/{permissionId}',
 		summary: 'Get Permission',
@@ -3970,6 +4192,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getSystemTime',
 		tag: 'miscellaneous',
+		tags: ['miscellaneous'],
 		method: 'get',
 		path: '/time',
 		summary: 'Current System Time',
@@ -3984,6 +4207,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'acceptFriendRequest',
 		tag: 'notifications',
+		tags: ['notifications'],
 		method: 'put',
 		path: '/auth/user/notifications/{notificationId}/accept',
 		summary: 'Accept Friend Request',
@@ -4000,6 +4224,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'acknowledgeNotificationV2',
 		tag: 'notifications',
+		tags: ['notifications'],
 		method: 'post',
 		path: '/notifications/{notificationId}/see',
 		summary: 'Acknowledge NotificationV2',
@@ -4016,6 +4241,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'clearNotifications',
 		tag: 'notifications',
+		tags: ['notifications'],
 		method: 'put',
 		path: '/auth/user/notifications/clear',
 		summary: 'Clear All Notifications',
@@ -4030,6 +4256,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteAllNotificationV2s',
 		tag: 'notifications',
+		tags: ['notifications'],
 		method: 'delete',
 		path: '/notifications',
 		summary: 'Delete All NotificationV2s',
@@ -4044,6 +4271,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteNotification',
 		tag: 'notifications',
+		tags: ['notifications'],
 		method: 'put',
 		path: '/auth/user/notifications/{notificationId}/hide',
 		summary: 'Delete Notification',
@@ -4060,6 +4288,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteNotificationV2',
 		tag: 'notifications',
+		tags: ['notifications'],
 		method: 'delete',
 		path: '/notifications/{notificationId}',
 		summary: 'Delete NotificationV2',
@@ -4076,6 +4305,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getNotification',
 		tag: 'notifications',
+		tags: ['notifications'],
 		method: 'get',
 		path: '/auth/user/notifications/{notificationId}',
 		summary: 'Show notification',
@@ -4092,6 +4322,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getNotifications',
 		tag: 'notifications',
+		tags: ['notifications'],
 		method: 'get',
 		path: '/auth/user/notifications',
 		summary: 'List Notifications',
@@ -4113,6 +4344,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getNotificationV2',
 		tag: 'notifications',
+		tags: ['notifications'],
 		method: 'get',
 		path: '/notifications/{notificationId}',
 		summary: 'Get NotificationV2',
@@ -4129,6 +4361,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getNotificationV2s',
 		tag: 'notifications',
+		tags: ['notifications'],
 		method: 'get',
 		path: '/notifications',
 		summary: 'List NotificationV2s',
@@ -4145,6 +4378,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'markNotificationAsRead',
 		tag: 'notifications',
+		tags: ['notifications'],
 		method: 'put',
 		path: '/auth/user/notifications/{notificationId}/see',
 		summary: 'Mark Notification As Read',
@@ -4161,6 +4395,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'replyNotificationV2',
 		tag: 'notifications',
+		tags: ['notifications'],
 		method: 'post',
 		path: '/notifications/{notificationId}/reply',
 		summary: 'Reply NotificationV2',
@@ -4177,6 +4412,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'respondNotificationV2',
 		tag: 'notifications',
+		tags: ['notifications'],
 		method: 'post',
 		path: '/notifications/{notificationId}/respond',
 		summary: 'Respond NotificationV2',
@@ -4195,6 +4431,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'clearAllPlayerModerations',
 		tag: 'playermoderation',
+		tags: ['playermoderation'],
 		method: 'delete',
 		path: '/auth/user/playermoderations',
 		summary: 'Clear All Player Moderations',
@@ -4209,6 +4446,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getPlayerModerations',
 		tag: 'playermoderation',
+		tags: ['playermoderation'],
 		method: 'get',
 		path: '/auth/user/playermoderations',
 		summary: 'Search Player Moderations',
@@ -4226,6 +4464,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'moderateUser',
 		tag: 'playermoderation',
+		tags: ['playermoderation'],
 		method: 'post',
 		path: '/auth/user/playermoderations',
 		summary: 'Moderate User',
@@ -4243,6 +4482,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'unmoderateUser',
 		tag: 'playermoderation',
+		tags: ['playermoderation'],
 		method: 'put',
 		path: '/auth/user/unplayermoderate',
 		summary: 'Unmoderate User',
@@ -4260,6 +4500,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deletePrint',
 		tag: 'prints',
+		tags: ['prints'],
 		method: 'delete',
 		path: '/prints/{printId}',
 		summary: 'Delete Print',
@@ -4276,6 +4517,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'editPrint',
 		tag: 'prints',
+		tags: ['prints'],
 		method: 'post',
 		path: '/prints/{printId}',
 		summary: 'Edit Print',
@@ -4294,6 +4536,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getPrint',
 		tag: 'prints',
+		tags: ['prints'],
 		method: 'get',
 		path: '/prints/{printId}',
 		summary: 'Get Print',
@@ -4310,6 +4553,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getUserPrints',
 		tag: 'prints',
+		tags: ['prints'],
 		method: 'get',
 		path: '/prints/user/{userId}',
 		summary: 'Get Own Prints',
@@ -4326,6 +4570,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'uploadPrint',
 		tag: 'prints',
+		tags: ['prints'],
 		method: 'post',
 		path: '/prints',
 		summary: 'Upload Print',
@@ -4346,6 +4591,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'createProp',
 		tag: 'props',
+		tags: ['props'],
 		method: 'post',
 		path: '/props',
 		summary: 'Create Prop',
@@ -4373,6 +4619,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteProp',
 		tag: 'props',
+		tags: ['props'],
 		method: 'delete',
 		path: '/props/{propId}',
 		summary: 'Delete Prop',
@@ -4389,6 +4636,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getProp',
 		tag: 'props',
+		tags: ['props'],
 		method: 'get',
 		path: '/props/{propId}',
 		summary: 'Get Prop',
@@ -4405,6 +4653,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getPropPublishStatus',
 		tag: 'props',
+		tags: ['props'],
 		method: 'get',
 		path: '/props/{propId}/publish',
 		summary: 'Get Prop Publish Status',
@@ -4421,6 +4670,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'listProps',
 		tag: 'props',
+		tags: ['props'],
 		method: 'get',
 		path: '/props',
 		summary: 'List Props',
@@ -4439,6 +4689,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'publishProp',
 		tag: 'props',
+		tags: ['props'],
 		method: 'put',
 		path: '/props/{propId}/publish',
 		summary: 'Publish Prop',
@@ -4455,6 +4706,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'unpublishProp',
 		tag: 'props',
+		tags: ['props'],
 		method: 'delete',
 		path: '/props/{propId}/publish',
 		summary: 'Unpublish Prop',
@@ -4471,6 +4723,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateProp',
 		tag: 'props',
+		tags: ['props'],
 		method: 'put',
 		path: '/props/{propId}',
 		summary: 'Update Prop',
@@ -4498,6 +4751,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'addTags',
 		tag: 'users',
+		tags: ['users'],
 		method: 'post',
 		path: '/users/{userId}/addTags',
 		summary: 'Add User Tags',
@@ -4515,6 +4769,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'checkUserPersistenceExists',
 		tag: 'users',
+		tags: ['users', 'worlds'],
 		method: 'get',
 		path: '/users/{userId}/{worldId}/persist/exists',
 		summary: 'Check User Persistence Exists',
@@ -4532,6 +4787,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteAllUserPersistenceData',
 		tag: 'users',
+		tags: ['users', 'worlds'],
 		method: 'delete',
 		path: '/users/{userId}/persist',
 		summary: 'Delete All User Persistence Data',
@@ -4548,6 +4804,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteUserPersistence',
 		tag: 'users',
+		tags: ['users', 'worlds'],
 		method: 'delete',
 		path: '/users/{userId}/{worldId}/persist',
 		summary: 'Delete User Persistence',
@@ -4565,6 +4822,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getBlockedGroups',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/users/{userId}/groups/userblocked',
 		summary: 'Get User Group Blocks',
@@ -4581,6 +4839,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getInvitedGroups',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/users/{userId}/groups/invited',
 		summary: 'Get User Group Invited',
@@ -4597,6 +4856,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getMutualFriends',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/users/{userId}/mutuals/friends',
 		summary: 'Get User Mutual Friends',
@@ -4615,6 +4875,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getMutualGroups',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/users/{userId}/mutuals/groups',
 		summary: 'Get User Mutual Groups',
@@ -4633,6 +4894,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getMutuals',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/users/{userId}/mutuals',
 		summary: 'Get User Mutuals',
@@ -4649,6 +4911,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getPrivateProfile',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/profile/{userId}/private',
 		summary: 'Get Private Profile',
@@ -4665,6 +4928,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getPublicProfile',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/profile/{userId}',
 		summary: 'Get Public Profile',
@@ -4681,6 +4945,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getUser',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/users/{userId}',
 		summary: 'Get User by ID',
@@ -4697,6 +4962,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getUserAllGroupPermissions',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/users/{userId}/groups/permissions',
 		summary: 'Get user\'s permissions for all joined groups.',
@@ -4714,6 +4980,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getUserByName',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/users/{username}/name',
 		summary: 'Get User by Username',
@@ -4730,6 +4997,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getUserFeedback',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/users/{userId}/feedback',
 		summary: 'Get User Feedback',
@@ -4749,6 +5017,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getUserGroupInstances',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/users/{userId}/instances/groups',
 		summary: 'Get User Group Instances',
@@ -4765,6 +5034,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getUserGroupInstancesForGroup',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/users/{userId}/instances/groups/{groupId}',
 		summary: 'Get User Group Instances for a specific Group',
@@ -4782,6 +5052,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getUserGroupRequests',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/users/{userId}/groups/requested',
 		summary: 'Get User Group Requests',
@@ -4798,6 +5069,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getUserGroups',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/users/{userId}/groups',
 		summary: 'Get User Groups',
@@ -4814,6 +5086,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getUserNote',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/userNotes/{userNoteId}',
 		summary: 'Get User Note',
@@ -4830,6 +5103,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getUserNotes',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/userNotes',
 		summary: 'Get User Notes',
@@ -4847,6 +5121,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getUserRepresentedGroup',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/users/{userId}/groups/represented',
 		summary: 'Get user\'s current represented group',
@@ -4863,6 +5138,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getUserTutorialStatus',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/users/{userId}/tutorial',
 		summary: 'Get User Tutorial Status',
@@ -4879,6 +5155,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'removeTags',
 		tag: 'users',
+		tags: ['users'],
 		method: 'post',
 		path: '/users/{userId}/removeTags',
 		summary: 'Remove User Tags',
@@ -4896,6 +5173,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'searchUsers',
 		tag: 'users',
+		tags: ['users'],
 		method: 'get',
 		path: '/users',
 		summary: 'Search All Users',
@@ -4916,6 +5194,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateBadge',
 		tag: 'users',
+		tags: ['users'],
 		method: 'put',
 		path: '/users/{userId}/badges/{badgeId}',
 		summary: 'Update User Badge',
@@ -4935,6 +5214,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateUser',
 		tag: 'users',
+		tags: ['users'],
 		method: 'put',
 		path: '/users/{userId}',
 		summary: 'Update User Info',
@@ -4970,6 +5250,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateUserNote',
 		tag: 'users',
+		tags: ['users'],
 		method: 'post',
 		path: '/userNotes',
 		summary: 'Update User Note',
@@ -4987,6 +5268,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'addWorldTags',
 		tag: 'worlds',
+		tags: ['worlds'],
 		method: 'post',
 		path: '/worlds/{worldId}/addTags',
 		summary: 'Add World Tags',
@@ -5004,6 +5286,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'createWorld',
 		tag: 'worlds',
+		tags: ['worlds'],
 		method: 'post',
 		path: '/worlds',
 		summary: 'Create World',
@@ -5033,6 +5316,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteWorld',
 		tag: 'worlds',
+		tags: ['worlds'],
 		method: 'delete',
 		path: '/worlds/{worldId}',
 		summary: 'Delete World',
@@ -5049,6 +5333,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'deleteWorldPlatform',
 		tag: 'worlds',
+		tags: ['worlds'],
 		method: 'delete',
 		path: '/worlds/{worldId}/platform/{publishedPlatform}',
 		summary: 'Delete World Platform',
@@ -5066,6 +5351,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getActiveWorlds',
 		tag: 'worlds',
+		tags: ['worlds'],
 		method: 'get',
 		path: '/worlds/active',
 		summary: 'List Active Worlds',
@@ -5094,6 +5380,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getFavoritedWorlds',
 		tag: 'worlds',
+		tags: ['worlds'],
 		method: 'get',
 		path: '/worlds/favorites',
 		summary: 'List Favorited Worlds',
@@ -5122,6 +5409,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getRecentWorlds',
 		tag: 'worlds',
+		tags: ['worlds'],
 		method: 'get',
 		path: '/worlds/recent',
 		summary: 'List Recent Worlds',
@@ -5150,6 +5438,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getWorld',
 		tag: 'worlds',
+		tags: ['worlds'],
 		method: 'get',
 		path: '/worlds/{worldId}',
 		summary: 'Get World by ID',
@@ -5166,6 +5455,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getWorldInstance',
 		tag: 'worlds',
+		tags: ['worlds'],
 		method: 'get',
 		path: '/worlds/{worldId}/{instanceId}',
 		summary: 'Get World Instance',
@@ -5183,6 +5473,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getWorldMetadata',
 		tag: 'worlds',
+		tags: ['worlds'],
 		method: 'get',
 		path: '/worlds/{worldId}/metadata',
 		summary: 'Get World Metadata',
@@ -5199,6 +5490,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'getWorldPublishStatus',
 		tag: 'worlds',
+		tags: ['worlds'],
 		method: 'get',
 		path: '/worlds/{worldId}/publish',
 		summary: 'Get World Publish Status',
@@ -5215,6 +5507,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'publishWorld',
 		tag: 'worlds',
+		tags: ['worlds'],
 		method: 'put',
 		path: '/worlds/{worldId}/publish',
 		summary: 'Publish World',
@@ -5231,6 +5524,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'removeWorldTags',
 		tag: 'worlds',
+		tags: ['worlds'],
 		method: 'post',
 		path: '/worlds/{worldId}/removeTags',
 		summary: 'Remove World Tags',
@@ -5248,6 +5542,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'searchWorlds',
 		tag: 'worlds',
+		tags: ['worlds'],
 		method: 'get',
 		path: '/worlds',
 		summary: 'Search All Worlds',
@@ -5280,6 +5575,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'unpublishWorld',
 		tag: 'worlds',
+		tags: ['worlds'],
 		method: 'delete',
 		path: '/worlds/{worldId}/publish',
 		summary: 'Unpublish World',
@@ -5296,6 +5592,7 @@ export const operations: Operation[] = [
 	{
 		operationId: 'updateWorld',
 		tag: 'worlds',
+		tags: ['worlds'],
 		method: 'put',
 		path: '/worlds/{worldId}',
 		summary: 'Update World',

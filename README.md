@@ -218,7 +218,7 @@ refused at call time — they never appear in `tools/list`.
 | `read` | `GET` | none — always registered | `getCurrentUser`, `searchWorlds`, `getBalance` |
 | `write` | `POST` / `PUT` / `PATCH` | `VRCHAT_MCP_ALLOW_WRITES=1` | `createInstance`, `updateWorld` |
 | `destructive` | `DELETE`, plus an explicit override list | `VRCHAT_MCP_ALLOW_WRITES=1` **and** `VRCHAT_MCP_ALLOW_DESTRUCTIVE_WRITES=1` | `deleteProduct`, `banGroupMember`, `kickGroupMember`, `moderateUser`, `deleteAllUserPersistence`, `closeInstance` |
-| `money` | Explicit list plus anything under Tilia/KYC/payout paths | `VRCHAT_MCP_ALLOW_WRITES=1` **and** `VRCHAT_MCP_ALLOW_PURCHASES=1` | `purchaseProductListing`, `getEconomyPayouts`, `createProduct`, `createProductListing`, `updateTiliaTosAgreementStatus` |
+| `money` | Buying, and anything under Tilia/KYC/payout paths | `VRCHAT_MCP_ALLOW_WRITES=1` **and** `VRCHAT_MCP_ALLOW_PURCHASES=1` | `purchaseProductListing`, `getEconomyPayouts`, `getUserTiliaKyc`, `updateTiliaTos` |
 | `admin` | Admin-only and account-lifecycle ops | `VRCHAT_MCP_ALLOW_ADMIN=1` (independent of the write gate) | `deleteUser`, `registerUserAccount`, `confirmEmail`, `updateAssetReviewNotes`, moderation-report ops |
 
 What you are actually opting into:
@@ -381,6 +381,62 @@ there, so one retry lands it. `_availableKeys` is included on projected response
 (names only, capped). Where the spec has a response schema, the top-level field names are
 baked into the tool description at codegen time, so the common case needs no discovery
 round-trip at all.
+
+## Running a store
+
+Managing a storefront is an ordinary write, not a `money` operation. Creating a product,
+renaming it, changing its image, publishing or unpublishing a listing: none of these spend or
+earn anything, so they need only `VRCHAT_MCP_ALLOW_WRITES=1`. The `money` gate is reserved for
+buying things and for the payment processor.
+
+`VRCHAT_MCP_TAGS=store` narrows to the 19 storefront operations. The spec's own `economy` tag
+covers the storefront, wallet balances, purchase history and Tilia all at once, so it barely
+filters anything for a creator who only manages products. Every operation keeps its spec tag
+too, so `economy` still matches all of them.
+
+```bash
+VRCHAT_MCP_TAGS=store
+VRCHAT_MCP_ALLOW_WRITES=1
+```
+
+Setting a product image takes two calls, or one:
+
+```json
+{ "name": "vrchat_setProductImage",
+  "arguments": { "productId": "prod_...", "path": "/abs/path/cover.png" } }
+```
+
+That uploads with `tag: "product"` and attaches the returned file id as the product's
+`imageId`. Doing it by hand is `vrchat__uploadImage` with `tag: "product"` or
+`"listinggallery"`, then `vrchat__updateProduct` with the `id` it returns.
+
+**What VRChat itself does not allow:** a listing exposes only `active` for editing, so its
+price, title and description cannot be changed after creation. Delete the listing and create a
+new one. The name, description and image live on the *product* and are editable through
+`vrchat__updateProduct`.
+
+## Which tools am I missing?
+
+A gated tool is simply absent, which reads as "VRChat cannot do this" rather than "this server
+was told not to". `vrchat_authStatus` closes that gap: it reports every tag and safety class,
+how many operations each holds, which are currently exposed, and the exact `.env` change that
+would expose the rest.
+
+```json
+{
+  "availability": {
+    "toolsRegistered": 12,
+    "toolsHidden": 285,
+    "tagFilter": ["store"],
+    "kinds": { "write": { "enabled": false, "hidden": 88 } },
+    "nextSteps": [
+      "88 `write` operations are hidden. Ask the user to set VRCHAT_MCP_ALLOW_WRITES=1 ..."
+    ]
+  }
+}
+```
+
+Call it before concluding something is unsupported.
 
 ## Uploading files
 

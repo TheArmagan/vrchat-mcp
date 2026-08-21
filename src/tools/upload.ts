@@ -63,7 +63,100 @@ async function putToPresignedUrl(url: string, file: File): Promise<string> {
 	return (response.headers.get('etag') ?? '').replace(/"/g, '')
 }
 
+/**
+ * Image roles that make sense for a storefront. VRChat's `ImagePurpose` enum
+ * carries eleven values; these are the two that attach to commerce.
+ */
+const STORE_IMAGE_TAGS = ['product', 'listinggallery'] as const
+
 export function registerUploadTools(server: McpServer): void {
+	server.registerTool(
+		'vrchat_setProductImage',
+		{
+			title: 'Set a VRChat store product image',
+			description:
+				"Uploads a local image and attaches it to one of your store products, in one call. This is the link between the upload tools and the economy tools: vrchat__uploadImage returns a file id, and that id is what a product's `imageId` wants. Changing a product's name or description instead is vrchat__updateProduct. Note that a *listing* only exposes `active` for editing, so its price and title cannot be changed after creation — delete and recreate the listing for that. Requires VRCHAT_MCP_ALLOW_WRITES=1.",
+			inputSchema: z.object({
+				productId: z
+					.string()
+					.describe('The product to attach the image to. From vrchat__listUserProducts.'),
+				path: z
+					.string()
+					.describe(
+						"Path to the local image. Absolute, or relative to the server's working directory. Never file contents."
+					),
+				tag: z
+					.enum(STORE_IMAGE_TAGS)
+					.default('product')
+					.describe('`product` for the product image itself, `listinggallery` for gallery shots.')
+			}),
+			annotations: {
+				title: 'Set a VRChat store product image',
+				readOnlyHint: false,
+				destructiveHint: false,
+				openWorldHint: true
+			}
+		},
+		async ({ productId, path, tag }) => {
+			if (!config.allowWrites) {
+				return fail({
+					status: null,
+					message: 'Changing a product image is a write operation and writes are disabled.',
+					hint: 'Set VRCHAT_MCP_ALLOW_WRITES=1 in the server environment to enable it.'
+				})
+			}
+
+			try {
+				const file = await fileFromPath(path, 'path')
+				await ensureAuthenticated()
+				const client = getClient()
+
+				const uploaded = (await client.uploadImage({
+					body: { file: file as never, tag: tag as never },
+					throwOnError: false
+				})) as SdkResult
+
+				if (uploaded.error || !uploaded.data) return fail(describeError(uploaded.error ?? uploaded))
+
+				const imageId = String(uploaded.data.id ?? '')
+				if (!imageId) {
+					return fail({
+						status: null,
+						message: 'VRChat accepted the image but returned no file id.',
+						hint: 'Retry, or upload with vrchat__uploadImage and pass the id to vrchat__updateProduct yourself.'
+					})
+				}
+
+				const updated = (await client.updateProduct({
+					path: { productId },
+					body: { imageId: imageId as never },
+					throwOnError: false
+				})) as SdkResult
+
+				if (updated.error) {
+					// The image is uploaded and real; only the attach failed. Say so,
+					// so the work is not repeated and the id is not lost.
+					const detail = describeError(updated.error)
+					return fail({
+						...detail,
+						imageId,
+						hint: `${detail.hint} The image uploaded successfully as ${imageId} — attach it with vrchat__updateProduct { productId, imageId } rather than uploading again.`
+					})
+				}
+
+				return json({
+					ok: true,
+					uploaded: { name: file.name, bytes: file.size, type: file.type },
+					imageId,
+					productId,
+					product: updated.data
+				})
+			} catch (cause) {
+				return fail(describeError(cause))
+			}
+		}
+	)
+
 	server.registerTool(
 		'vrchat_uploadFile',
 		{

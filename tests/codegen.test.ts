@@ -108,12 +108,19 @@ describe('kind classification', () => {
 		submitModerationReport: 'admin',
 		purchaseProductListing: 'money',
 		getUserTiliaKyc: 'money',
-		createProduct: 'money',
+		getEconomyPayouts: 'money',
 		getCurrentUser: 'read',
 		getBalance: 'read',
 		deleteProduct: 'destructive',
 		closeInstance: 'destructive',
-		updateUser: 'write'
+		updateUser: 'write',
+		// Managing your own storefront spends nothing and earns nothing, so it
+		// is an ordinary write. Filing it under `money` meant a creator could
+		// not rename their own product without also granting purchase rights.
+		createProduct: 'write',
+		updateProduct: 'write',
+		createProductListingDirect: 'write',
+		updateProductListingDirect: 'write'
 	}
 
 	for (const [operationId, kind] of Object.entries(cases)) {
@@ -125,5 +132,44 @@ describe('kind classification', () => {
 	test('every kind is one of the five known values', () => {
 		const known = new Set(['read', 'write', 'destructive', 'money', 'admin'])
 		for (const operation of operations) expect(known.has(operation.kind)).toBe(true)
+	})
+})
+
+describe('the store tag', () => {
+	test('narrows economy down to the storefront', () => {
+		// `economy` is one tag over the storefront, wallet balances, purchase
+		// history and the payment processor, so filtering on it barely narrows
+		// anything for a creator who only manages products.
+		const store = Object.values(operationsById).filter((op) => op.tags.includes('store'))
+		const economy = Object.values(operationsById).filter((op) => op.tags.includes('economy'))
+
+		expect(store.length).toBeGreaterThan(0)
+		expect(store.length).toBeLessThan(economy.length)
+	})
+
+	test('covers the full product and listing lifecycle', () => {
+		for (const id of [
+			'listUserProducts',
+			'createProduct',
+			'updateProduct',
+			'deleteProduct',
+			'createProductListingDirect',
+			'updateProductListingDirect',
+			'deleteProductListingDirect',
+			'getProductListings'
+		]) {
+			expect(operationsById[id]?.tags).toContain('store')
+		}
+	})
+
+	test('leaves the wallet and payment processor out of it', () => {
+		for (const id of ['getBalance', 'getUserTiliaKyc', 'getEconomyPayouts', 'getTiliaStatus']) {
+			expect(operationsById[id]?.tags).not.toContain('store')
+		}
+	})
+
+	test('keeps the spec tag as primary, so nothing leaves economy', () => {
+		expect(operationsById.updateProduct?.tag).toBe('economy')
+		expect(operationsById.updateProduct?.tags).toContain('economy')
 	})
 })

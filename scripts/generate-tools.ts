@@ -70,18 +70,25 @@ const DESTRUCTIVE = new Set([
 	'unmoderateUser'
 ])
 
-/** Anything that can move real money or bind the account to a payout agreement. */
+/**
+ * Anything that moves real money or binds the account to a payout agreement.
+ *
+ * Deliberately narrow. Managing your own store — creating a product, renaming
+ * it, changing its image, publishing or unpublishing a listing — spends
+ * nothing and earns nothing, so it is an ordinary `write`. Filing it under
+ * `money` meant a creator could not touch their own storefront without also
+ * handing the agent the ability to make purchases, which is a strictly worse
+ * trade than the one the gate is meant to offer.
+ *
+ * What stays here: buying something, and anything that reaches the payment
+ * processor or the account's payout identity.
+ */
 const MONEY = new Set([
 	'purchaseProductListing',
 	'getEconomyPayouts',
+	'getEconomyPayoutStatus',
 	'updateTiliaTosAgreementStatus',
-	'updateTiliaTos',
-	'createProduct',
-	'createProductListing',
-	'createProductListingDirect',
-	'updateProduct',
-	'updateProductListing',
-	'updateProductListingDirect'
+	'updateTiliaTos'
 ])
 
 /** Paths under the payment processor; caught by path so renames can't leak one. */
@@ -106,6 +113,26 @@ const ADMIN = new Set([
 
 /** Moderation reporting and global avatar moderation, by path rather than by name. */
 const ADMIN_PATH = /moderationReports|avatarmoderations/i
+
+/**
+ * Storefront operations: products, listings, shelves and seller status.
+ *
+ * `economy` is one tag covering the storefront, wallet balances, purchase
+ * history and the payment processor, so filtering on it barely narrows
+ * anything. `store` picks out just the commerce surface a creator manages.
+ */
+const STORE_PATTERN = /product|listing|store|shelves|seller/i
+
+/** Synthetic tags an operation answers to on top of the spec's own. */
+function extraTags(operationId: string, path: string, specTags: string[]): string[] {
+	const extra: string[] = []
+
+	if (specTags.includes('economy') && (STORE_PATTERN.test(operationId) || STORE_PATTERN.test(path))) {
+		extra.push('store')
+	}
+
+	return extra
+}
 
 function classify(operationId: string, method: HttpMethod, path: string): OperationKind {
 	if (ADMIN.has(operationId) || ADMIN_PATH.test(path)) return 'admin'
@@ -383,6 +410,7 @@ function responseKeys(operation: Json, deref: (node: unknown) => any): string[] 
 interface Emitted {
 	operationId: string
 	tag: string
+	tags: string[]
 	method: HttpMethod
 	path: string
 	summary: string
@@ -409,6 +437,7 @@ function render(op: Emitted): string {
 		'\t{',
 		`\t\toperationId: ${quote(op.operationId)},`,
 		`\t\ttag: ${quote(op.tag)},`,
+		`		tags: ${list(op.tags)},`,
 		`\t\tmethod: ${quote(op.method)},`,
 		`\t\tpath: ${quote(op.path)},`,
 		`\t\tsummary: ${quote(op.summary)},`,
@@ -526,9 +555,13 @@ async function main(): Promise<void> {
 				problems.push(`${operationId} declares a real \`${PROJECTION_ARG}\` parameter`)
 			}
 
+			const specTags = (operation.tags ?? ['untagged']).map((t: unknown) => String(t).toLowerCase())
+			const primaryTag = specTags[0] as string
+
 			ops.push({
 				operationId,
-				tag: String((operation.tags ?? ['untagged'])[0]).toLowerCase(),
+				tag: primaryTag,
+				tags: [...new Set([...specTags, ...extraTags(operationId, path, specTags)])],
 				method,
 				path,
 				summary: String(operation.summary ?? operationId),

@@ -7,6 +7,7 @@
 
 import type { McpServer } from '@modelcontextprotocol/server'
 import { z } from 'zod'
+import { describeGates } from '../registry.ts'
 import { authStatus, getClient, logout, restartLogin, TwoFactorRequiredError } from '../vrchat/client.ts'
 import { getBroker } from '../vrchat/twofactor.ts'
 
@@ -104,11 +105,11 @@ export function registerAuthTools(server: McpServer): void {
 		{
 			title: 'VRChat auth status',
 			description:
-				'Reports VRChat authentication state (authenticated / awaiting a two-factor code / not configured), which environment gates are active, and the local rate limiter. Call this first whenever VRChat tools behave oddly.',
+				'Reports VRChat authentication state (authenticated / awaiting a two-factor code / not configured), the local rate limiter, and exactly which tool groups are exposed versus hidden by the server environment gates. Call this first whenever VRChat tools behave oddly, and whenever a capability seems missing: a gated tool is simply absent, which looks identical to VRChat not supporting it. The availability.nextSteps field names the .env change to ask the user for.',
 			inputSchema: z.object({}),
 			annotations: { title: 'VRChat auth status', readOnlyHint: true, openWorldHint: false }
 		},
-		async () => json(await authStatus())
+		async () => json({ ...(await authStatus()), availability: describeGates() })
 	)
 
 	server.registerTool(

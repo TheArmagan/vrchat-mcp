@@ -439,6 +439,41 @@ its own grants nothing. Letting it work alone would make it a route to deletes
 registers `vrchat__deleteProduct`; the gate test that asserted it did was
 updated to assert the opposite, plus the new four-level ladder.
 
+## Economy reclassification, the `store` tag, and gate visibility
+
+An agent using this server reported that "every economy tool exposed here is
+read-only" and that "there is no product- or listing-update tool". Both claims
+were false, and the reasons are worth keeping.
+
+- **`updateProduct` and `updateProductListingDirect` existed all along**, but
+  were classified `money`, so they sat behind `VRCHAT_MCP_ALLOW_PURCHASES`. The
+  agent had writes on and purchases off, so it saw only the reads. Managing your
+  own storefront spends nothing and earns nothing, so **seller CRUD is now
+  `write`** (`createProduct`, `updateProduct`, `createProductListingDirect`,
+  `updateProductListingDirect`; the deletes stay `destructive`). `money` is now
+  buying plus Tilia/KYC/payout only — 7 operations, down from 11. The old
+  arrangement forced a creator to accept purchase rights to rename a product.
+- **Images can attach to listings**, contrary to the report. `ImagePurpose`
+  includes `product` and `listinggallery`, and a product's `imageId` is exactly
+  the `FileID` that `uploadImage` returns. The connection was undiscoverable, so
+  `vrchat_setProductImage` now does both steps in one call and says so in its
+  description. If the attach fails after a successful upload it returns the
+  file id, so the upload is not repeated.
+- **One claim was correct:** `updateProductListingDirect` really does accept
+  only `active`. A listing's price and title cannot be edited after creation;
+  that is a VRChat API limitation. Documented rather than worked around.
+- **`store` tag added.** `Operation.tags` now carries the spec's tags plus
+  synthetic ones, and the tag gate matches any of them. `economy` covers the
+  storefront, balances, purchase history and the payment processor together, so
+  it barely narrows anything; `store` selects the 19 storefront operations.
+  Primary `tag` is unchanged, so nothing left `economy` and the 41-op assertion
+  still holds.
+- **`vrchat_authStatus` now reports availability.** Per tag and per safety
+  class: how many operations exist, how many are registered, and the exact env
+  change that would expose the rest, as `nextSteps` phrased for the agent to
+  relay. A gated tool is otherwise indistinguishable from an unsupported one,
+  which is the mistake that started this.
+
 ## Blocked / open
 
 - **SOCKS proxy support is deliberately NOT implemented — decided, not pending.**

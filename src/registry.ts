@@ -44,13 +44,107 @@ export function passesKindGate(kind: OperationKind): boolean {
 	}
 }
 
-/** Unset `VRCHAT_MCP_TAGS` means every tag registers. */
-export function passesTagGate(tag: string): boolean {
-	return config.tags === null || config.tags.has(tag.toLowerCase())
+/**
+ * Unset `VRCHAT_MCP_TAGS` means every tag registers. Otherwise an operation
+ * needs to answer to at least one requested tag, which includes the synthetic
+ * ones codegen adds (`store`) alongside the spec's own.
+ */
+export function passesTagGate(tags: readonly string[]): boolean {
+	if (config.tags === null) return true
+	return tags.some((tag) => config.tags!.has(tag.toLowerCase()))
 }
 
 export function shouldRegister(operation: Operation): boolean {
-	return passesTagGate(operation.tag) && passesKindGate(operation.kind)
+	return passesTagGate(operation.tags) && passesKindGate(operation.kind)
+}
+
+/** The env var that unlocks each safety class, for reporting. */
+const KIND_ENV: Record<OperationKind, string | null> = {
+	read: null,
+	write: 'VRCHAT_MCP_ALLOW_WRITES=1',
+	destructive: 'VRCHAT_MCP_ALLOW_WRITES=1 and VRCHAT_MCP_ALLOW_DESTRUCTIVE_WRITES=1',
+	money: 'VRCHAT_MCP_ALLOW_WRITES=1 and VRCHAT_MCP_ALLOW_PURCHASES=1',
+	admin: 'VRCHAT_MCP_ALLOW_ADMIN=1'
+}
+
+/**
+ * What is currently exposed and what is not, and the env change that would
+ * expose it.
+ *
+ * A tool that is gated off is simply absent, which reads to an agent as "VRChat
+ * cannot do this" rather than "this server was told not to". That mistake has
+ * already been made once in the wild: an agent reported the economy API as
+ * read-only when the write tools existed and were merely behind a flag. This is
+ * the surface that lets it say "ask the user to set X" instead.
+ */
+export function describeGates() {
+	const tagCounts = new Map<string, { total: number; registered: number }>()
+
+	for (const operation of operations) {
+		const visible = shouldRegister(operation)
+		for (const tag of operation.tags) {
+			const entry = tagCounts.get(tag) ?? { total: 0, registered: 0 }
+			entry.total += 1
+			if (visible) entry.registered += 1
+			tagCounts.set(tag, entry)
+		}
+	}
+
+	const byTag = [...tagCounts].sort((a, b) => a[0].localeCompare(b[0]))
+	const selected = (tag: string) => passesTagGate([tag])
+
+	const kinds = {} as Record<
+		OperationKind,
+		{ enabled: boolean; total: number; hidden: number; enableWith: string | null }
+	>
+
+	for (const kind of ['read', 'write', 'destructive', 'money', 'admin'] as const) {
+		const all = operations.filter((operation) => operation.kind === kind)
+		const enabled = passesKindGate(kind)
+		kinds[kind] = {
+			enabled,
+			total: all.length,
+			hidden: enabled ? 0 : all.length,
+			enableWith: enabled ? null : KIND_ENV[kind]
+		}
+	}
+
+	const registered = operations.filter(shouldRegister).length
+	const nextSteps: string[] = []
+
+	for (const kind of ['write', 'destructive', 'money', 'admin'] as const) {
+		if (!kinds[kind].enabled) {
+			nextSteps.push(
+				`${kinds[kind].total} \`${kind}\` operations are hidden. Ask the user to set ${KIND_ENV[kind]} in the server environment (.env) and restart the server.`
+			)
+		}
+	}
+
+	if (config.tags !== null) {
+		const off = byTag.filter(([tag]) => !selected(tag)).map(([tag]) => tag)
+		nextSteps.push(
+			`VRCHAT_MCP_TAGS is restricting tools to ${[...config.tags].join(', ')}. ${
+				off.length
+			} other tags are hidden (${off.join(', ')}). Ask the user to widen or unset VRCHAT_MCP_TAGS.`
+		)
+	}
+
+	return {
+		toolsRegistered: registered,
+		toolsHidden: operations.length - registered,
+		tagFilter: config.tags === null ? null : [...config.tags],
+		tags: byTag.map(([tag, counts]) => ({
+			tag,
+			selected: selected(tag),
+			registered: counts.registered,
+			total: counts.total
+		})),
+		kinds,
+		nextSteps:
+			nextSteps.length > 0
+				? nextSteps
+				: ['Everything the spec defines is registered; nothing is gated off.']
+	}
 }
 
 /** `vrchat__` — the double underscore marks a tool as generated from the spec. */
@@ -81,7 +175,9 @@ function describeOperation(operation: Operation): string {
 
 	if (operation.description) parts.push(operation.description)
 
-	parts.push(`${operation.method.toUpperCase()} ${operation.path} (tag: ${operation.tag}, ${operation.kind})`)
+	parts.push(
+		`${operation.method.toUpperCase()} ${operation.path} (tags: ${operation.tags.join(', ')}, ${operation.kind})`
+	)
 
 	if (operation.responseKeys.length > 0) {
 		parts.push(`Response fields: ${operation.responseKeys.join(', ')}.`)

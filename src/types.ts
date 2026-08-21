@@ -22,6 +22,16 @@ export interface Operation {
 	operationId: string
 	/** First tag from the spec, lowercased (e.g. `economy`, `users`). */
 	tag: string
+	/**
+	 * Every tag this operation answers to, `tag` included.
+	 *
+	 * Beyond the spec's own tags we add narrower synthetic ones, because some
+	 * spec tags are too coarse to filter on usefully: `economy` covers running a
+	 * storefront, reading balances, buying things and the payment processor all
+	 * at once, so `VRCHAT_MCP_TAGS=economy` is close to no filter at all for a
+	 * creator who only manages products. `VRCHAT_MCP_TAGS` matches any of these.
+	 */
+	tags: string[]
 	method: 'get' | 'post' | 'put' | 'patch' | 'delete'
 	/** Templated path, e.g. `/users/{userId}`. */
 	path: string
