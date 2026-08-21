@@ -594,6 +594,11 @@ narrowed to two fields.
 - Measured on the `World` fixture: outline is 73% smaller than the payload at
   depth 1, 50% at depth 2. Stated in a test rather than claimed loosely, because
   depth 2 expands nested arrays and the saving is real but not dramatic.
+- **A live call can return the data too.** It originally discarded the response
+  after outlining it, so learning the shape cost one request and using the
+  resource cost another. `_responseKeys` on the live call returns the projected
+  payload beside the outline; empty (the default) keeps it outline-only, so the
+  cheap path stays cheap.
 - Array projections no longer need the `_result` envelope on success, only on a
   miss, since that envelope exists to carry meta that is no longer there.
 

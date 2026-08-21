@@ -354,6 +354,18 @@ depth 2, which is the depth that shows you paths like `author.displayName`. A li
 obeys the same gates as the operation itself, so reading keys is never a way to reach a write
 that is switched off.
 
+A live call can hand back the data as well, since the request has already been paid for. Pass
+`_responseKeys` and the projected response comes back next to the outline, so you are not
+charged twice for the same resource:
+
+```json
+{ "tool": "vrchat__getUser", "live": true,
+  "arguments": { "userId": "usr_..." },
+  "_responseKeys": ["displayName", "statusDescription"] }
+```
+
+Leaving `_responseKeys` off returns the outline alone, which keeps the default cheap.
+
 `["*"]` returns the input by reference, so the raw path is provably lossless and nothing is
 ever hidden.
 

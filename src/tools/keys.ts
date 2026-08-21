@@ -15,7 +15,7 @@ import { z } from 'zod'
 
 import { describeError, toToolError } from '../errors.ts'
 import { operationsById } from '../generated/operations.ts'
-import { keyOutline } from '../project.ts'
+import { keyOutline, project } from '../project.ts'
 import { shouldRegister, toolNameFor } from '../registry.ts'
 import { ensureAuthenticated, getClient } from '../vrchat/client.ts'
 
@@ -35,7 +35,7 @@ export function registerKeyTools(server: McpServer): void {
 		{
 			title: 'List the fields a VRChat response contains',
 			description:
-				'Reports the field names a tool returns, so you can pick `_responseKeys` without fetching a full payload first and without guessing. Answers from the OpenAPI spec with no API call when the spec describes the response, which is the usual case. Pass `live: true` (with whatever arguments the operation needs) to make one real call and outline the actual shape instead, including nested fields; use that when the spec has nothing, or when you need to see below the top level. Read-only.',
+				'Reports the field names a tool returns, so you can pick `_responseKeys` without fetching a full payload first and without guessing. Answers from the OpenAPI spec with no API call when the spec describes the response, which is the usual case. Pass `live: true` (with whatever arguments the operation needs) to make one real call and outline the actual shape instead, including nested fields; use that when the spec has nothing, or when you need to see below the top level. A live call can also return the data itself: pass `_responseKeys` and the projected response comes back alongside the outline, so you do not pay for the same request twice. Read-only.',
 			inputSchema: z.object({
 				tool: z
 					.string()
@@ -54,7 +54,13 @@ export function registerKeyTools(server: McpServer): void {
 					.min(1)
 					.max(5)
 					.default(2)
-					.describe('How many levels deep to outline, for a live call.')
+					.describe('How many levels deep to outline, for a live call.'),
+				_responseKeys: z
+					.array(z.string())
+					.default([])
+					.describe(
+						'Also return response data from the same live call, projected to these paths. Empty (the default) returns the outline alone. Use ["*"] for the whole payload. This is how you avoid paying for a second request once you know what you want.'
+					)
 			}),
 			annotations: {
 				title: 'List the fields a VRChat response contains',
@@ -62,7 +68,7 @@ export function registerKeyTools(server: McpServer): void {
 				openWorldHint: true
 			}
 		},
-		async ({ tool, live, arguments: args, depth }) => {
+		async ({ tool, live, arguments: args, depth, _responseKeys }) => {
 			const operation = resolveOperation(tool)
 
 			if (!operation) {
@@ -146,9 +152,13 @@ export function registerKeyTools(server: McpServer): void {
 					tool: name,
 					source: 'live',
 					depth,
-					// Names and types only. Returning the values would defeat the
-					// point, since avoiding exactly that is why this tool exists.
-					outline: keyOutline(result.data, depth)
+					// Names and types only by default. Returning the values unasked
+					// would defeat the point, since avoiding exactly that is why this
+					// tool exists.
+					outline: keyOutline(result.data, depth),
+					// The request has already been paid for, so handing back the data
+					// the caller asked for saves them making it again.
+					...(_responseKeys.length > 0 ? { data: project(result.data, _responseKeys) } : {})
 				})
 			} catch (cause) {
 				return { ...json(describeError(cause)), isError: true as const }

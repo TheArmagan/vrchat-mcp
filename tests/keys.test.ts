@@ -92,3 +92,21 @@ describe('keyOutline', () => {
 		expect(nested).toBeLessThan(rawSize / 1.9)
 	})
 })
+
+describe('a live call can pay for itself', () => {
+	test('outline and data come from one response, not two requests', () => {
+		// Without this the caller learns the shape, then has to fetch the same
+		// resource again to actually use it. The request is already paid for.
+		const outline = keyOutline(raw, 1)
+		const data = project(raw, ['id', 'name'])
+
+		expect(outline).toHaveProperty('id')
+		expect(data).toEqual({ id: raw.id, name: raw.name })
+	})
+
+	test('asking for nothing stays outline-only', () => {
+		// The default has to remain cheap, or the tool re-creates the problem it
+		// was added to solve.
+		expect(project(raw, []) as unknown).toBe(raw)
+	})
+})
