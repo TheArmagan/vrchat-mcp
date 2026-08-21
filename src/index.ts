@@ -11,7 +11,7 @@ import { McpServer } from '@modelcontextprotocol/server'
 import { serveStdio } from '@modelcontextprotocol/server/stdio'
 
 import { config } from './config.ts'
-import { registerGeneratedTools } from './registry.ts'
+import { knownTags, registerGeneratedTools, unknownTags } from './registry.ts'
 import { registerAuthTools } from './tools/auth.ts'
 import { registerEventTools } from './tools/events.ts'
 import { registerUploadTools } from './tools/upload.ts'
@@ -54,6 +54,18 @@ function createServer() {
 	}
 
 	const { registered, skipped } = registerGeneratedTools(server)
+
+	// Said loudly, because the symptom is an empty tool list rather than an error.
+	const unknown = unknownTags()
+	if (unknown.length > 0) {
+		console.error(
+			`[vrchat-mcp] WARNING: VRCHAT_MCP_TAGS contains unknown ${
+				unknown.length === 1 ? 'tag' : 'tags'
+			}: ${unknown.join(', ')}
+` +
+				`[vrchat-mcp] valid tags: ${knownTags().join(', ')} (or 'everything' for no filter)`
+		)
+	}
 
 	console.error(
 		`[vrchat-mcp] ${registered.length} tools registered, ${skipped.length} gated off` +

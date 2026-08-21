@@ -189,6 +189,23 @@ function count(raw: string): number | null {
 	return Number.isFinite(parsed) && parsed >= 0 ? parsed : null
 }
 
+/**
+ * Values that mean "do not filter at all".
+ *
+ * Unsetting the variable already means this, but an MCP client config is a JSON
+ * object of strings: removing a key is often more awkward than changing its
+ * value, and a config that has to be emptied to be disabled invites people to
+ * guess. `everything` is the documented spelling; the rest are what people try.
+ */
+const ALL_TAGS = new Set(['everything', 'all', '*'])
+
+/** Collapses an explicit "give me everything" to the same null as unset. */
+export function parseTagFilter(tags: Set<string> | null): Set<string> | null {
+	if (tags === null) return null
+	for (const value of tags) if (ALL_TAGS.has(value)) return null
+	return tags
+}
+
 /** Event types subscribed to when `VRCHAT_MCP_WS_EVENTS` is unset. */
 export const DEFAULT_WS_EVENTS = [
 	'notification',
@@ -209,8 +226,8 @@ export const config = {
 	totpSecret: env.VRCHAT_TOTP_SECRET,
 	contact: env.VRCHAT_CONTACT,
 
-	/** null = every tag registers. */
-	tags: set('VRCHAT_MCP_TAGS'),
+	/** null = every tag registers, either by being unset or by asking for all. */
+	tags: parseTagFilter(set('VRCHAT_MCP_TAGS')),
 	allowWrites: bool('VRCHAT_MCP_ALLOW_WRITES'),
 	/** Layered on top of writes: DELETE and the explicit destructive overrides. */
 	allowDestructive: bool('VRCHAT_MCP_ALLOW_DESTRUCTIVE_WRITES'),

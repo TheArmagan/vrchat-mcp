@@ -162,7 +162,7 @@ server at startup — a missing credential becomes a tool error on first use.
 | `VRCHAT_PASSWORD` | — | Account password. |
 | `VRCHAT_TOTP_SECRET` | — | Base32 TOTP secret. Set for unattended login; leave unset for the interactive 2FA flow. |
 | `VRCHAT_CONTACT` | — | Contact string in the mandatory descriptive User-Agent. Effectively required. |
-| `VRCHAT_MCP_TAGS` | all tags | Comma-separated OpenAPI tags to register, e.g. `economy,inventory,users`. Trimmed, lowercased, de-duped. |
+| `VRCHAT_MCP_TAGS` | all tags | Comma-separated tags to register, e.g. `store,inventory,users`. `everything` (or `all`, `*`) means no filter. Trimmed, lowercased, de-duped; an operation matches if it answers to any listed tag. |
 | `VRCHAT_MCP_ALLOW_WRITES` | off | Registers `write` operations: creating and editing. Not deletes. |
 | `VRCHAT_MCP_ALLOW_DESTRUCTIVE_WRITES` | off | Additionally registers `destructive` operations. Requires the write gate too. |
 | `VRCHAT_MCP_ALLOW_PURCHASES` | off | Additionally registers `money` operations. Requires the write gate too. |
@@ -414,6 +414,27 @@ That uploads with `tag: "product"` and attaches the returned file id as the prod
 price, title and description cannot be changed after creation. Delete the listing and create a
 new one. The name, description and image live on the *product* and are editable through
 `vrchat__updateProduct`.
+
+## Choosing which tools to expose
+
+`VRCHAT_MCP_TAGS` selects tags. Leaving it unset registers everything, and
+`VRCHAT_MCP_TAGS=everything` says the same thing explicitly, which is easier than deleting a
+key from an MCP client's JSON config. `all` and `*` work too.
+
+```bash
+VRCHAT_MCP_TAGS=everything          # all 297 operations
+VRCHAT_MCP_TAGS=store               # just the storefront
+VRCHAT_MCP_TAGS=store,users,worlds  # matches any of the three
+```
+
+Spec tags: `authentication`, `avatars`, `calendar`, `economy`, `favorites`, `files`,
+`friends`, `groups`, `instances`, `inventory`, `invite`, `jams`, `miscellaneous`,
+`notifications`, `playermoderation`, `prints`, `props`, `users`, `worlds`. Plus `store`,
+which this server adds.
+
+A tag that matches nothing is warned about on stderr at startup and reported by
+`vrchat_authStatus`. Without that, a typo like `stores` registers no generated tools and looks
+exactly like a broken server.
 
 ## Which tools am I missing?
 

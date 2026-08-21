@@ -474,6 +474,20 @@ were false, and the reasons are worth keeping.
   relay. A gated tool is otherwise indistinguishable from an unsupported one,
   which is the mistake that started this.
 
+## `VRCHAT_MCP_TAGS=everything`
+
+Unsetting the variable already meant "no filter", but an MCP client config is a
+JSON object of strings: removing a key is more awkward than changing its value,
+and a setting that must be emptied to be disabled invites guessing. `everything`
+is the documented spelling; `all` and `*` are accepted because they are what
+people try. A test asserts none of the three collides with a real tag.
+
+Alongside it, **unknown tags are now reported instead of failing silently.** A
+typo (`stores` for `store`) previously registered zero generated tools, which is
+indistinguishable from a broken server. Startup warns on stderr naming the bad
+value and listing the valid ones, and `vrchat_authStatus` carries the same in
+`availability.unknownTags`.
+
 ## Blocked / open
 
 - **SOCKS proxy support is deliberately NOT implemented — decided, not pending.**

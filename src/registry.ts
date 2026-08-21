@@ -77,6 +77,24 @@ const KIND_ENV: Record<OperationKind, string | null> = {
  * read-only when the write tools existed and were merely behind a flag. This is
  * the surface that lets it say "ask the user to set X" instead.
  */
+/** Every tag any operation answers to, spec tags and synthetic alike. */
+export function knownTags(): string[] {
+	return [...new Set(operations.flatMap((operation) => operation.tags))].sort()
+}
+
+/**
+ * Requested tags that match nothing.
+ *
+ * A typo (`stores` for `store`) otherwise registers zero generated tools and
+ * looks exactly like a broken server. Naming the unmatched value turns a
+ * mystery into a one-word correction.
+ */
+export function unknownTags(): string[] {
+	if (config.tags === null) return []
+	const known = new Set(knownTags())
+	return [...config.tags].filter((tag) => !known.has(tag)).sort()
+}
+
 export function describeGates() {
 	const tagCounts = new Map<string, { total: number; registered: number }>()
 
@@ -120,6 +138,15 @@ export function describeGates() {
 		}
 	}
 
+	const unknown = unknownTags()
+	if (unknown.length > 0) {
+		nextSteps.push(
+			`VRCHAT_MCP_TAGS lists ${unknown.length === 1 ? 'a tag' : 'tags'} that match nothing: ${unknown.join(
+				', '
+			)}. Valid tags are ${knownTags().join(', ')}, or \`everything\` for no filter.`
+		)
+	}
+
 	if (config.tags !== null) {
 		const off = byTag.filter(([tag]) => !selected(tag)).map(([tag]) => tag)
 		nextSteps.push(
@@ -133,6 +160,7 @@ export function describeGates() {
 		toolsRegistered: registered,
 		toolsHidden: operations.length - registered,
 		tagFilter: config.tags === null ? null : [...config.tags],
+		unknownTags: unknown,
 		tags: byTag.map(([tag, counts]) => ({
 			tag,
 			selected: selected(tag),
